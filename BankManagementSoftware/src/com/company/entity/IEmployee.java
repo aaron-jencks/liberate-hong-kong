@@ -1,5 +1,6 @@
 package com.company.entity;
 
-public interface Employee{
+public interface IEmployee extends IPerson{
     
+    public boolean Login(String username, String password);
 }
