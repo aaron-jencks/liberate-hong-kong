@@ -1,14 +1,14 @@
 package Entity.Abstract;
 
-import Entity.Account;
-import Entity.Customer;
-import Entity.Employee;
+import Entity.Interface.IAccount;
+import Entity.Interface.ICustomer;
+import Entity.Interface.IEmployee;
 import Entity.Interface.IVault;
 
 import java.util.HashMap;
 
 public abstract class AVault implements IVault {
-    protected HashMap<Long, Customer> customers;
-    protected HashMap<Long, Employee> employees;
-    protected HashMap<Long, Account> accounts;
+    protected HashMap<Long, ICustomer> customers;
+    protected HashMap<Long, IEmployee> employees;
+    protected HashMap<Long, IAccount> accounts;
 }
