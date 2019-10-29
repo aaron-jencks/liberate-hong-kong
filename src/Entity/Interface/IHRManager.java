@@ -1,8 +1,8 @@
 package Entity.Interface;
 
-import Entity.Employee;
-import Entity.Person;
+import Entity.Interface.IEmployee;
+import Entity.Interface.IPerson;
 
 public interface IHRManager {
-    Employee Hire(Person p);
+    IEmployee Hire(IPerson p);
 }
