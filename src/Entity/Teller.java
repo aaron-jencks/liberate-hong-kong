@@ -1,6 +1,8 @@
 package Entity;
 
-import Entity.Abstract.ATeller;
+import Entity.Abstract.AEmployee;
+import Entity.Interface.ISaveable;
+import Entity.Interface.ITeller;
 
-public class Teller extends ATeller {
+public class Teller extends AEmployee implements ITeller, ISaveable {
 }
