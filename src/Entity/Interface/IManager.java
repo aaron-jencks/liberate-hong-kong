@@ -1,7 +1,7 @@
 package Entity.Interface;
 
-import Entity.Employee;
+import Entity.Interface.IEmployee;
 
 public interface IManager {
-    void Fire(Employee e);
+    void Fire(IEmployee e);
 }
