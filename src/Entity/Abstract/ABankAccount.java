@@ -1,8 +1,8 @@
 package Entity.Abstract;
 
-import Entity.Interface.IAccount;
+import Entity.Abstract.AAccount;
 import Entity.Interface.IBankAccount;
 import Entity.Interface.ISaveable;
 
-public abstract class ABankAccount implements IBankAccount , IAccount, ISaveable {
+public abstract class ABankAccount  extends AAccount implements IBankAccount , ISaveable {
 }
