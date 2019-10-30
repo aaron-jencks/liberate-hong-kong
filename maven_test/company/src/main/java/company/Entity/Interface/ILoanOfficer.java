@@ -4,6 +4,6 @@ import company.Entity.CreditAccount;
 import company.Entity.Customer;
 
 public interface ILoanOfficer {
-    void CreateAccount(CreditAccount account, Customer customer);
-    void CloseAccount(CreditAccount account);
+    public void CreateAccount(CreditAccount account, Customer customer);
+    public void CloseAccount(CreditAccount account);
 }

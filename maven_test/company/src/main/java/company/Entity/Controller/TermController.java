@@ -1,6 +1,7 @@
 package company.Entity.Controller;
 
 import java.util.ArrayDeque;
+import java.io.IOException;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -16,7 +17,7 @@ public class TermController implements ITermController {
     private IMenu current = null;
     private ArrayDeque<IMenu> active_windows = new ArrayDeque<>();
 
-    public TermController()
+    public TermController() throws IOException
     {
         Terminal t = TerminalBuilder.terminal();
         term_width = t.getWidth();
