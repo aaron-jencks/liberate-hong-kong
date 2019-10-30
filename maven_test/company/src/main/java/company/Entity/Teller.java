@@ -1,6 +1,7 @@
 package company.Entity;
 
-import company.Entity.Abstract.ATeller;
+import company.Entity.Abstract.APerson;
+import company.Entity.Interface.ITeller;
 
-public class Teller extends ATeller {
+public class Teller extends APerson implements ITeller {
 }

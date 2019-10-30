@@ -1,10 +1,32 @@
 package company.Entity.Abstract;
 
 import company.Entity.Interface.IAccount;
-import company.Entity.Interface.ISaveable;
 
-public abstract class AAccount implements IAccount, ISaveable {
+public abstract class AAccount extends ASaveable implements IAccount
+{
 
     protected long amount;
     protected long accountNumber;
+
+    public long getAmount()
+    {
+        return amount;
+    }
+
+    public AAccount setAmount(long amount)
+    {
+        this.amount = amount;
+        return this;
+    }
+
+    public long getAccountNumber()
+    {
+        return accountNumber;
+    }
+
+    public AAccount setAccountNumber(long accountNumber)
+    {
+        this.accountNumber = accountNumber;
+        return this;
+    }
 }

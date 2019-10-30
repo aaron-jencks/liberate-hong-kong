@@ -1,6 +1,6 @@
-package Entity.Abstract;
+package company.Entity.Abstract;
 
-import Entity.Interface.ISaveable;
+import company.Entity.Interface.ISaveable;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 public abstract class ASaveable implements ISaveable
 {
     @Override
-    public void Save()
+    public void save()
     {
         JSONObject obj = new JSONObject();
         Field[] fields = this.getClass().getDeclaredFields();
