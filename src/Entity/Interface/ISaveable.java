@@ -1,5 +1,6 @@
 package Entity.Interface;
 
-public interface  ISaveable {
-
+public interface ISaveable
+{
+    void Save();
 }

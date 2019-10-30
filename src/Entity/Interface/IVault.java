@@ -1,4 +1,5 @@
 package Entity.Interface;
 
-public interface IVault {
+public interface IVault
+{
 }

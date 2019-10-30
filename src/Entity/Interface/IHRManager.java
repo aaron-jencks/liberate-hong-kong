@@ -1,5 +1,6 @@
 package Entity.Interface;
 
-public interface IHRManager {
+public interface IHRManager
+{
     IEmployee Hire(IPerson p);
 }

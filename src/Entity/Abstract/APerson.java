@@ -1,9 +1,9 @@
 package Entity.Abstract;
 
 import Entity.Interface.IPerson;
-import Entity.Interface.ISaveable;
 
-public abstract class APerson implements IPerson , ISaveable {
+public abstract class APerson extends ASaveable implements IPerson
+{
 
     protected String firstName;
     protected String lastName;

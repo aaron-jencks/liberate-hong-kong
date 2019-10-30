@@ -3,7 +3,8 @@ package Entity;
 import Entity.Abstract.AAccountController;
 import Entity.Interface.IAccount;
 
-public class AccountController extends AAccountController {
+public class AccountController extends AAccountController
+{
 
     @Override
     public void Deposit(IAccount account, long amount)

@@ -1,5 +1,6 @@
 package Entity.Interface;
 
-public interface IManager {
+public interface IManager
+{
     void Fire(IEmployee e);
 }

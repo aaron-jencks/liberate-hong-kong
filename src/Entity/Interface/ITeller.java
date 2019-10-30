@@ -1,4 +1,5 @@
 package Entity.Interface;
 
-public interface ITeller {
+public interface ITeller
+{
 }

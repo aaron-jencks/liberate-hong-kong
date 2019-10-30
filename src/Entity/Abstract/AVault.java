@@ -7,7 +7,8 @@ import Entity.Interface.IVault;
 
 import java.util.HashMap;
 
-public abstract class AVault implements IVault {
+public abstract class AVault implements IVault
+{
     protected HashMap<Long, ICustomer> customers;
     protected HashMap<Long, IEmployee> employees;
     protected HashMap<Long, IAccount> accounts;

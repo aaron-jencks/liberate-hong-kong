@@ -1,4 +1,5 @@
 package Entity.Interface;
 
-public interface ICreditAccount {
+public interface ICreditAccount
+{
 }
