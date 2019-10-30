@@ -13,8 +13,8 @@ public abstract class AMenu implements IMenu {
     protected ITermController parent;
     protected String title = new String();
     protected String prompt = "What would you like to do? ";
-    protected ArrayList<IMenuItem> items = new ArrayList<>();
-    protected ArrayList<IMenuItem> available = new ArrayList<>();
+    protected ArrayList<IMenuItem> items = new ArrayList<IMenuItem>();
+    protected ArrayList<IMenuItem> available = new ArrayList<IMenuItem>();
     public boolean is_valid = false;
 
     public AMenu(ITermController parent)
@@ -68,7 +68,7 @@ public abstract class AMenu implements IMenu {
             // Normally I just use a lambda expression here, but since I need the length of the list
             // I have to use an external class.
             // But, (T v) -> {expression;} is also okay.
-            item = UIUtil.get_input(sc, item, prompt, new MenuItemValidator(available.size() + 1));
+            item = UIUtil.get_input(sc, item, prompt, new MenuItemValidator(available.size()));
         }
         catch(Exception e)
         {

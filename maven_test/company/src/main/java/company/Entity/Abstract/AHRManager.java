@@ -7,7 +7,6 @@ import company.Entity.Interface.IPerson;
 
 public abstract class AHRManager extends AManager implements IHRManager {
 
-    @Override
     public IEmployee Hire(IPerson p)
     {
         // TODO

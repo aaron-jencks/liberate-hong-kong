@@ -205,7 +205,6 @@ public class JSONArray implements Iterable<Object> {
         }
     }
 
-    @Override
     public Iterator<Object> iterator() {
         return this.myArrayList.iterator();
     }

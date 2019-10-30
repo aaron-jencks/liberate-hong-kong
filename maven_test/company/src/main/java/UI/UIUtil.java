@@ -106,7 +106,7 @@ public class UIUtil {
     public static ArrayList<String> create_string_list(Iterable list, 
                                                        boolean is_numbered)
     {
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<String>();
         int row = 1;
 
         for(Object o : list)
@@ -204,8 +204,19 @@ public class UIUtil {
     @SuppressWarnings("unchecked")
 	public static <T> T get_input(Scanner sc, T out, String prompt, Predicate<T> valid) throws Exception
 	{
-		System.out.print(prompt);
+        boolean first = true;
 		do {
+            if(first)
+                first = false;
+            else
+            {
+                System.out.println("\033[" + 
+                                   (prompt.length() + 1 + out.toString().length() + 1) + 
+                                   "G\033[A\033[38;5;9mInvalid response, try again...\033[0m");
+            }
+
+            System.out.print(prompt);
+
 			if(out.getClass() == Integer.class)
 			{
 				while(!sc.hasNextInt());	// Waits until a valid entry was chosen
