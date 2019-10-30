@@ -14,10 +14,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.UUID;
 
 public abstract class ASaveable implements ISaveable {
+
+    public UUID objId;
+
     @Override
-    public void save() {
+    public UUID save() {
+        UUID id = UUID.randomUUID();
         JSONObject obj = new JSONObject();
         Field[] fields = this.getClass().getSuperclass().getDeclaredFields();
         String type = this.getClass().getSuperclass().getSimpleName();
@@ -25,6 +30,7 @@ public abstract class ASaveable implements ISaveable {
             fields = this.getClass().getSuperclass().getSuperclass().getDeclaredFields();
         }
         obj.put("type", type);
+        obj.put("ID", id);
         try {
             for (Field f : fields) {
                 obj.put(f.getName(), f.get(this));
@@ -38,12 +44,13 @@ public abstract class ASaveable implements ISaveable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return id;
     }
 
-    @Override
-    public Object load() {
+    
+    public static Object load(String className, UUID uuid) {
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "\\data\\" + this.getClass().getName() + ".json");
+        File file = new File(s + "\\data\\company.Entity." + className + ".json");
         try {
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
@@ -51,6 +58,11 @@ public abstract class ASaveable implements ISaveable {
                 String line = sc.nextLine();
                 //make the string into json
                 JSONObject obj = new JSONObject(line);
+                //check if it has the ID we are searching for
+                UUID id = UUID.fromString((String)obj.get("ID"));
+                if(!id.equals(uuid)){
+                    continue;
+                }
                 //instantiate it into an object
                 Object inst = instantiate(removeLeadingA(obj.get("type").toString()));
                 Class<?> clazz = inst.getClass();
