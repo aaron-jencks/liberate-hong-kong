@@ -3,38 +3,42 @@ package UI.controller;
 import java.util.ArrayDeque;
 import java.io.IOException;
 
-// import org.jline.terminal.Terminal;
-// import org.jline.terminal.TerminalBuilder;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+// import com.googlecode.lanterna.TerminalSize;
+// import com.googlecode.lanterna.screen.Screen;
+// import com.googlecode.lanterna.screen.TerminalScreen;
+// import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 
 import UI.controller.ITermController;
 import UI.IMenu;
 import UI.IMenuItem;
+import UI.UIUtil;
 
 public class TermController implements ITermController {
     private int term_width;
     private int term_height;
-    private Screen term = null;
+    private Terminal term = null;
     private IMenu current = null;
     private ArrayDeque<IMenu> active_windows = new ArrayDeque<>();
 
     public TermController() throws IOException
     { 
-        term = new TerminalScreen(new DefaultTerminalFactory().createTerminal());
-        term.startScreen();
-        TerminalSize size = term.getTerminalSize();
-        term_width = size.getColumns();
-        term_height = size.getRows();
+        term = TerminalBuilder.terminal();
+        //term.startScreen();
+        // TerminalSize size = term.getTerminalSize();
+        // term_width = size.getColumns();
+        // term_height = size.getRows();
+        term_width = term.getWidth();
+        term_height = term.getHeight();
     }
 
     @Override
     public void set_main_window(IMenu window)
     {
-        term.clear();
+        //term.clear();
+        UIUtil.clrscr();
         active_windows.push(window);
         window.display();
         current = window;
@@ -51,7 +55,8 @@ public class TermController implements ITermController {
     @Override
     public void close_window()
     {
-        term.clear();
+        //term.clear();
+        UIUtil.clrscr();
         active_windows.pop();
 
         current = null;
