@@ -7,13 +7,28 @@ import UI.IMenu;
 import UI.IMenuItem;
 import UI.MenuItemValidator;
 import UI.UIUtil;
+import UI.controller.ITermController;
 
 public abstract class AMenu implements IMenu {
-    private String title = new String();
-    private String prompt = new String();
-    private ArrayList<IMenuItem> items = new ArrayList<>();
-    private ArrayList<IMenuItem> available = new ArrayList<>();
+    protected ITermController parent;
+    protected String title = new String();
+    protected String prompt = "What would you like to do? ";
+    protected ArrayList<IMenuItem> items = new ArrayList<>();
+    protected ArrayList<IMenuItem> available = new ArrayList<>();
 
+    public AMenu(ITermController parent)
+    {
+        super();
+        this.parent = parent;
+    }
+
+    @Override
+    public String get_display_string()
+    {
+        return UIUtil.create_menu_string(title, true, available, "");
+    }
+
+    @Override
     public void display()
     {
         available = new ArrayList<>(items.size());
@@ -21,9 +36,10 @@ public abstract class AMenu implements IMenu {
             if(i.is_available())
                 available.add(i);
 
-        System.out.print(UIUtil.create_menu_string(title, true, available, ""));
+        System.out.print(get_display_string());
     }
 
+    @Override
     public IMenuItem prompt()
     {
         display();

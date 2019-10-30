@@ -1,7 +1,8 @@
 package company;
 
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
+import UI.controller.TermController;
+import UI.menus.GreeterMenu.GreeterMenu;
+import UI.IMenuItem;
 import java.io.IOException;
 
 /**
@@ -12,10 +13,11 @@ public class App
 {
     public static void main( String[] args ) throws IOException
     {
-        Terminal terminal = TerminalBuilder.terminal();
-
-        System.out.println("The size of the terminal is " + terminal.getWidth() + "x" + terminal.getHeight());
-
         System.out.println( "Hello World!" );
+
+        TermController term = new TermController();
+        GreeterMenu splash = new GreeterMenu(term);
+        term.set_main_window(splash);
+        IMenuItem response = term.interact();
     }
 }

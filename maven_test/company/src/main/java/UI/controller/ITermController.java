@@ -1,4 +1,4 @@
-package company.Entity.Interface;
+package UI.controller;
 
 import UI.IMenu;
 import UI.IMenuItem;
@@ -25,4 +25,14 @@ public interface ITermController {
      * Returns the number of active windows at the given time.
      */
     public int get_window_count();
+
+    /**
+     * Returns the width of the terminal (in characters)
+     */
+    public int get_term_width();
+
+    /**
+     * Returns the height of the terminal (in lines)
+     */
+    public int get_term_height();
 }

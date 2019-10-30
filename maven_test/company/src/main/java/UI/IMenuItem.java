@@ -13,6 +13,8 @@ public interface IMenuItem {
 
     /**
      * Activates whatever action is associated with this item.
+     * @return Returns a menu that can be posted to display the information represented by this
+     * item, or null if it doesn't have an associated menu.
      */
-    public void Activate();
+    public AMenu Activate();
 }

@@ -1,4 +1,4 @@
-package company.Entity.Controller;
+package UI.controller;
 
 import java.util.ArrayDeque;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
-import company.Entity.Interface.ITermController;
+import UI.controller.ITermController;
 import UI.IMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
@@ -24,10 +24,6 @@ public class TermController implements ITermController {
         term_height = t.getHeight();
     }
 
-    /**
-     * Creates a new main window on the terminal, pushing this window onto the stack of already open windows.
-     * @param window The window to open.
-     */
     @Override
     public void set_main_window(IMenu window)
     {
@@ -37,10 +33,6 @@ public class TermController implements ITermController {
         current = window;
     }
 
-    /**
-     * Interacts with the current window, prompting the user for an input
-     * @return Returns the IMenu item selected by the user
-     */
     @Override
     public IMenuItem interact()
     {
@@ -49,9 +41,7 @@ public class TermController implements ITermController {
         return null;
     }
 
-    /**
-     * Closes the current window and opens any underlying window, if available.
-     */
+    @Override
     public void close_window()
     {
         UIUtil.clrscr();
@@ -66,8 +56,12 @@ public class TermController implements ITermController {
         }
     }
 
-    /**
-     * Returns the number of active windows at the given time.
-     */
+    @Override
     public int get_window_count() { return active_windows.size(); }
+
+    @Override
+    public int get_term_width() { return term_width; }
+
+    @Override
+    public int get_term_height() { return term_height; }
 }
