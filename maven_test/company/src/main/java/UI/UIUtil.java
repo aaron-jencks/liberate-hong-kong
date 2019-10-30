@@ -229,7 +229,7 @@ public class UIUtil {
 			}
 			else if(out.getClass() == String.class)
 			{
-				while(!sc.hasNextLine());	// Waits until a valid entry was chosen
+				sc.hasNextLine();	// Waits until a valid entry was chosen
 				out = (T)(Object)sc.nextLine();
 			}
 			else

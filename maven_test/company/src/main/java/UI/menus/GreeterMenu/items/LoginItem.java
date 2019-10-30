@@ -10,7 +10,7 @@ public class LoginItem extends AMenuItem {
     public LoginItem(ITermController parent) { super(parent); }
 
     @Override
-    public AMenu Activate()
+    public AMenu activate()
     {
         return new LoginMenu(parent);
     }

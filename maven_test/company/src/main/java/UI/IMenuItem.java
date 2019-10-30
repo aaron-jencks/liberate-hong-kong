@@ -16,5 +16,5 @@ public interface IMenuItem {
      * @return Returns a menu that can be posted to display the information represented by this
      * item, or null if it doesn't have an associated menu.
      */
-    public AMenu Activate();
+    public AMenu activate();
 }

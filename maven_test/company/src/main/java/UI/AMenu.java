@@ -15,7 +15,9 @@ public abstract class AMenu implements IMenu {
     protected String prompt = "What would you like to do? ";
     protected ArrayList<IMenuItem> items = new ArrayList<IMenuItem>();
     protected ArrayList<IMenuItem> available = new ArrayList<IMenuItem>();
+    private boolean is_availabled = false;
     public boolean is_valid = false;
+    public boolean is_centered = true;
 
     public AMenu(ITermController parent)
     {
@@ -23,10 +25,61 @@ public abstract class AMenu implements IMenu {
         this.parent = parent;
     }
 
+    /**
+     * Determines the column that the menu box for this menu starts in
+     * @return Returns the index of the column that this menu starts in.
+     */
+    public int get_x_coord()
+    {
+        int menu_width = 0, diff;
+
+        for(String s : UIUtil.create_menu_string(title, true, available, "").split("\n"))
+            if(s.length() > menu_width)
+                menu_width = s.length();
+
+        diff = parent.get_term_width() - menu_width;
+        if(diff < 0)
+            return 0;
+        else
+            return diff >> 1;
+    }
+
+    public int get_y_coord()
+    {
+        if(!is_availabled)
+            populate_availabled();
+
+        return (parent.get_term_height() - available.size() - 3) >> 1;
+    }
+
     @Override
     public String get_display_string()
     {
-        return UIUtil.create_menu_string(title, true, available, "");
+        if(is_centered)
+        {
+            String result = new String();
+            String[] temp = UIUtil.create_menu_string(title, true, available, "").split("\n");
+
+            // Add vertical padding
+            int v_pad = get_y_coord(), h_pad = get_x_coord();
+            for(int i = 0; i < v_pad; i++)
+                result += "\n";
+
+            for(String str : temp)
+                if(!str.isEmpty())
+                    result += UIUtil.pad_string(str, 
+                                                parent.get_term_width(), 
+                                                AlignmentType.center) + '\n';
+
+            String new_prompt = new String();
+            for(int i = 0; i < h_pad; i++)
+                new_prompt += " ";
+            prompt = new_prompt + prompt;
+
+            return result;
+        }
+        else
+            return UIUtil.create_menu_string(title, true, available, "");
     }
 
     protected void populate_availabled()
@@ -37,12 +90,14 @@ public abstract class AMenu implements IMenu {
                 available.add(i);
 
         is_valid = false;
+        is_availabled = true;
     }
 
     @Override
     public void display()
     {
-        populate_availabled();
+        if(!is_availabled)
+            populate_availabled();
 
         System.out.print(get_display_string());
 
@@ -53,6 +108,7 @@ public abstract class AMenu implements IMenu {
     public void invalidate()
     {
         is_valid = false;
+        is_availabled = false;
     }
 
     @Override
@@ -74,6 +130,8 @@ public abstract class AMenu implements IMenu {
         {
             System.err.println("How the hell did you get here???");
         }
+
+        sc.close();
 
         return available.get(item - 1);
     }

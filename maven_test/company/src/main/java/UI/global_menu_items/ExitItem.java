@@ -13,7 +13,7 @@ public class ExitItem extends AMenuItem {
      * TODO Maybe make close entire application instead.
      */
     @Override
-    public AMenu Activate()
+    public AMenu activate()
     {
         if(parent != null)
             parent.close_window();
