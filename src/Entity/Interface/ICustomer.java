@@ -1,4 +1,5 @@
 package Entity.Interface;
 
-public interface ICustomer {
+public interface ICustomer
+{
 }

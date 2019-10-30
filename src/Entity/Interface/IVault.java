@@ -1,5 +1,5 @@
 package Entity.Interface;
 
-public interface IEmployee
+public interface IVault
 {
 }

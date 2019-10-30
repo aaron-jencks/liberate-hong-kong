@@ -1,5 +1,6 @@
 package Entity.Interface;
 
-public interface IPerson {
+public interface IPerson
+{
 
 }
