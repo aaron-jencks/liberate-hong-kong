@@ -1,8 +1,12 @@
 # metadata thingy...
 .metadata/
 
+# 'database' files
+.Data/
+
 # Compiled class file
 *.class
+.out/
 
 # Log file
 *.log
