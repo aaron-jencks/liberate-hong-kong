@@ -1,16 +1,19 @@
 package Entity;
 
 import Entity.Abstract.AAccountController;
+import Entity.Interface.IAccount;
 
 public class AccountController extends AAccountController {
 
     @Override
-    public void Deposit(Account account, long amount) {
+    public void Deposit(IAccount account, long amount)
+    {
 
     }
 
     @Override
-    public void Withdrawl(Account account, long amount) {
+    public void Withdrawl(IAccount account, long amount)
+    {
 
     }
 }
