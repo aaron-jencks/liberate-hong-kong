@@ -18,6 +18,11 @@ public interface IMenu {
     public String get_display_string();
 
     /**
+     * Causes the menu to be re-displayed on the next prompt.
+     */
+    public void invalidate();
+
+    /**
      * Prompts the user for input and returns the item they selected from the list of available items.
      */
     public IMenuItem prompt();

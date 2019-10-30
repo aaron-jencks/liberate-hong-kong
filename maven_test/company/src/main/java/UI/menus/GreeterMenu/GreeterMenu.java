@@ -47,7 +47,7 @@ public class GreeterMenu extends AMenu {
         String[] temp = super.get_display_string().split("\n");
 
         // Add vertical padding
-        int v_pad = get_y_coord();
+        int v_pad = get_y_coord(), h_pad = get_x_coord();
         for(int i = 0; i < v_pad; i++)
             result += "\n";
 
@@ -56,6 +56,11 @@ public class GreeterMenu extends AMenu {
                 result += UIUtil.pad_string(str, 
                                             parent.get_term_width(), 
                                             AlignmentType.center) + '\n';
+
+        String new_prompt = new String();
+        for(int i = 0; i < h_pad; i++)
+            new_prompt += " ";
+        prompt = new_prompt + prompt;
 
         return result;
     }

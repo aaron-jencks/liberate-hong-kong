@@ -14,4 +14,7 @@ public class LoginItem extends AMenuItem {
     {
         return new LoginMenu(parent);
     }
+
+    @Override
+    public String toString() { return "Login"; }
 }

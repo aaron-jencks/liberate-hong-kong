@@ -20,4 +20,7 @@ public class ExitItem extends AMenuItem {
 
         return null;
     }
+
+    @Override
+    public String toString() { return "Exit"; }
 }

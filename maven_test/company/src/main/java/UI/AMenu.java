@@ -15,6 +15,7 @@ public abstract class AMenu implements IMenu {
     protected String prompt = "What would you like to do? ";
     protected ArrayList<IMenuItem> items = new ArrayList<>();
     protected ArrayList<IMenuItem> available = new ArrayList<>();
+    public boolean is_valid = false;
 
     public AMenu(ITermController parent)
     {
@@ -28,21 +29,37 @@ public abstract class AMenu implements IMenu {
         return UIUtil.create_menu_string(title, true, available, "");
     }
 
-    @Override
-    public void display()
+    protected void populate_availabled()
     {
         available = new ArrayList<>(items.size());
         for(IMenuItem i : items)
             if(i.is_available())
                 available.add(i);
 
+        is_valid = false;
+    }
+
+    @Override
+    public void display()
+    {
+        populate_availabled();
+
         System.out.print(get_display_string());
+
+        is_valid = true;
+    }
+
+    @Override
+    public void invalidate()
+    {
+        is_valid = false;
     }
 
     @Override
     public IMenuItem prompt()
     {
-        display();
+        if(!is_valid)
+            display();
 
         Scanner sc = new Scanner(System.in);
         Integer item = 0;

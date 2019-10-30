@@ -166,7 +166,7 @@ public class UIUtil {
         if(use_borders)
             result += create_bar_string(total_width + 4, '#') + '\n';
 
-        result += pad_string(title, total_width, AlignmentType.center);
+        result += "# " + pad_string(title, total_width, AlignmentType.center) + " #\n";
 
         for(String element : create_string_list(items, true))
         {
@@ -182,7 +182,7 @@ public class UIUtil {
         if(use_borders)
             result += create_bar_string(total_width + 4, '#') + '\n';
 
-        result += prompt + "? ";
+        result += prompt;
 
         return result;
     }
