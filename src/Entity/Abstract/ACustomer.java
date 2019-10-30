@@ -13,8 +13,9 @@ public abstract class ACustomer extends APerson implements ICustomer , ISaveable
         return accountIds;
     }
 
-    public void setAccountIds(ArrayList<String> accountIds)
+    public ACustomer setAccountIds(ArrayList<String> accountIds)
     {
         this.accountIds = accountIds;
+        return this;
     }
 }

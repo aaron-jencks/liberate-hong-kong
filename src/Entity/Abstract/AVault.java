@@ -17,9 +17,10 @@ public abstract class AVault implements IVault {
         return customers;
     }
 
-    public void setCustomers(HashMap<Long, ICustomer> customers)
+    public AVault setCustomers(HashMap<Long, ICustomer> customers)
     {
         this.customers = customers;
+        return this;
     }
 
     public HashMap<Long, IEmployee> getEmployees()
@@ -27,9 +28,10 @@ public abstract class AVault implements IVault {
         return employees;
     }
 
-    public void setEmployees(HashMap<Long, IEmployee> employees)
+    public AVault setEmployees(HashMap<Long, IEmployee> employees)
     {
         this.employees = employees;
+        return this;
     }
 
     public HashMap<Long, IAccount> getAccounts()
@@ -37,8 +39,9 @@ public abstract class AVault implements IVault {
         return accounts;
     }
 
-    public void setAccounts(HashMap<Long, IAccount> accounts)
+    public AVault setAccounts(HashMap<Long, IAccount> accounts)
     {
         this.accounts = accounts;
+        return this;
     }
 }

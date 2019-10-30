@@ -14,9 +14,10 @@ public abstract class AEmployee extends APerson implements IEmployee, ISaveable 
         return employeeID;
     }
 
-    public void setEmployeeID(long employeeID)
+    public AEmployee setEmployeeID(long employeeID)
     {
         this.employeeID = employeeID;
+        return this;
     }
 
     public long getEmployeePassword()
@@ -24,8 +25,9 @@ public abstract class AEmployee extends APerson implements IEmployee, ISaveable 
         return employeePassword;
     }
 
-    public void setEmployeePassword(long employeePassword)
+    public AEmployee setEmployeePassword(long employeePassword)
     {
         this.employeePassword = employeePassword;
+        return this;
     }
 }

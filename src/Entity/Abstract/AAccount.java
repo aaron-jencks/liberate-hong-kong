@@ -13,9 +13,10 @@ public abstract class AAccount implements IAccount, ISaveable {
         return amount;
     }
 
-    public void setAmount(long amount)
+    public AAccount setAmount(long amount)
     {
         this.amount = amount;
+        return this;
     }
 
     public long getAccountNumber()
@@ -23,8 +24,9 @@ public abstract class AAccount implements IAccount, ISaveable {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber)
+    public AAccount setAccountNumber(long accountNumber)
     {
         this.accountNumber = accountNumber;
+        return this;
     }
 }

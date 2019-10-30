@@ -14,9 +14,10 @@ public abstract class APerson implements IPerson , ISaveable {
         return firstName;
     }
 
-    public void setFirstName(String firstName)
+    public APerson setFirstName(String firstName)
     {
         this.firstName = firstName;
+        return this;
     }
 
     public String getLastName()
@@ -24,9 +25,10 @@ public abstract class APerson implements IPerson , ISaveable {
         return lastName;
     }
 
-    public void setLastName(String lastName)
+    public APerson setLastName(String lastName)
     {
         this.lastName = lastName;
+        return this;
     }
 
     public String getEmail()
@@ -34,8 +36,9 @@ public abstract class APerson implements IPerson , ISaveable {
         return email;
     }
 
-    public void setEmail(String email)
+    public APerson setEmail(String email)
     {
         this.email = email;
+        return this;
     }
 }
