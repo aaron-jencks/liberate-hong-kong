@@ -3,6 +3,7 @@ package company;
 import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
+import company.Entity.Teller;
 import UI.IMenuItem;
 import UI.AMenu;
 import java.io.IOException;
@@ -16,6 +17,13 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         System.out.println( "Hello World!" );
+        Teller t = new Teller();
+        t.setEmployeePassword("p");
+        t.setEmployeeUsername("u");
+        t.setEmployeeSecurityQuestion("Hello?");
+        t.setEmployeeSecurityAnswer("World!");
+        t.save();
+        
 
         TermController term = new TermController();
         GreeterMenu splash = new GreeterMenu(term);

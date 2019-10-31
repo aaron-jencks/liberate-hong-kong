@@ -7,6 +7,9 @@ import UI.IMenuItem;
 import UI.controller.ITermController;
 import UI.menus.LoginMenu.items.MainMenuItem;
 import UI.UIUtil;
+import UI.AlignmentType;
+import UI.global_menu_items.ExitItem;
+import company.Entity.Abstract.AEmployee;
 
 public class ForgotPasswordMenu extends LoginMenu {
     protected String security_question = new String();
@@ -34,7 +37,6 @@ public class ForgotPasswordMenu extends LoginMenu {
                         (iteration == 2) ? "New Password: " : "Confirm Password: ");
         if(iteration++ == 3)
             iteration = 0;
-            
         return result;
     }
 
@@ -47,27 +49,59 @@ public class ForgotPasswordMenu extends LoginMenu {
         if(!is_valid)
             display();
 
-        try { username = UIUtil.get_input(ForgotPasswordMenu.inputScanner, username, prompt, (String s) -> { return true; }); }
+        int h_pad = get_x_coord();
+        String padding = new String();
+        for(int i = 0; i < h_pad; i++)
+            padding += " ";
+
+        try { username = UIUtil.get_input(ForgotPasswordMenu.inputScanner, username, padding + "Username: ", (String s) -> { return true; }); }
         catch(Exception e) { e.printStackTrace(); }
 
-        // TODO Fetch user security question
-        get_display_string();
-        System.out.println(prompt);
+        if(!AEmployee.CheckEmployee(username))
+        {
+            System.out.println(UIUtil.pad_string("That user does not exist, please contact your system administrator to create a new account.", 
+                                                 parent.get_term_width(), AlignmentType.center));
+            System.out.println(UIUtil.pad_string("Press RETURN to continue", 
+                                                 parent.get_term_width(), AlignmentType.center));
+            try { UIUtil.get_input(ForgotPasswordMenu.inputScanner, new String(), "", (String s) -> { return true; }); }
+            catch(Exception e) { e.printStackTrace(); }
 
-        get_display_string();
-        try { security_answer = UIUtil.get_input(ForgotPasswordMenu.inputScanner, security_answer, prompt, (String s) -> { return true; }); }
+            return new ExitItem(parent);
+        }
+
+
+        // TODO Fetch user security question
+        security_question = AEmployee.LookupSecurityQuestion(username); // Shouldn't be null, so no need to check
+        try { security_answer = UIUtil.get_input(ForgotPasswordMenu.inputScanner, security_answer, 
+                                                 padding + "SecurityQuestion: " + security_question, (String s) -> { return true; }); }
         catch(Exception e) { e.printStackTrace(); }
 
         // TODO check existence
+        if(!AEmployee.CheckSecurityQuestion(username, security_answer))
+        {
+            System.out.println(UIUtil.pad_string("Account has been locked down due to suspicious activity, please contact your system administrator.", 
+                                                 parent.get_term_width(), AlignmentType.center));
+            System.out.println(UIUtil.pad_string("Press RETURN to continue", 
+                                                 parent.get_term_width(), AlignmentType.center));
+            try { UIUtil.get_input(ForgotPasswordMenu.inputScanner, new String(), "", (String s) -> { return true; }); }
+            catch(Exception e) { e.printStackTrace(); }
 
-        get_display_string();
-        try { password = UIUtil.get_input(ForgotPasswordMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
-        catch(Exception e) { e.printStackTrace(); }
+            return new ExitItem(parent);
+        }
 
-        get_display_string();
-        try { confirm_password = UIUtil.get_input(ForgotPasswordMenu.inputScanner, confirm_password, prompt, (String s) -> { return true; }); }
-        catch(Exception e) { e.printStackTrace(); }
+        do
+        {
+            try { password = UIUtil.get_input(ForgotPasswordMenu.inputScanner, password, padding + "New Password: ", (String s) -> { return true; }); }
+            catch(Exception e) { e.printStackTrace(); }
 
-        return new MainMenuItem(parent);
+            try { confirm_password = UIUtil.get_input(ForgotPasswordMenu.inputScanner, confirm_password, padding + "Confirm Password: ", (String s) -> { return true; }); }
+            catch(Exception e) { e.printStackTrace(); }
+
+            if(!password.equals(confirm_password))
+                System.out.println(UIUtil.pad_string("Those passwords don't match, try again.", parent.get_term_width(), AlignmentType.center));
+
+        } while(!password.equals(confirm_password));
+
+        return new ExitItem(parent);
     }
 }
