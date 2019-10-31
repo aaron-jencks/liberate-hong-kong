@@ -56,8 +56,8 @@ public abstract class ASaveable implements ISaveable {
      */
     public static void AppendToFile(JSONObject obj, String className) {
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "\\data\\company.Entity." + className + ".json");
-        File tempFile = new File(s + "\\data\\company.Entity." + className + "-temp.json");
+        File file = new File(s + "/data/company.Entity." + className + ".json");
+        File tempFile = new File(s + "/data/company.Entity." + className + "-temp.json");
         JSONArray objArray = new JSONArray();
         try {
             Scanner sc = new Scanner(file);
@@ -94,8 +94,8 @@ public abstract class ASaveable implements ISaveable {
      */
     public static JSONObject loadJsonObject(String className, UUID id) {
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "\\data\\company.Entity." + className + ".json");
-        File tempFile = new File(s + "\\data\\company.Entity." + className + "-temp.json");
+        File file = new File(s + "/data/company.Entity." + className + ".json");
+        File tempFile = new File(s + "/data/company.Entity." + className + "-temp.json");
         JSONObject returnObject = new JSONObject();
         JSONArray objArray = new JSONArray();
         try {
