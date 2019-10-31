@@ -1,24 +1,19 @@
-package UI.menus.LoginMenu;
+package UI.menus.ForgotPasswordMenu;
 
 import java.util.Scanner;
 
-import UI.AMenu;
+import UI.menus.LoginMenu.LoginMenu;
 import UI.IMenuItem;
 import UI.controller.ITermController;
 import UI.menus.LoginMenu.items.MainMenuItem;
 import UI.UIUtil;
 
-public class LoginMenu extends AMenu {
-    protected String username = new String();
-    protected String password = new String();
+public class ForgotPasswordMenu extends LoginMenu {
+    protected String security_question = new String();
+    protected String security_answer = new String();
+    protected String confirm_password = new String();
 
-    public LoginMenu(ITermController parent) { super(parent); }
-
-    @Override
-    public int get_y_coord()
-    {
-        return (parent.get_term_height() - 2) >> 1;
-    }
+    public ForgotPasswordMenu(ITermController parent) { super(parent); }
 
     @Override
     public String get_display_string()
@@ -33,7 +28,8 @@ public class LoginMenu extends AMenu {
         String new_prompt = new String();
         for(int i = 0; i < h_pad; i++)
             new_prompt += " ";
-        prompt = new_prompt + ((username.isEmpty()) ? "Username: " : "Password: ");
+        prompt = new_prompt + ((username.isEmpty()) ? "Username: " : 
+                               ("Password: ");
 
         return result;
     }
@@ -41,18 +37,18 @@ public class LoginMenu extends AMenu {
     @Override
     public IMenuItem prompt()
     {
-        if(LoginMenu.inputScanner == null)
-            LoginMenu.inputScanner = new Scanner(System.in);
+        if(ForgotPasswordMenu.inputScanner == null)
+            ForgotPasswordMenu.inputScanner = new Scanner(System.in);
 
         if(!is_valid)
             display();
 
-        try { username = UIUtil.get_input(LoginMenu.inputScanner, username, prompt, (String s) -> { return true; }); }
+        try { username = UIUtil.get_input(ForgotPasswordMenu.inputScanner, username, prompt, (String s) -> { return true; }); }
         catch(Exception e) { e.printStackTrace(); }
 
         get_display_string();
 
-        try { password = UIUtil.get_input(LoginMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
+        try { password = UIUtil.get_input(ForgotPasswordMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
         catch(Exception e) { e.printStackTrace(); }
 
         // TODO check existence
