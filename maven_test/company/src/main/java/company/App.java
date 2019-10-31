@@ -3,9 +3,12 @@ package company;
 import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
+import company.Entity.Controller.EmployeeController;
 import company.Entity.Teller;
 import UI.IMenuItem;
 import UI.AMenu;
+import company.Entity.Vault;
+
 import java.io.IOException;
 
 /**
@@ -26,7 +29,10 @@ public class App
         
 
         TermController term = new TermController();
-        GreeterMenu splash = new GreeterMenu(term);
+        Vault vault = new Vault();
+        EmployeeController employeeController = new EmployeeController(vault);
+
+        GreeterMenu splash = new GreeterMenu(term, employeeController);
         term.set_main_window(splash);
 
         while(true)

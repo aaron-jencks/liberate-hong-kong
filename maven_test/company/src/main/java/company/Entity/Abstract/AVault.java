@@ -11,9 +11,9 @@ import java.util.HashMap;
 public abstract class AVault implements IVault
 {
     private long lastEmployeeID = 0;
-    protected HashMap<Long, ICustomer> customers;
-    protected HashMap<Long, IEmployee> employees;
-    protected HashMap<Long, IAccount> accounts;
+    protected HashMap<Long, ICustomer> customers = new HashMap<Long, ICustomer>();
+    protected HashMap<Long, IEmployee> employees = new HashMap<Long, IEmployee>();
+    protected HashMap<Long, IAccount> accounts = new HashMap<Long, IAccount>();
 
     public HashMap<Long, ICustomer> getCustomers()
     {
@@ -32,11 +32,18 @@ public abstract class AVault implements IVault
     }
 
     public IEmployee getEmployee(Person p) {
-        for(IEmployee employee: employees.values()) {
-            if ((Person)employee == p)
-                return employee;
+        if (employees != null) {
+            for (IEmployee employee : employees.values()) {
+                if ((APerson) employee == p)
+                    return employee;
+            }
         }
         return null;
+    }
+
+    public IEmployee getEmployee(long employee_id)
+    {
+        return employees.get(employee_id);
     }
 
     public AVault setEmployees(HashMap<Long, IEmployee> employees)
@@ -58,7 +65,7 @@ public abstract class AVault implements IVault
 
     public long createTeller(Person p)
     {
-        long new_id = lastEmployeeID++;
+        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Teller t = new Teller(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, t);
@@ -67,7 +74,7 @@ public abstract class AVault implements IVault
 
     public long createLoanOfficer(Person p)
     {
-        long new_id = lastEmployeeID++;
+        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
         LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, lo);
@@ -76,7 +83,7 @@ public abstract class AVault implements IVault
 
     public long createManager(Person p)
     {
-        long new_id = lastEmployeeID++;
+        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Manager m = new Manager(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, m);
@@ -85,7 +92,7 @@ public abstract class AVault implements IVault
 
     public long createHRManager(Person p)
     {
-        long new_id = lastEmployeeID++;
+        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
         HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, hrm);
@@ -93,11 +100,17 @@ public abstract class AVault implements IVault
     }
     public long createOwner(Person p)
     {
-        long new_id = lastEmployeeID++;
+        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, o);
         return new_id;
+    }
+
+    public long fireEmployee(long employee_id)
+    {
+        employees.remove(employee_id);
+        return employee_id;
     }
 
 

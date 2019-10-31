@@ -43,4 +43,11 @@ public class EmployeeController implements IEmployeeController {
 
         return employee_id;
     }
+
+    public long fireEmployee(long employee_id) throws Exception {
+        IEmployee employee = vault.getEmployee(employee_id);
+        if (employee == null)
+            throw new Exception("Employee not found");
+        return vault.fireEmployee(employee_id);
+    }
 }

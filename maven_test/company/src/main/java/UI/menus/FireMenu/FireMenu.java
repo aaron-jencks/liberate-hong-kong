@@ -1,4 +1,4 @@
-package UI.menus.HireMenu;
+package UI.menus.FireMenu;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -9,10 +9,10 @@ import company.Entity.Controller.EmployeeController;
 
 import java.util.Scanner;
 
-public class HireMenu extends AMenu {
+public class FireMenu extends AMenu {
     private EmployeeController controller;
 
-    public HireMenu(ITermController parent, EmployeeController controller)
+    public FireMenu(ITermController parent, EmployeeController controller)
     {
         super(parent, controller);
         this.controller = controller;
@@ -44,25 +44,17 @@ public class HireMenu extends AMenu {
         if(!is_valid)
             display();
 
-        String first_name = "";
-        String last_name = "";
-        String position = "";
+        Integer employee_id = 0;
 
         while(true) {
             String padding = get_display_string();
 
             while (confirm.toUpperCase().indexOf('Y') < 0) {
                 try {
-                    first_name = UIUtil.get_input(sc, first_name, padding + "First Name: ", (String s) -> {
+                    employee_id = UIUtil.get_input(sc, employee_id, padding + "Employee ID: ", (Integer x) -> {
                         return true;
                     });
-                    last_name = UIUtil.get_input(sc, last_name, padding + "Last Name: ", (String s) -> {
-                        return true;
-                    });
-                    position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> {
-                        return true;
-                    });
-                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm hiring this person? ", (String s) -> {
+                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm firing this person? ", (String s) -> {
                         return true;
                     });
                 } catch (Exception e) {
@@ -73,15 +65,26 @@ public class HireMenu extends AMenu {
             }
 
             try {
-                long id = controller.createEmployee(first_name, last_name, position);
-                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been created. Press enter to continue.", (String s) -> {
+                long id = controller.fireEmployee((long)employee_id);
+                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been fired. Press enter to continue.", (String s) -> {
                     return true;
                 });
                 return new ExitItem(parent);
             }
             catch (Exception e) {
-                e.printStackTrace();
-                return new ExitItem(parent);
+                if (e.getMessage().equals("Employee not found")) {
+                    try {
+                        confirm = UIUtil.get_input(sc, confirm, padding + "Employee not found. Please try again. Press enter to continue.", (String s) -> {
+                            return true;
+                        });
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                else {
+                    e.printStackTrace();
+                    return new ExitItem(parent);
+                }
             }
         }
 

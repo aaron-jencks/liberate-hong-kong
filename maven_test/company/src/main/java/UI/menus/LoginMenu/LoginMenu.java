@@ -9,12 +9,16 @@ import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.items.MainMenuItem;
 import company.Entity.Abstract.AEmployee;
 import UI.UIUtil;
+import company.Entity.Controller.EmployeeController;
 
 public class LoginMenu extends AMenu {
     protected String username = new String();
     protected String password = new String();
 
-    public LoginMenu(ITermController parent) { super(parent); }
+    public LoginMenu(ITermController parent, EmployeeController employeeController)
+    {
+        super(parent, employeeController);
+    }
 
     @Override
     public int get_y_coord()
@@ -59,7 +63,7 @@ public class LoginMenu extends AMenu {
         // TODO check existence
         boolean validUP = AEmployee.CheckPassword(username, password);
         if(validUP){
-            return new MainMenuItem(parent);
+            return new MainMenuItem(parent, this.employeeController);
         }
 
         return new ExitItem(parent);
