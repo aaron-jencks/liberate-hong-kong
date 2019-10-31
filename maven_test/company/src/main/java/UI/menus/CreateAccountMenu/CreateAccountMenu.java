@@ -6,46 +6,45 @@ import UI.AMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
+import UI.global_menu_items.ExitItem;
 import company.Entity.Customer;
 
 public class CreateAccountMenu extends AMenu {
 
     private String firstName = new String();
     private String lastName = new String();
+    private String accountId = new String();
+    private String accept = new String();
 
     public CreateAccountMenu(ITermController parent) {
         super(parent);
     }
 
-    
     @Override
-    public int get_y_coord()
-    {
+    public int get_y_coord() {
         return (parent.get_term_height() - 2) >> 1;
     }
 
     @Override
-    public String get_display_string()
-    {
+    public String get_display_string() {
         String result = new String();
 
         // Add vertical padding
         int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for(int i = 0; i < v_pad; i++)
+        for (int i = 0; i < v_pad; i++)
             result += "\n";
 
         String new_prompt = new String();
-        for(int i = 0; i < h_pad; i++)
+        for (int i = 0; i < h_pad; i++)
             new_prompt += " ";
 
         String s = "";
-        if(firstName.isEmpty()){
+        if (firstName.isEmpty()) {
             s = "First Name: ";
-        }
-        else if(lastName.isEmpty()){
+        } else if (lastName.isEmpty()) {
             s = "Last Name: ";
         }
-        
+
         prompt = new_prompt + s;
 
         return result;
@@ -55,31 +54,42 @@ public class CreateAccountMenu extends AMenu {
     public IMenuItem prompt() {
         Scanner sc = new Scanner(System.in);
 
-        if(!is_valid)
+        if (!is_valid)
             display();
 
-        try { firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> { return true; }); }
-        catch(Exception e) { e.printStackTrace(); }
+        try {
+            firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> {
+                return true;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         get_display_string();
 
-        try { lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> { return true; }); }
-        catch(Exception e) { e.printStackTrace(); }
+        try {
+            lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> {
+                return true;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         get_display_string();
 
-
-<<<<<<< HEAD
         Customer c = new Customer(firstName, lastName);
-=======
-        Customer c = new Customer();
-        c.setFirstName(firstName)
-        .setLastName(lastName);
->>>>>>> working_branch
-        // c.save();
 
-        // String accountId = c.createAccount();
+        accountId = c.createAccount();
 
-        return null;
+        try {
+            accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountId
+                    + "\n Press any key to return to the account menu.", (String s) -> {
+                        return true;
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ExitItem(this.parent);
     }
 }

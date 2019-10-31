@@ -13,10 +13,10 @@ import company.Entity.Interface.IBankAccount;
 public abstract class ABankAccount extends AAccount implements IBankAccount {
 
     public static BankAccount findById(String accountId) {
-        JSONArray arr = ASaveable.loadAllAsJson("Account");
+        JSONArray arr = ASaveable.loadAllAsJson("BankAccount");
         for (int i = 0; i < arr.length(); i++) {
             JSONObject obj = arr.getJSONObject(i);
-            if (obj.getString("accountId").equals(accountId)) {
+            if (obj.getString("accountNumber").equals(accountId)) {
                 Object inst = instantiate("BankAccount");
                 Class<?> clazz = inst.getClass();
                 // fill all the attributes

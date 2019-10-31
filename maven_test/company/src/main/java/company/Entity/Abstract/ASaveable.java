@@ -45,7 +45,7 @@ public abstract class ASaveable implements ISaveable {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        AppendToFile(obj, removeLeadingA(type));
+        //AppendToFile(obj, removeLeadingA(type));
         return id;
     }
 
