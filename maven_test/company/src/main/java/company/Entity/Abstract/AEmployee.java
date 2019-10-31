@@ -19,7 +19,13 @@ public abstract class AEmployee extends APerson implements IEmployee
     protected String employeeUsername;
     protected String employeePassword;
 
-
+    public AEmployee(String firstName, String lastName, String employeeUsername, long employeeID)
+    {
+        super(firstName, lastName);
+        this.employeeUsername = employeeUsername;
+        this.employeePassword = "";
+        this.employeeID = employeeID;
+    }
 
     public static boolean CheckPassword(String username, String password){
         JSONArray emps = ASaveable.loadAllAsJson("Employee");

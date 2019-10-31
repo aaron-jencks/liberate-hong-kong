@@ -17,7 +17,7 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         System.out.println( "Hello World!" );
-        Teller t = new Teller();
+        Teller t = new Teller("John", "Smith", "TSmith", 0);
         t.setEmployeePassword("p");
         t.setEmployeeUsername("u");
         t.save();
