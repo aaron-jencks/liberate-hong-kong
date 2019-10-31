@@ -18,8 +18,30 @@ public abstract class AEmployee extends APerson implements IEmployee
     protected long employeeID;
     protected String employeeUsername;
     protected String employeePassword;
+    protected String employeeSecurityQuestion;
+    protected String employeeSecurityAnswer;
 
+    public static String LookupSecurityQuestion(String username){
+        JSONArray emps = ASaveable.loadAllAsJson("Employee");
+        for (int i = 0; i < emps.length(); i++) {
+            JSONObject obj = emps.getJSONObject(i);
+            if(obj.getString("employeeUsername").equals(username) {
+                return obj.getString("employeeSecurityQuestion");
+            }
+        }
+        return null;
+    }
 
+    public static boolean CheckSecurityQuestion(String username, String answer){
+        JSONArray emps = ASaveable.loadAllAsJson("Employee");
+        for (int i = 0; i < emps.length(); i++) {
+            JSONObject obj = emps.getJSONObject(i);
+            if(obj.getString("employeeUsername").equals(username) && obj.getString("employeeSecurityAnswer").equals(answer)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static boolean CheckPassword(String username, String password){
         JSONArray emps = ASaveable.loadAllAsJson("Employee");
@@ -104,6 +126,28 @@ public abstract class AEmployee extends APerson implements IEmployee
     public AEmployee setEmployeeUsername(String employeeUsername)
     {
         this.employeeUsername = employeeUsername;
+        return this;
+    }
+
+    public String getEmployeeSecurityQuestion()
+    {
+        return employeeSecurityQuestion;
+    }
+
+    public AEmployee setEmployeeSecurityQuestion(String employeeSecurityQuestion)
+    {
+        this.employeeSecurityQuestion = employeeSecurityQuestion;
+        return this;
+    }
+
+    public String getEmployeeSecurityAnswer()
+    {
+        return employeeSecurityAnswer;
+    }
+
+    public AEmployee setEmployeeSecurityAnswer(String employeeSecurityAnswer)
+    {
+        this.employeeSecurityAnswer = employeeSecurityAnswer;
         return this;
     }
 
