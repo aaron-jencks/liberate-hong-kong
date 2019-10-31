@@ -25,7 +25,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         JSONArray emps = ASaveable.loadAllAsJson("Employee");
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
-            if(obj.getString("employeeUsername").equals(username) {
+            if(obj.getString("employeeUsername").equals(username)) {
                 return obj.getString("employeeSecurityQuestion");
             }
         }

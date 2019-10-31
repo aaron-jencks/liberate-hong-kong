@@ -9,8 +9,8 @@ public class MainMenu extends AMenu {
     public MainMenu(ITermController parent) { 
         super(parent); 
         title = "Hong Kong Liberation Banking System";
-        items.add(new ExitItem(this.parent));
         items.add(new AccountMenuItem(this.parent));
+        items.add(new ExitItem(this.parent));
         // TODO Add Options here
     }
 }
