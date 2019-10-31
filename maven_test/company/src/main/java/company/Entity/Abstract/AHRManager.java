@@ -7,9 +7,14 @@ import company.Entity.Interface.IPerson;
 
 public abstract class AHRManager extends AManager implements IHRManager {
 
-    public IEmployee Hire(IPerson p)
+    public AHRManager(String firstName, String lastName, String employeeUsername, long employeeID) {
+        super(firstName, lastName, employeeUsername, employeeID);
+    }
+
+    public long Hire(IPerson p)
     {
         // TODO
-        return null;
+    	
+        return -1;
     }
 }

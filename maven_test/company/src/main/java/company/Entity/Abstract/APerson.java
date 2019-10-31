@@ -7,7 +7,11 @@ public abstract class APerson extends ASaveable implements IPerson
 
     protected String firstName;
     protected String lastName;
-    protected String email;
+
+    public APerson(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public String getFirstName()
     {
@@ -28,17 +32,6 @@ public abstract class APerson extends ASaveable implements IPerson
     public APerson setLastName(String lastName)
     {
         this.lastName = lastName;
-        return this;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public APerson setEmail(String email)
-    {
-        this.email = email;
         return this;
     }
 }

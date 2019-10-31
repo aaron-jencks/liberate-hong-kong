@@ -10,6 +10,7 @@ import UI.UIUtil;
 import UI.AlignmentType;
 import UI.global_menu_items.ExitItem;
 import company.Entity.Abstract.AEmployee;
+import company.Entity.Controller.EmployeeController;
 
 public class ForgotPasswordMenu extends LoginMenu {
     protected String security_question = new String();
@@ -17,7 +18,10 @@ public class ForgotPasswordMenu extends LoginMenu {
     protected String confirm_password = new String();
     protected int iteration = 0;
 
-    public ForgotPasswordMenu(ITermController parent) { super(parent); }
+    public ForgotPasswordMenu(ITermController parent, EmployeeController employeeController)
+    {
+        super(parent, employeeController);
+    }
 
     @Override
     public String get_display_string()
