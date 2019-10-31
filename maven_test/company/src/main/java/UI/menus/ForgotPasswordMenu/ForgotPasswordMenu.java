@@ -75,7 +75,7 @@ public class ForgotPasswordMenu extends LoginMenu {
 
 
         // TODO Fetch user security question
-        security_question = AEmployee.LookupSecurityQuestion(username); // Shouldn't be null, so no need to check
+        security_question = AEmployee.LookupSecurityQuestion(username) + '\n' + padding + "Answer? "; // Shouldn't be null, so no need to check
         try { security_answer = UIUtil.get_input(ForgotPasswordMenu.inputScanner, security_answer, 
                                                  padding + "SecurityQuestion: " + security_question, (String s) -> { return true; }); }
         catch(Exception e) { e.printStackTrace(); }
@@ -105,6 +105,15 @@ public class ForgotPasswordMenu extends LoginMenu {
                 System.out.println(UIUtil.pad_string("Those passwords don't match, try again.", parent.get_term_width(), AlignmentType.center));
 
         } while(!password.equals(confirm_password));
+
+        // TODO Change password
+
+        System.out.println(UIUtil.pad_string("Account password changed successfully.", 
+                                                 parent.get_term_width(), AlignmentType.center));
+        System.out.println(UIUtil.pad_string("Press RETURN to continue", 
+                                                parent.get_term_width(), AlignmentType.center));
+        try { UIUtil.get_input(ForgotPasswordMenu.inputScanner, new String(), "", (String s) -> { return true; }); }
+        catch(Exception e) { e.printStackTrace(); }        
 
         return new ExitItem(parent);
     }

@@ -15,11 +15,11 @@ import company.Entity.Interface.IEmployee;
 public abstract class AEmployee extends APerson implements IEmployee
 {
 
-    protected long employeeID;
-    protected String employeeUsername;
-    protected String employeePassword;
-    protected String employeeSecurityQuestion;
-    protected String employeeSecurityAnswer;
+    protected long employeeID = 0;
+    protected String employeeUsername = new String();
+    protected String employeePassword = new String();
+    protected String employeeSecurityQuestion = new String();
+    protected String employeeSecurityAnswer = new String();
 
 
     public AEmployee(String firstName, String lastName, String employeeUsername, long employeeID) {
@@ -64,7 +64,7 @@ public abstract class AEmployee extends APerson implements IEmployee
 
     public static boolean CheckEmployee(String username){
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "\\data\\company.Entity.Employee.json");
+        File file = new File(s + "/data/company.Entity.Employee.json");
         try {
             Scanner sc = new Scanner(file);
             String content = "";

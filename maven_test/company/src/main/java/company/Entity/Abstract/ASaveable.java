@@ -42,6 +42,8 @@ public abstract class ASaveable implements ISaveable {
                 System.out.println(f.getName());
                 obj.put(f.getName(), f.get(this));
             }
+
+            // while(System.in.read() == -1);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -144,7 +146,8 @@ public abstract class ASaveable implements ISaveable {
      */
     public static JSONArray loadAllAsJson(String className) {
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "\\data\\company.Entity." + className + ".json");
+        // System.out.println(s);
+        File file = new File(s + "/data/company.Entity." + className + ".json");
         JSONArray arr = new JSONArray();
         try {
             Scanner sc = new Scanner(file);
