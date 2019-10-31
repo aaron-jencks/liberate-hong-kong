@@ -6,6 +6,7 @@ import UI.AMenu;
 import UI.IMenuItem;
 import UI.controller.ITermController;
 import UI.menus.LoginMenu.items.MainMenuItem;
+import company.Entity.Abstract.AEmployee;
 import UI.UIUtil;
 
 public class LoginMenu extends AMenu {
@@ -55,7 +56,12 @@ public class LoginMenu extends AMenu {
         catch(Exception e) { e.printStackTrace(); }
 
         // TODO check existence
+        boolean validUP = AEmployee.CheckPassword(username, password);
+        if(validUP){
+            return new MainMenuItem(parent);
+        }
 
-        return new MainMenuItem(parent);
+        return null;
+        
     }
 }

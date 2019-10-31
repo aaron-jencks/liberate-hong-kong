@@ -39,6 +39,7 @@ public abstract class ASaveable implements ISaveable {
         obj.put("ID", id);
         try {
             for (Field f : fields) {
+                System.out.println(f.getName());
                 obj.put(f.getName(), f.get(this));
             }
         } catch (IllegalAccessException e) {
@@ -60,12 +61,15 @@ public abstract class ASaveable implements ISaveable {
         JSONArray objArray = new JSONArray();
         try {
             Scanner sc = new Scanner(file);
+            String content = "";
             while (sc.hasNextLine()) {
                 // get the next line in file
                 String line = sc.nextLine();
-                // make the string into json
-                objArray = new JSONArray(line);
+                content += line;
+                
             }
+            // make the string into json
+            objArray = new JSONArray(content);
             sc.close();
 
         } catch (FileNotFoundException e) {
@@ -74,7 +78,7 @@ public abstract class ASaveable implements ISaveable {
         System.out.println(objArray.length());
         objArray.put(obj);
         System.out.println(objArray.length());
-        try (FileWriter writer = new FileWriter(tempFile)) {
+        try (FileWriter writer = new FileWriter(tempFile, false)) {
             writer.write(objArray.toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,11 +100,15 @@ public abstract class ASaveable implements ISaveable {
         JSONArray objArray = new JSONArray();
         try {
             Scanner sc = new Scanner(file);
+            String content = "";
             while (sc.hasNextLine()) {
                 // get the next line in file
                 String line = sc.nextLine();
                 // make the string into json
-                JSONArray arr = new JSONArray(line);
+                content += line;
+            }
+            sc.close();
+            JSONArray arr = new JSONArray(content);
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
                     // check if it has the ID we are searching for
@@ -112,9 +120,7 @@ public abstract class ASaveable implements ISaveable {
                         objArray.put(obj);
                     }
                 }
-
-            }
-            sc.close();
+            
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -131,6 +137,35 @@ public abstract class ASaveable implements ISaveable {
     }
 
     /**
+     * Load all objects from the className
+     * @param className
+     * @param uuid
+     * @return
+     */
+    public static JSONArray loadAllAsJson(String className) {
+        String s = Paths.get("").toAbsolutePath().toString();
+        File file = new File(s + "\\data\\company.Entity." + className + ".json");
+        JSONArray arr = new JSONArray();
+        try {
+            Scanner sc = new Scanner(file);
+            String content = "";
+            while (sc.hasNextLine()) {
+                // get the next line in file
+                String line = sc.nextLine();
+                content += line;
+            }
+            sc.close();
+            // make the string into json
+            arr = new JSONArray(content);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
+
+    /**
      * Load an object from the className file given the UUID
      * @param className
      * @param uuid
@@ -141,35 +176,36 @@ public abstract class ASaveable implements ISaveable {
         File file = new File(s + "\\data\\company.Entity." + className + ".json");
         try {
             Scanner sc = new Scanner(file);
+            String content = "";
             while (sc.hasNextLine()) {
                 // get the next line in file
                 String line = sc.nextLine();
-                // make the string into json
-                JSONArray arr = new JSONArray(line);
-                // check if it has the ID we are searching for
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject obj = arr.getJSONObject(i);
-                    UUID id = UUID.fromString((String) obj.get("ID"));
-                    if (!id.equals(uuid)) {
-                        continue;
-                    }
-                    // instantiate it into an object
-                    Object inst = instantiate(removeLeadingA(obj.get("type").toString()));
-                    Class<?> clazz = inst.getClass();
-                    // fill all the attributes
-                    Field[] fields = clazz.getSuperclass().getDeclaredFields();
-                    if (fields.length == 0) {
-                        fields = clazz.getSuperclass().getSuperclass().getDeclaredFields();
-                    }
-                    for (Field f : fields) {
-                        f.set(inst, obj.get(f.getName()));
-                    }
-                    sc.close();
-                    return inst;
-                }
-
+                content += line;
             }
             sc.close();
+            // make the string into json
+            JSONArray arr = new JSONArray(content);
+            // check if it has the ID we are searching for
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                UUID id = UUID.fromString((String) obj.get("ID"));
+                if (!id.equals(uuid)) {
+                    continue;
+                }
+                // instantiate it into an object
+                Object inst = instantiate(removeLeadingA(obj.get("type").toString()));
+                Class<?> clazz = inst.getClass();
+                // fill all the attributes
+                Field[] fields = clazz.getSuperclass().getDeclaredFields();
+                if (fields.length == 0) {
+                    fields = clazz.getSuperclass().getSuperclass().getDeclaredFields();
+                }
+                for (Field f : fields) {
+                    f.set(inst, obj.get(f.getName()));
+                }
+                sc.close();
+                return inst;
+            }
 
         } catch (FileNotFoundException | IllegalAccessException e) {
             e.printStackTrace();
