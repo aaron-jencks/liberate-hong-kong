@@ -4,6 +4,7 @@ import UI.AlignmentType;
 
 import java.lang.Iterable;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -220,17 +221,25 @@ public class UIUtil {
 			if(out.getClass() == Integer.class)
 			{
 				while(!sc.hasNextInt());	// Waits until a valid entry was chosen
-				out = (T)(Object)sc.nextInt();
+                out = (T)(Object)sc.nextInt();
+                
+                // Read in the extra '\n'
+                if(sc.hasNextLine())
+                    sc.nextLine();
 			}
 			else if(out.getClass() == Double.class)
 			{
 				while(!sc.hasNextDouble());	// Waits until a valid entry was chosen
-				out = (T)(Object)sc.nextDouble();
+                out = (T)(Object)sc.nextDouble();
+
+                // Read in the extra '\n'
+                if(sc.hasNextLine())
+                    sc.nextLine();
 			}
 			else if(out.getClass() == String.class)
 			{
-				sc.hasNextLine();	// Waits until a valid entry was chosen
-				out = (T)(Object)sc.nextLine();
+                while(!sc.hasNextLine());
+                out = (T)(Object)sc.nextLine();
 			}
 			else
 			{

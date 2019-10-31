@@ -10,6 +10,7 @@ public class MainMenuItem extends AMenuItem {
 
     public AMenu activate()
     {
+        parent.close_window();  // Close the login window
         return new MainMenu(parent);
     }
 }

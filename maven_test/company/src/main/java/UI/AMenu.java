@@ -10,6 +10,9 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 
 public abstract class AMenu implements IMenu {
+
+    protected static Scanner inputScanner = null;
+
     protected ITermController parent;
     protected String title = new String();
     protected String prompt = "What would you like to do? ";
@@ -117,21 +120,20 @@ public abstract class AMenu implements IMenu {
         if(!is_valid)
             display();
 
-        Scanner sc = new Scanner(System.in);
+        if(AMenu.inputScanner == null)
+            AMenu.inputScanner = new Scanner(System.in);
         Integer item = 0;
         try
         {
             // Normally I just use a lambda expression here, but since I need the length of the list
             // I have to use an external class.
             // But, (T v) -> {expression;} is also okay.
-            item = UIUtil.get_input(sc, item, prompt, new MenuItemValidator(available.size()));
+            item = UIUtil.get_input(AMenu.inputScanner, item, prompt, new MenuItemValidator(available.size()));
         }
         catch(Exception e)
         {
             System.err.println("How the hell did you get here???");
         }
-
-        sc.close();
 
         return available.get(item - 1);
     }
