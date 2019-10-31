@@ -71,7 +71,7 @@ public abstract class AEmployee extends APerson implements IEmployee
             // check if it has the ID we are searching for
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                String id = obj.get("username").toString();
+                String id = obj.getString("employeeUsername").toString();
                 if (!id.equals(username)) {
                     continue;
                 }

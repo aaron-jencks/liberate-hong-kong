@@ -20,6 +20,8 @@ public class App
         Teller t = new Teller();
         t.setEmployeePassword("p");
         t.setEmployeeUsername("u");
+        t.setEmployeeSecurityQuestion("Hello?");
+        t.setEmployeeSecurityAnswer("World!");
         t.save();
         
 
