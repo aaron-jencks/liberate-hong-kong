@@ -1,9 +1,9 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Abstract.AEmployee;
-import company.Entity.Interface.ILoanOfficer;
-import company.Entity.CreditAccount;
-import company.Entity.Customer;
+import main.java.company.Entity.Abstract.AEmployee;
+import main.java.company.Entity.Interface.ILoanOfficer;
+import main.java.company.Entity.CreditAccount;
+import main.java.company.Entity.Customer;
 
 public abstract class ALoanOfficer extends AEmployee implements ILoanOfficer {
     

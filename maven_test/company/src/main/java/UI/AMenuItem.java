@@ -1,7 +1,7 @@
-package UI;
+package main.java.UI;
 
-import UI.IMenuItem;
-import UI.controller.ITermController;
+import main.java.UI.IMenuItem;
+import main.java.UI.controller.ITermController;
 
 public abstract class AMenuItem implements IMenuItem {
 

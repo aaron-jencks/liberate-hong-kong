@@ -1,4 +1,4 @@
-package UI;
+package main.java.UI;
 
 /**
  * Represents an item on a menu

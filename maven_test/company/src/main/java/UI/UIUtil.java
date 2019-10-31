@@ -1,6 +1,6 @@
-package UI;
+package main.java.UI;
 
-import UI.AlignmentType;
+import main.java.UI.AlignmentType;
 
 import java.lang.Iterable;
 import java.util.ArrayList;

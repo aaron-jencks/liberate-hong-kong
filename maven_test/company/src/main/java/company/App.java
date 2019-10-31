@@ -1,10 +1,10 @@
-package company;
+package main.java.company;
 
-import UI.controller.TermController;
-import UI.global_menu_items.ExitItem;
-import UI.menus.GreeterMenu.GreeterMenu;
-import UI.IMenuItem;
-import UI.AMenu;
+import main.java.UI.controller.TermController;
+import main.java.UI.global_menu_items.ExitItem;
+import main.java.UI.menus.GreeterMenu.GreeterMenu;
+import main.java.UI.IMenuItem;
+import main.java.UI.AMenu;
 import java.io.IOException;
 
 /**

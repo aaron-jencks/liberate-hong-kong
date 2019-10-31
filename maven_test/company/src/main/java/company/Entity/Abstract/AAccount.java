@@ -1,6 +1,6 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Interface.IAccount;
+import main.java.company.Entity.Interface.IAccount;
 
 public abstract class AAccount extends ASaveable implements IAccount
 {

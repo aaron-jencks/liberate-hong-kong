@@ -1,7 +1,7 @@
-package UI.controller;
+package main.java.UI.controller;
 
-import UI.IMenu;
-import UI.IMenuItem;
+import main.java.UI.IMenu;
+import main.java.UI.IMenuItem;
 
 public interface ITermController {
     /**

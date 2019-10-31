@@ -1,6 +1,6 @@
-package company.Entity.Interface;
+package main.java.company.Entity.Interface;
 
-import company.Entity.Interface.IEmployee;
+import main.java.company.Entity.Interface.IEmployee;
 
 public interface IManager {
     public void Fire(IEmployee e);

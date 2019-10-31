@@ -1,4 +1,4 @@
-package org.json;
+package main.java.org.json;
 
 /*
 Copyright (c) 2018 JSON.org

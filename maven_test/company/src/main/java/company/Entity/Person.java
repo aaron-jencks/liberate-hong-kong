@@ -1,6 +1,6 @@
-package company.Entity;
+package main.java.company.Entity;
 
-import company.Entity.Abstract.APerson;
+import main.java.company.Entity.Abstract.APerson;
 
 public class Person extends APerson {
 }

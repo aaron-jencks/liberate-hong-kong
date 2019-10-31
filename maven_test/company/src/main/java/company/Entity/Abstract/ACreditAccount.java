@@ -1,7 +1,7 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Abstract.AAccount;
-import company.Entity.Interface.ICreditAccount;
+import main.java.company.Entity.Abstract.AAccount;
+import main.java.company.Entity.Interface.ICreditAccount;
 
 public abstract class ACreditAccount extends AAccount implements ICreditAccount {
 }

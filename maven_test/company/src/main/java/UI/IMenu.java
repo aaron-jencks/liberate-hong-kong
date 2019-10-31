@@ -1,6 +1,6 @@
-package UI;
+package main.java.UI;
 
-import UI.IMenuItem;
+import main.java.UI.IMenuItem;
 
 /**
  * Represents a menu that can be displayed to the console

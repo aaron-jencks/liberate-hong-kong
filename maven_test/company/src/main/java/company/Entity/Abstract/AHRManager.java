@@ -1,9 +1,9 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Abstract.AManager;
-import company.Entity.Interface.IHRManager;
-import company.Entity.Interface.IEmployee;
-import company.Entity.Interface.IPerson;
+import main.java.company.Entity.Abstract.AManager;
+import main.java.company.Entity.Interface.IHRManager;
+import main.java.company.Entity.Interface.IEmployee;
+import main.java.company.Entity.Interface.IPerson;
 
 public abstract class AHRManager extends AManager implements IHRManager {
 

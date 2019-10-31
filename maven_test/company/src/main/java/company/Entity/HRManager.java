@@ -1,6 +1,6 @@
-package company.Entity;
+package main.java.company.Entity;
 
-import company.Entity.Abstract.AHRManager;
+import main.java.company.Entity.Abstract.AHRManager;
 
 public class HRManager extends AHRManager {
 }

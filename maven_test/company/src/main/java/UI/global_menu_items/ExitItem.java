@@ -1,8 +1,8 @@
-package UI.global_menu_items;
+package main.java.UI.global_menu_items;
 
-import UI.AMenuItem;
-import UI.controller.ITermController;
-import UI.AMenu;
+import main.java.UI.AMenuItem;
+import main.java.UI.controller.ITermController;
+import main.java.UI.AMenu;
 
 public class ExitItem extends AMenuItem {
 

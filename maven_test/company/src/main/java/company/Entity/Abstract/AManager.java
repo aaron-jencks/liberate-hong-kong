@@ -1,8 +1,8 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Abstract.AEmployee;
-import company.Entity.Interface.IManager;
-import company.Entity.Interface.IEmployee;
+import main.java.company.Entity.Abstract.AEmployee;
+import main.java.company.Entity.Interface.IManager;
+import main.java.company.Entity.Interface.IEmployee;
 
 public abstract class AManager extends AEmployee implements IManager {
 

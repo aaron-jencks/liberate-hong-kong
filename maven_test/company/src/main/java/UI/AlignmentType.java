@@ -1,3 +1,3 @@
-package UI;
+package main.java.UI;
 
 public enum AlignmentType {left, center, right}

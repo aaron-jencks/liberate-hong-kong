@@ -1,9 +1,9 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Interface.IAccount;
-import company.Entity.Interface.ICustomer;
-import company.Entity.Interface.IEmployee;
-import company.Entity.Interface.IVault;
+import main.java.company.Entity.Interface.IAccount;
+import main.java.company.Entity.Interface.ICustomer;
+import main.java.company.Entity.Interface.IEmployee;
+import main.java.company.Entity.Interface.IVault;
 
 import java.util.HashMap;
 

@@ -1,9 +1,9 @@
-package UI.menus.GreeterMenu.items;
+package main.java.UI.menus.GreeterMenu.items;
 
-import UI.AMenuItem;
-import UI.controller.ITermController;
-import UI.AMenu;
-import UI.menus.LoginMenu.LoginMenu;
+import main.java.UI.AMenuItem;
+import main.java.UI.controller.ITermController;
+import main.java.UI.AMenu;
+import main.java.UI.menus.LoginMenu.LoginMenu;
 
 public class LoginItem extends AMenuItem {
 

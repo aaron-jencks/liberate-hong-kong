@@ -1,6 +1,6 @@
-package company.Entity.Interface;
+package main.java.company.Entity.Interface;
 
-import company.Entity.Interface.IAccount;
+import main.java.company.Entity.Interface.IAccount;
 
 public interface IAccountController {
     public void Deposit(IAccount account, long amount);

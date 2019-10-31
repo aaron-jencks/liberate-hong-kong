@@ -1,9 +1,9 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Interface.ISaveable;
+import main.java.company.Entity.Interface.ISaveable;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import main.java.org.json.JSONArray;
+import main.java.org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;

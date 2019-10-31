@@ -1,4 +1,4 @@
-package company;
+package test.java.company;
 
 import static org.junit.Assert.assertTrue;
 

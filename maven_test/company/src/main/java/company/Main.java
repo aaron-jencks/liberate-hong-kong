@@ -1,10 +1,10 @@
-package company;
+package main.java.company;
 
 import java.util.UUID;
 
-import company.Entity.BankAccount;
-import company.Entity.Person;
-import company.Entity.Abstract.ASaveable;
+import main.java.company.Entity.BankAccount;
+import main.java.company.Entity.Person;
+import main.java.company.Entity.Abstract.ASaveable;
 
 public class Main {
 

@@ -1,7 +1,7 @@
-package company.Entity.Controller;
+package main.java.company.Entity.Controller;
 
-import company.Entity.Interface.IAccountController;
-import company.Entity.Interface.IAccount;
+import main.java.company.Entity.Interface.IAccountController;
+import main.java.company.Entity.Interface.IAccount;
 
 public class AccountController implements IAccountController {
     @Override

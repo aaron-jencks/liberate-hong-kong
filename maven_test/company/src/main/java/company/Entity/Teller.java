@@ -1,7 +1,7 @@
-package company.Entity;
+package main.java.company.Entity;
 
-import company.Entity.Abstract.APerson;
-import company.Entity.Interface.ITeller;
+import main.java.company.Entity.Abstract.APerson;
+import main.java.company.Entity.Interface.ITeller;
 
 public class Teller extends APerson implements ITeller {
 }

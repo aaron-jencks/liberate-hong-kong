@@ -1,6 +1,6 @@
-package company.Entity;
+package main.java.company.Entity;
 
-import company.Entity.Abstract.AManager;
+import main.java.company.Entity.Abstract.AManager;
 
 public class Manager extends AManager {
 }

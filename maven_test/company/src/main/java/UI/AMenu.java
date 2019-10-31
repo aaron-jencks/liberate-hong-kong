@@ -1,13 +1,13 @@
-package UI;
+package main.java.UI;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import UI.IMenu;
-import UI.IMenuItem;
-import UI.MenuItemValidator;
-import UI.UIUtil;
-import UI.controller.ITermController;
+import main.java.UI.IMenu;
+import main.java.UI.IMenuItem;
+import main.java.UI.MenuItemValidator;
+import main.java.UI.UIUtil;
+import main.java.UI.controller.ITermController;
 
 public abstract class AMenu implements IMenu {
 

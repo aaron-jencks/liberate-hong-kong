@@ -1,12 +1,12 @@
-package UI.menus.LoginMenu;
+package main.java.UI.menus.LoginMenu;
 
 import java.util.Scanner;
 
-import UI.AMenu;
-import UI.IMenuItem;
-import UI.controller.ITermController;
-import UI.menus.LoginMenu.items.MainMenuItem;
-import UI.UIUtil;
+import main.java.UI.AMenu;
+import main.java.UI.IMenuItem;
+import main.java.UI.controller.ITermController;
+import main.java.UI.menus.LoginMenu.items.MainMenuItem;
+import main.java.UI.UIUtil;
 
 public class LoginMenu extends AMenu {
     private String username = new String();

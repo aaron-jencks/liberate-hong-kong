@@ -1,6 +1,6 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Interface.ICustomer;
+import main.java.company.Entity.Interface.ICustomer;
 
 import java.util.ArrayList;
 

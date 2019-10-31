@@ -1,6 +1,6 @@
-package company.Entity;
+package main.java.company.Entity;
 
-import company.Entity.Abstract.ACustomer;
+import main.java.company.Entity.Abstract.ACustomer;
 
 public class Customer extends ACustomer {
 }

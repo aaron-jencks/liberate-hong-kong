@@ -1,6 +1,6 @@
-package company.Entity;
+package main.java.company.Entity;
 
-import company.Entity.Abstract.ACreditAccount;
+import main.java.company.Entity.Abstract.ACreditAccount;
 
 public class CreditAccount extends ACreditAccount {
 }

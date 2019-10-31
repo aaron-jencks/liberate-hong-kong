@@ -1,6 +1,6 @@
-package company.Entity.Abstract;
+package main.java.company.Entity.Abstract;
 
-import company.Entity.Interface.IPerson;
+import main.java.company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
 {
