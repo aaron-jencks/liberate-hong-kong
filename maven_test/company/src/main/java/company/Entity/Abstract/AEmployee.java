@@ -83,22 +83,11 @@ public abstract class AEmployee extends APerson implements IEmployee
                 if (!id.equals(username)) {
                     continue;
                 }
-                // instantiate it into an object
-                Object inst = instantiate(removeLeadingA(obj.get("type").toString()));
-                Class<?> clazz = inst.getClass();
-                // fill all the attributes
-                Field[] fields = clazz.getSuperclass().getDeclaredFields();
-                if (fields.length == 0) {
-                    fields = clazz.getSuperclass().getSuperclass().getDeclaredFields();
-                }
-                for (Field f : fields) {
-                    f.set(inst, obj.get(f.getName()));
-                }
                 sc.close();
                 return true;
             }
 
-        } catch (FileNotFoundException | IllegalAccessException e) {
+        } catch (FileNotFoundException  e) {
             e.printStackTrace();
         }
         return false;

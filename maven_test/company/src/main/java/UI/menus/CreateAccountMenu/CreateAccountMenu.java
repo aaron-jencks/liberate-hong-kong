@@ -69,7 +69,13 @@ public class CreateAccountMenu extends AMenu {
         get_display_string();
 
 
+<<<<<<< HEAD
         Customer c = new Customer(firstName, lastName);
+=======
+        Customer c = new Customer();
+        c.setFirstName(firstName)
+        .setLastName(lastName);
+>>>>>>> working_branch
         // c.save();
 
         // String accountId = c.createAccount();

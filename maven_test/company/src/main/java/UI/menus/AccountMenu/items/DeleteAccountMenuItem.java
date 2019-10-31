@@ -3,6 +3,7 @@ package UI.menus.AccountMenu.items;
 import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
+import UI.menus.DeleteAccountMenu.DeleteAccountMenu;
 
 public class DeleteAccountMenuItem extends AMenuItem {
 
@@ -13,8 +14,7 @@ public class DeleteAccountMenuItem extends AMenuItem {
 
     @Override
     public AMenu activate() {
-        
-        return null;
+        return new DeleteAccountMenu(this.parent);
     }
 
     @Override

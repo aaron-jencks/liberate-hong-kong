@@ -3,6 +3,7 @@ package UI.menus.AccountMenu.items;
 import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
+import UI.menus.CreateAccountMenu.CreateAccountMenu;
 
 public class CreateAccountMenuItem extends AMenuItem {
 
@@ -13,8 +14,7 @@ public class CreateAccountMenuItem extends AMenuItem {
 
     @Override
     public AMenu activate() {
-        // TODO Auto-generated method stub
-        return null;
+        return new CreateAccountMenu(this.parent);
     }
 
     @Override
