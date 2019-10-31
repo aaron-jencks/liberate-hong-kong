@@ -19,8 +19,6 @@ public abstract class AEmployee extends APerson implements IEmployee
     protected String employeeUsername;
     protected String employeePassword;
 
-
-
     public static boolean CheckPassword(String username, String password){
         JSONArray emps = ASaveable.loadAllAsJson("Employee");
         for (int i = 0; i < emps.length(); i++) {

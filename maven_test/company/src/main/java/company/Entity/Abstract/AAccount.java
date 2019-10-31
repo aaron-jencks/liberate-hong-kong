@@ -6,7 +6,7 @@ public abstract class AAccount extends ASaveable implements IAccount
 {
 
     protected long amount;
-    protected long accountNumber;
+    protected String accountNumber;
 
     public long getAmount()
     {
@@ -19,12 +19,12 @@ public abstract class AAccount extends ASaveable implements IAccount
         return this;
     }
 
-    public long getAccountNumber()
+    public String getAccountNumber()
     {
         return accountNumber;
     }
 
-    public AAccount setAccountNumber(long accountNumber)
+    public AAccount setAccountNumber(String accountNumber)
     {
         this.accountNumber = accountNumber;
         return this;
