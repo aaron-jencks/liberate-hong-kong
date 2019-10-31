@@ -5,13 +5,14 @@ import java.util.Scanner;
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.controller.ITermController;
+import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.items.MainMenuItem;
 import company.Entity.Abstract.AEmployee;
 import UI.UIUtil;
 
 public class LoginMenu extends AMenu {
-    private String username = new String();
-    private String password = new String();
+    protected String username = new String();
+    protected String password = new String();
 
     public LoginMenu(ITermController parent) { super(parent); }
 
@@ -61,7 +62,7 @@ public class LoginMenu extends AMenu {
             return new MainMenuItem(parent);
         }
 
-        return null;
+        return new ExitItem(parent);
         
     }
 }
