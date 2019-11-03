@@ -167,6 +167,13 @@ public abstract class ASaveable implements ISaveable {
         return returnObject;
     }
 
+    public static JSONArray loadAllAsJson(String className){
+        String s = Paths.get("").toAbsolutePath().toString();
+        s = s + File.separator + "data" + File.separator;
+        String fullFile = s + className + ".json";
+        return ASaveable.read(fullFile);
+    }
+
     public static Object load(Class classObject, UUID uuid) {
 
         String s = Paths.get("").toAbsolutePath().toString();

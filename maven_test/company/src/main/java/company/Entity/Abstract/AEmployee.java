@@ -30,9 +30,7 @@ public abstract class AEmployee extends APerson implements IEmployee
     }
 
     public static String LookupSecurityQuestion(String username){
-        // JSONArray emps = ASaveable.loadAllAsJson("Employee");
-        //TODO put this back
-        JSONArray emps = new JSONArray();
+        JSONArray emps = ASaveable.loadAllAsJson("Employee");
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
             if(obj.getString("employeeUsername").equals(username)) {
@@ -43,9 +41,7 @@ public abstract class AEmployee extends APerson implements IEmployee
     }
 
     public static boolean CheckSecurityQuestion(String username, String answer){
-        // JSONArray emps = ASaveable.loadAllAsJson("Employee");
-        //TODO put this back
-        JSONArray emps = new JSONArray();
+        JSONArray emps = ASaveable.loadAllAsJson("Employee");
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
             if(obj.getString("employeeUsername").equals(username) && obj.getString("employeeSecurityAnswer").equals(answer)){
@@ -56,9 +52,7 @@ public abstract class AEmployee extends APerson implements IEmployee
     }
 
     public static boolean CheckPassword(String username, String password){
-        // JSONArray emps = ASaveable.loadAllAsJson("Employee");
-        //TODO put this back
-        JSONArray emps = new JSONArray();
+        JSONArray emps = ASaveable.loadAllAsJson("Employee");
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
             if(obj.getString("employeeUsername").equals(username) && obj.getString("employeePassword").equals(password)){
