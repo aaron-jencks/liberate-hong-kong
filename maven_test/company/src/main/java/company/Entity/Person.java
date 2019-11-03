@@ -6,4 +6,8 @@ public class Person extends APerson {
     public Person(String firstName, String lastName) {
         super(firstName, lastName);
     }
+
+    public Person(){
+        super();
+    }
 }

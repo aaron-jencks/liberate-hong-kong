@@ -5,8 +5,11 @@ import company.Entity.Interface.ISaveable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -21,162 +24,155 @@ public abstract class ASaveable implements ISaveable {
 
     public UUID objId;
 
+    public static void write(String fileName, boolean append, String content) {
+        BufferedWriter buffOut = null;
+        try {
+            String s = Paths.get("").toAbsolutePath().toString();
+            buffOut = new BufferedWriter(new FileWriter(fileName, append));
+            buffOut.write(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (buffOut != null) {
+                    buffOut.close();
+                } else {
+                    System.out.println("Buffer not initialized");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static JSONArray read(String filePath) {
+        StringBuilder contentBuilder = new StringBuilder();
+        JSONArray arr = new JSONArray();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                contentBuilder.append(sCurrentLine).append("\n");
+            }
+            arr = new JSONArray(contentBuilder.toString());
+        } catch (FileNotFoundException e) {
+            arr = new JSONArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
     @Override
     public UUID save() {
         UUID id = UUID.randomUUID();
         JSONObject obj = new JSONObject();
+        boolean append = true;
         // if it has an id it should already be stored and can be loaded
         if (this.objId != null) {
             id = this.objId;
             obj = loadJsonObject(removeLeadingA(this.getClass().getSuperclass().getSimpleName()), id);
+            append = false;
         }
+        // get the fields
         Field[] fields = this.getClass().getSuperclass().getDeclaredFields();
+        // get the type
         String type = this.getClass().getSuperclass().getSimpleName();
+        // if the fields are empty we are not at the concrete definition yet
         if (fields.length == 0) {
             fields = this.getClass().getSuperclass().getSuperclass().getDeclaredFields();
         }
-        obj.put("type", type);
+        // add the type and id
+        obj.put("type", removeLeadingA(type));
         obj.put("ID", id);
+        // add each field
         try {
             for (Field f : fields) {
-                System.out.println(f.getName());
                 obj.put(f.getName(), f.get(this));
             }
-
-            // while(System.in.read() == -1);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        AppendToFile(obj, removeLeadingA(type));
+        if (append) {
+            // append the new obj to the entity file
+            appendToFile(obj, removeLeadingA(type));
+        }
+        else{
+            //update the existing entry for the object
+            updateObjectInFile(obj, removeLeadingA(type));
+        }
         return id;
     }
 
     /**
-     * Add the JsonObject to the end of the file specified by className
+     * Replace the existing obj in the data file with the new one
      * @param obj
-     * @param className
+     * @param fileName
      */
-    public static void AppendToFile(JSONObject obj, String className) {
+    public static void updateObjectInFile(JSONObject obj, String fileName){
+        // get the full path to the data dir
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "/data/company.Entity." + className + ".json");
-        File tempFile = new File(s + "/data/company.Entity." + className + "-temp.json");
-        JSONArray objArray = new JSONArray();
-        try {
-            Scanner sc = new Scanner(file);
-            String content = "";
-            while (sc.hasNextLine()) {
-                // get the next line in file
-                String line = sc.nextLine();
-                content += line;
-                
+        s = s + File.separator + "data" + File.separator;
+        String fullFile = s + fileName + ".json";
+        // turn the file into a json array
+        JSONArray objArray = read(fullFile);
+        for(int i = 0; i < objArray.length(); i++){
+            JSONObject testObj = objArray.getJSONObject(i);
+            if(testObj.getString("ID").equals(obj.getString("ID"))){
+                objArray.remove(i);
+                objArray.put(obj);
             }
-            // make the string into json
-            objArray = new JSONArray(content);
-            sc.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
-        System.out.println(objArray.length());
-        objArray.put(obj);
-        System.out.println(objArray.length());
-        try (FileWriter writer = new FileWriter(tempFile, false)) {
-            writer.write(objArray.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        tempFile.renameTo(file);
+        write(fullFile, false, objArray.toString());
     }
 
     /**
-     * Search the file for className to find the matching UUID, removes the found object from the file
+     * Add the item to the existing data file
+     * @param obj
+     * @param fileName
+     */
+    public static void appendToFile(JSONObject obj, String fileName) {
+        // get the full path to the data dir
+        String s = Paths.get("").toAbsolutePath().toString();
+        s = s + File.separator + "data" + File.separator;
+        String fullFile = s + fileName + ".json";
+        // turn the file into a json array
+        JSONArray objArray = read(fullFile);
+        // add the new obj to the
+        objArray.put(obj);
+        write(fullFile, false, objArray.toString());
+    }
+
+    /**
+     * Use the given class name to find the obj with the matching id
+     * 
      * @param className
      * @param id
      * @return
      */
     public static JSONObject loadJsonObject(String className, UUID id) {
         String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "/data/company.Entity." + className + ".json");
-        File tempFile = new File(s + "/data/company.Entity." + className + "-temp.json");
+        s = s + File.separator + "data" + File.separator;
+        String fullFile = s + className + ".json";
         JSONObject returnObject = new JSONObject();
-        JSONArray objArray = new JSONArray();
-        try {
-            Scanner sc = new Scanner(file);
-            String content = "";
-            while (sc.hasNextLine()) {
-                // get the next line in file
-                String line = sc.nextLine();
-                // make the string into json
-                content += line;
+        // pull the array for all objects of given type
+        JSONArray arr = ASaveable.read(fullFile);
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject obj = arr.getJSONObject(i);
+            // check if it has the ID we are searching for
+            UUID testId = UUID.fromString((String) obj.get("ID"));
+            if (testId.equals(id)) {
+                returnObject = obj;
             }
-            sc.close();
-            JSONArray arr = new JSONArray(content);
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject obj = arr.getJSONObject(i);
-                    // check if it has the ID we are searching for
-                    UUID testId = UUID.fromString((String) obj.get("ID"));
-                    if (testId.equals(id)) {
-                        sc.close();
-                        returnObject = obj;
-                    } else {
-                        objArray.put(obj);
-                    }
-                }
-            
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
-        System.out.println(objArray.toString());
-        try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write(objArray.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        tempFile.renameTo(file);
         return returnObject;
     }
 
-    /**
-     * Load all objects from the className
-     * @param className
-     * @param uuid
-     * @return
-     */
-    public static JSONArray loadAllAsJson(String className) {
+    public static Object load(Class classObject, UUID uuid) {
+
         String s = Paths.get("").toAbsolutePath().toString();
-        // System.out.println(s);
-        File file = new File(s + "/data/company.Entity." + className + ".json");
-        JSONArray arr = new JSONArray();
-        try {
-            Scanner sc = new Scanner(file);
-            String content = "";
-            while (sc.hasNextLine()) {
-                // get the next line in file
-                String line = sc.nextLine();
-                content += line;
-            }
-            sc.close();
-            // make the string into json
-            arr = new JSONArray(content);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return arr;
-    }
-
-
-    /**
-     * Load an object from the className file given the UUID
-     * @param className
-     * @param uuid
-     * @return
-     */
-    public static Object load(String className, UUID uuid) {
-        String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "\\data\\company.Entity." + className + ".json");
+        String classFileName = removeLeadingNamespace(classObject.getName());
+        System.out.println("Searching for " + classFileName);
+        File file = new File(s + File.separator + "data" + File.separator + classFileName + ".json");
         try {
             Scanner sc = new Scanner(file);
             String content = "";
@@ -225,6 +221,13 @@ public abstract class ASaveable implements ISaveable {
         return new String(arrCp);
     }
 
+    static String removeLeadingNamespace(String str) {
+        if (str.subSequence(0, 15).equals("company.Entity.")) {
+            return str.substring(15);
+        }
+        return str;
+    }
+
     static Object instantiate(String className) {
         // Load the class.
         className = "company.Entity." + className;
@@ -234,6 +237,10 @@ public abstract class ASaveable implements ISaveable {
             // Search for an "appropriate" constructor.
             for (Constructor<?> ctor : clazz.getConstructors()) {
                 Object[] args = null;
+                // we want the empty constructor so the jsonObject can fill out the parameters
+                if (ctor.getParameterTypes().length > 0) {
+                    continue;
+                }
                 return clazz.cast(ctor.newInstance(args));
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException

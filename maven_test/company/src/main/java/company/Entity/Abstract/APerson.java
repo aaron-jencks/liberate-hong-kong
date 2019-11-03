@@ -1,5 +1,8 @@
 package company.Entity.Abstract;
 
+import java.util.UUID;
+
+import company.Entity.Person;
 import company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
@@ -11,6 +14,16 @@ public abstract class APerson extends ASaveable implements IPerson
     public APerson(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public APerson(){
+        this.firstName = null;
+        this.lastName = null;
+    }
+
+    public static Person load(UUID id){
+        Object o = ASaveable.load(Person.class, id);
+        return (Person)o;
     }
 
     public String getFirstName()

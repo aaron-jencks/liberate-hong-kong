@@ -1,6 +1,7 @@
 package company.Entity.Abstract;
 
 import java.lang.reflect.Field;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,8 +13,14 @@ import company.Entity.Interface.IBankAccount;
 
 public abstract class ABankAccount extends AAccount implements IBankAccount {
 
+    public static BankAccount load(UUID id){
+        Object o = ASaveable.load(BankAccount.class, id);
+        return (BankAccount)o;
+    }
+
     public static BankAccount findById(String accountId) {
-        JSONArray arr = ASaveable.loadAllAsJson("BankAccount");
+        // JSONArray arr = ASaveable.loadAllAsJson("BankAccount");
+        JSONArray arr = new JSONArray();
         for (int i = 0; i < arr.length(); i++) {
             JSONObject obj = arr.getJSONObject(i);
             if (obj.getString("accountNumber").equals(accountId)) {

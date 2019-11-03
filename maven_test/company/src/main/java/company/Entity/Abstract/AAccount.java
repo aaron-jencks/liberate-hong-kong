@@ -8,6 +8,11 @@ public abstract class AAccount extends ASaveable implements IAccount
     protected long amount;
     protected String accountNumber;
 
+    public AAccount(){
+        this.accountNumber = null;
+        this.amount = 0l;
+    }
+
     public long getAmount()
     {
         return amount;
