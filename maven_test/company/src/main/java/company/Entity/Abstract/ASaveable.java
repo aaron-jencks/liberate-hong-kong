@@ -67,20 +67,22 @@ public abstract class ASaveable implements ISaveable {
         UUID id = UUID.randomUUID();
         JSONObject obj = new JSONObject();
         boolean append = true;
+        String type = this.getClass().getSimpleName();
+        // get the fields
+        Field[] fields = this.getClass().getDeclaredFields();
+        if (fields.length == 0) {
+            fields = this.getClass().getSuperclass().getDeclaredFields();
+            if(fields.length == 0){
+                fields = this.getClass().getSuperclass().getSuperclass().getDeclaredFields();
+            }
+        }
         // if it has an id it should already be stored and can be loaded
         if (this.objId != null) {
             id = this.objId;
             obj = loadJsonObject(removeLeadingA(this.getClass().getSuperclass().getSimpleName()), id);
             append = false;
         }
-        // get the fields
-        Field[] fields = this.getClass().getSuperclass().getDeclaredFields();
-        // get the type
-        String type = this.getClass().getSuperclass().getSimpleName();
-        // if the fields are empty we are not at the concrete definition yet
-        if (fields.length == 0) {
-            fields = this.getClass().getSuperclass().getSuperclass().getDeclaredFields();
-        }
+        
         // add the type and id
         obj.put("type", removeLeadingA(type));
         obj.put("ID", id);
@@ -178,7 +180,6 @@ public abstract class ASaveable implements ISaveable {
 
         String s = Paths.get("").toAbsolutePath().toString();
         String classFileName = removeLeadingNamespace(classObject.getName());
-        System.out.println("Searching for " + classFileName);
         File file = new File(s + File.separator + "data" + File.separator + classFileName + ".json");
         try {
             Scanner sc = new Scanner(file);

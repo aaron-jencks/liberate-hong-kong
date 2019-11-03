@@ -21,10 +21,10 @@ public abstract class APerson extends ASaveable implements IPerson
         this.lastName = null;
     }
 
-    public static Person load(UUID id){
-        Object o = ASaveable.load(Person.class, id);
-        return (Person)o;
-    }
+    // public static Person load(UUID id){
+    //     Object o = ASaveable.load(Person.class, id);
+    //     return (Person)o;
+    // }
 
     public String getFirstName()
     {

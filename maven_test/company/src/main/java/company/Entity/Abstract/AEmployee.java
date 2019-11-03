@@ -2,8 +2,6 @@ package company.Entity.Abstract;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -27,6 +25,15 @@ public abstract class AEmployee extends APerson implements IEmployee
         this.employeeUsername = employeeUsername;
         this.employeePassword = "";
         this.employeeID = employeeID;
+    }
+
+    public AEmployee(){
+        super();
+        this.employeeID = 0l;
+        this.employeePassword = null;
+        this.employeeSecurityAnswer = null;
+        this.employeeSecurityQuestion = null;
+        this.employeeUsername = null;
     }
 
     public static String LookupSecurityQuestion(String username){

@@ -7,4 +7,8 @@ public class Teller extends AEmployee implements ITeller {
     public Teller(String firstName, String lastName, String employeeUsername, long employeeID) {
         super(firstName, lastName, employeeUsername, employeeID);
     }
+
+    public Teller(){
+        super();
+    }
 }
