@@ -115,7 +115,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeID;
     }
 
-    public AEmployee setEmployeeID(long employeeID)
+    public IEmployee setEmployeeID(long employeeID)
     {
         this.employeeID = employeeID;
         return this;
@@ -126,7 +126,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeePassword;
     }
 
-    public AEmployee setEmployeePassword(String employeePassword)
+    public IEmployee setEmployeePassword(String employeePassword)
     {
         this.employeePassword = employeePassword;
         return this;
@@ -137,7 +137,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeUsername;
     }
 
-    public AEmployee setEmployeeUsername(String employeeUsername)
+    public IEmployee setEmployeeUsername(String employeeUsername)
     {
         this.employeeUsername = employeeUsername;
         return this;
@@ -148,7 +148,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeSecurityQuestion;
     }
 
-    public AEmployee setEmployeeSecurityQuestion(String employeeSecurityQuestion)
+    public IEmployee setEmployeeSecurityQuestion(String employeeSecurityQuestion)
     {
         this.employeeSecurityQuestion = employeeSecurityQuestion;
         return this;
@@ -159,7 +159,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeSecurityAnswer;
     }
 
-    public AEmployee setEmployeeSecurityAnswer(String employeeSecurityAnswer)
+    public IEmployee setEmployeeSecurityAnswer(String employeeSecurityAnswer)
     {
         this.employeeSecurityAnswer = employeeSecurityAnswer;
         return this;

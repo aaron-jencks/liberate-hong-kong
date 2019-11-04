@@ -4,6 +4,8 @@ import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
 import company.Entity.Controller.EmployeeController;
+import company.Entity.Interface.IEmployee;
+import company.Entity.Person;
 import company.Entity.Teller;
 import UI.IMenuItem;
 import UI.AMenu;
@@ -19,17 +21,17 @@ public class App
 {
     public static void main( String[] args ) throws IOException
     {
-        System.out.println( "Hello World!" );
-        Teller t = new Teller("John", "Smith", "TSmith", 0);
+        TermController term = new TermController();
+        Vault vault = new Vault();
+
+        long user_id = vault.createTeller(new Person("John", "Smith"));
+        IEmployee t = vault.getEmployee(user_id);
         t.setEmployeePassword("p");
         t.setEmployeeUsername("u");
         t.setEmployeeSecurityQuestion("Hello?");
         t.setEmployeeSecurityAnswer("World!");
-        t.save();
-        
+        // TODO vault.save();
 
-        TermController term = new TermController();
-        Vault vault = new Vault();
         EmployeeController employeeController = new EmployeeController(vault);
 
         GreeterMenu splash = new GreeterMenu(term, employeeController);

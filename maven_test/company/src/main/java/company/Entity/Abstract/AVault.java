@@ -5,6 +5,7 @@ import company.Entity.Interface.IAccount;
 import company.Entity.Interface.ICustomer;
 import company.Entity.Interface.IEmployee;
 import company.Entity.Interface.IVault;
+import company.exceptions.EmployeeNotFoundException;
 
 import java.util.HashMap;
 
@@ -44,6 +45,14 @@ public abstract class AVault implements IVault
     public IEmployee getEmployee(long employee_id)
     {
         return employees.get(employee_id);
+    }
+
+    public IEmployee getEmployee(String username)
+    {
+        for(IEmployee e : employees.values())
+            if(e.getEmployeeUsername().equals(username))
+                return e;
+        return null;
     }
 
     public AVault setEmployees(HashMap<Long, IEmployee> employees)
@@ -98,6 +107,7 @@ public abstract class AVault implements IVault
         this.employees.put(new_id, hrm);
         return new_id;
     }
+
     public long createOwner(Person p)
     {
         long new_id = ++lastEmployeeID;
@@ -112,6 +122,4 @@ public abstract class AVault implements IVault
         employees.remove(employee_id);
         return employee_id;
     }
-
-
 }

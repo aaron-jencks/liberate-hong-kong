@@ -3,6 +3,7 @@ package UI.menus.LoginMenu;
 import java.util.Scanner;
 
 import UI.AMenu;
+import UI.AlignmentType;
 import UI.IMenuItem;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
@@ -10,8 +11,10 @@ import UI.menus.LoginMenu.items.MainMenuItem;
 import company.Entity.Abstract.AEmployee;
 import UI.UIUtil;
 import company.Entity.Controller.EmployeeController;
+import company.exceptions.EmployeeNotFoundException;
 
 public class LoginMenu extends AMenu {
+    protected long user_id = 0;
     protected String username = new String();
     protected String password = new String();
 
@@ -53,19 +56,29 @@ public class LoginMenu extends AMenu {
         if(!is_valid)
             display();
 
-        try { username = UIUtil.get_input(LoginMenu.inputScanner, username, prompt, (String s) -> { return true; }); }
-        catch(Exception e) { e.printStackTrace(); }
+        try { 
+            username = UIUtil.get_input(LoginMenu.inputScanner, username, prompt, (String s) -> { return true; }); 
+            user_id = employeeController.findEmployee(username);
 
-        get_display_string();
+            get_display_string();
 
-        try { password = UIUtil.get_input(LoginMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
-        catch(Exception e) { e.printStackTrace(); }
+            try { password = UIUtil.get_input(LoginMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
+            catch(Exception e) { e.printStackTrace(); }
 
-        // TODO check existence
-        boolean validUP = AEmployee.CheckPassword(username, password);
-        if(validUP){
-            return new MainMenuItem(parent, this.employeeController);
+            boolean validUP = employeeController.findEmployee(user_id).getEmployeePassword().equals(password);
+            if(validUP){
+                return new MainMenuItem(parent, this.employeeController);
+            }
         }
+        catch(EmployeeNotFoundException e) {
+            System.out.println(UIUtil.pad_string("That user does not exist, please contact your system administrator to create a new account.", 
+                                                 parent.get_term_width(), AlignmentType.center));
+            System.out.println(UIUtil.pad_string("Press RETURN to continue", 
+                                                 parent.get_term_width(), AlignmentType.center));
+            try { UIUtil.get_input(LoginMenu.inputScanner, new String(), "", (String s) -> { return true; }); }
+            catch(Exception e1) { e1.printStackTrace(); }
+        }
+        catch(Exception e) { e.printStackTrace(); }
 
         return new ExitItem(parent);
         

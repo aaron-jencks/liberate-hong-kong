@@ -4,6 +4,7 @@ import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
 import company.Entity.Interface.IEmployeeController;
 import company.Entity.Person;
+import company.exceptions.EmployeeNotFoundException;
 
 public class EmployeeController implements IEmployeeController {
     private AVault vault;
@@ -44,10 +45,33 @@ public class EmployeeController implements IEmployeeController {
         return employee_id;
     }
 
-    public long fireEmployee(long employee_id) throws Exception {
+    public long findEmployee(String username) throws EmployeeNotFoundException {
+        IEmployee employee = vault.getEmployee(username);
+        if(employee == null)
+            throw new EmployeeNotFoundException("Employee not found", username);
+        return employee.getEmployeeID();
+    }
+
+    public IEmployee findEmployee(long user_id) throws EmployeeNotFoundException {
+        IEmployee employee = vault.getEmployee(user_id);
+        if(employee == null)
+            throw new EmployeeNotFoundException("Employee not found", user_id);
+        return employee;
+    }
+
+    public long fireEmployee(long employee_id) throws EmployeeNotFoundException {
         IEmployee employee = vault.getEmployee(employee_id);
         if (employee == null)
-            throw new Exception("Employee not found");
+            throw new EmployeeNotFoundException("Employee not found", employee_id);
         return vault.fireEmployee(employee_id);
+    }
+
+    public long modifyEmployeePassword(long employee_id, String password) throws EmployeeNotFoundException
+    {
+        IEmployee employee = vault.getEmployee(employee_id);
+        if(employee == null)
+            throw new EmployeeNotFoundException("Employee not found", employee_id);
+        employee.setEmployeePassword(password);
+        return employee_id;
     }
 }
