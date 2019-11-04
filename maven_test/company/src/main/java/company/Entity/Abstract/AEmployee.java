@@ -3,6 +3,7 @@ package company.Entity.Abstract;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.json.JSONArray;
@@ -37,7 +38,7 @@ public abstract class AEmployee extends APerson implements IEmployee
     }
 
     public static String LookupSecurityQuestion(String username){
-        JSONArray emps = ASaveable.loadAllAsJson("Employee");
+        JSONArray emps = LoadAllEmployees();
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
             if(obj.getString("employeeUsername").equals(username)) {
@@ -48,7 +49,7 @@ public abstract class AEmployee extends APerson implements IEmployee
     }
 
     public static boolean CheckSecurityQuestion(String username, String answer){
-        JSONArray emps = ASaveable.loadAllAsJson("Employee");
+        JSONArray emps = LoadAllEmployees();
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
             if(obj.getString("employeeUsername").equals(username) && obj.getString("employeeSecurityAnswer").equals(answer)){
@@ -58,8 +59,9 @@ public abstract class AEmployee extends APerson implements IEmployee
         return false;
     }
 
+
     public static boolean CheckPassword(String username, String password){
-        JSONArray emps = ASaveable.loadAllAsJson("Employee");
+        JSONArray emps = LoadAllEmployees();
         for (int i = 0; i < emps.length(); i++) {
             JSONObject obj = emps.getJSONObject(i);
             if(obj.getString("employeeUsername").equals(username) && obj.getString("employeePassword").equals(password)){
@@ -69,33 +71,41 @@ public abstract class AEmployee extends APerson implements IEmployee
         return false;
     }
 
+    private static JSONArray add(JSONArray a1, JSONArray a2){
+        JSONArray master = new JSONArray();
+        for(int i = 0; i < a1.length(); i++){
+            master.put(a1.getJSONObject(i));
+        }
+        for(int i = 0; i < a2.length(); i++){
+            master.put(a2.getJSONObject(i));
+        }
+        return master;
+    }
+
+    public static JSONArray LoadAllEmployees(){
+        JSONArray tellers = ASaveable.loadAllAsJson("Teller");
+        JSONArray hrManagers = ASaveable.loadAllAsJson("HRManager");
+        JSONArray loanOfficers = ASaveable.loadAllAsJson("LoanOfficer");
+        JSONArray owner = ASaveable.loadAllAsJson("Owner");
+        JSONArray managers = ASaveable.loadAllAsJson("Manager");
+        JSONArray master0 = add(tellers, hrManagers);
+        JSONArray master1 = add(loanOfficers, owner);
+        JSONArray master2 = add(master0, managers);
+        return add(master2, master1);
+    }
+
+    /**
+     * Check if an employee exists with that username
+     * @param username
+     * @return
+     */
     public static boolean CheckEmployee(String username){
-        String s = Paths.get("").toAbsolutePath().toString();
-        File file = new File(s + "/data/company.Entity.Employee.json");
-        try {
-            Scanner sc = new Scanner(file);
-            String content = "";
-            while (sc.hasNextLine()) {
-                // get the next line in file
-                String line = sc.nextLine();
-                content += line;
-            }
-            sc.close();
-            // make the string into json
-            JSONArray arr = new JSONArray(content);
-            // check if it has the ID we are searching for
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                String id = obj.getString("employeeUsername").toString();
-                if (!id.equals(username)) {
-                    continue;
-                }
-                sc.close();
+        JSONArray jsonArray = LoadAllEmployees();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject o = jsonArray.getJSONObject(i);
+            if(o.getString("employeeUsername").equals(username)){
                 return true;
             }
-
-        } catch (FileNotFoundException  e) {
-            e.printStackTrace();
         }
         return false;
     }
