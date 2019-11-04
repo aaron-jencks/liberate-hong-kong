@@ -6,4 +6,8 @@ public class Customer extends ACustomer {
     public Customer(String firstName, String lastName) {
         super(firstName, lastName);
     }
+
+    public Customer(){
+        super();
+    }
 }

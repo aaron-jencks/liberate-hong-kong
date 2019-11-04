@@ -1,6 +1,7 @@
 package company.Entity.Abstract;
 
 import company.Entity.BankAccount;
+import company.Entity.Customer;
 import company.Entity.Interface.ICustomer;
 
 import java.util.ArrayList;
@@ -14,11 +15,22 @@ public abstract class ACustomer extends APerson implements ICustomer
         super(firstName, lastName);
     }
 
+    public ACustomer(){
+        super();
+        this.accountIds = null;
+    }
+
+    public static Customer load(UUID id){
+        Object o = ASaveable.load(Customer.class, id);
+        return (Customer)o;
+    }
+
     public String createAccount(){
         BankAccount ba = new BankAccount();
         ba.setAmount(0)
         .setAccountNumber(UUID.randomUUID().toString());
-        // ba.save();
+        ba.objId = UUID.fromString(ba.getAccountNumber());
+        ba.save();
         return ba.getAccountNumber();
     }
 

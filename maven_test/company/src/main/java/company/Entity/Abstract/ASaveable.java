@@ -62,6 +62,21 @@ public abstract class ASaveable implements ISaveable {
         return arr;
     }
 
+    public static Field[] getAllFields(Class itemClass){
+        Field[] f0 = itemClass.getDeclaredFields();
+        Field[] f1 = itemClass.getSuperclass().getDeclaredFields();
+        Field[] f2 = itemClass.getSuperclass().getSuperclass().getDeclaredFields();
+        Field[] f = add(f0, f1);
+        return add(f, f2);
+    }
+
+    private static Field[] add(Field[] a1, Field[] a2){
+        Field[] a0 = new Field[a1.length + a2.length];
+        System.arraycopy(a1, 0, a0, 0, a1.length);
+        System.arraycopy(a2, 0, a0, a1.length, a2.length);
+        return a0;
+    }
+
     @Override
     public UUID save() {
         UUID id = UUID.randomUUID();
@@ -69,13 +84,7 @@ public abstract class ASaveable implements ISaveable {
         boolean append = true;
         String type = this.getClass().getSimpleName();
         // get the fields
-        Field[] fields = this.getClass().getDeclaredFields();
-        if (fields.length == 0) {
-            fields = this.getClass().getSuperclass().getDeclaredFields();
-            if(fields.length == 0){
-                fields = this.getClass().getSuperclass().getSuperclass().getDeclaredFields();
-            }
-        }
+        Field[] fields = getAllFields(this.getClass());
         // if it has an id it should already be stored and can be loaded
         if (this.objId != null) {
             id = this.objId;
@@ -203,10 +212,7 @@ public abstract class ASaveable implements ISaveable {
                 Object inst = instantiate(removeLeadingA(obj.get("type").toString()));
                 Class<?> clazz = inst.getClass();
                 // fill all the attributes
-                Field[] fields = clazz.getSuperclass().getDeclaredFields();
-                if (fields.length == 0) {
-                    fields = clazz.getSuperclass().getSuperclass().getDeclaredFields();
-                }
+                Field[] fields = getAllFields(clazz);
                 for (Field f : fields) {
                     f.set(inst, obj.get(f.getName()));
                 }

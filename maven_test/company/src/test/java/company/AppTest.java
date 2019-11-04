@@ -41,6 +41,18 @@ public class AppTest
     }
 
     @Test
+    public void tellerTestPerson(){
+        Teller t = new Teller();
+        t.setEmployeeID(123l).setEmployeeUsername("user")
+        .setEmployeePassword("pass").setEmployeeSecurityQuestion("question")
+        .setEmployeeSecurityAnswer("answer").setFirstName("first").setLastName("last");
+        UUID id = t.save();
+        Teller t2 = ATeller.load(id);
+        boolean isSame = t.getFirstName().equals(t2.getFirstName());
+        assertTrue("Teller: person first name is not the same. " + t.getFirstName() + " != " + t2.getFirstName(), isSame);
+    }
+
+    @Test
     public void bankAccountTest(){
         BankAccount ba = new BankAccount();
         ba.setAccountNumber("test").setAmount(123l);
