@@ -62,7 +62,7 @@ public class DeleteAccountMenu extends AMenu {
         get_display_string();
 
         BankAccount ba = ABankAccount.findById(accountId);
-        if (ba.getAccountNumber() != accountId) {
+        if (ba == null) {
             try {
                 accept = UIUtil.get_input(sc, accept, prompt + " No account was found with the given account id", (String s) -> {
                             return true;

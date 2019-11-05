@@ -25,13 +25,9 @@ public abstract class ACustomer extends APerson implements ICustomer
         return (Customer)o;
     }
 
-    public String createAccount(){
-        BankAccount ba = new BankAccount();
-        ba.setAmount(0)
-        .setAccountNumber(UUID.randomUUID().toString());
-        ba.objId = UUID.fromString(ba.getAccountNumber());
-        ba.save();
-        return ba.getAccountNumber();
+    public void AddAccount(String accountId){
+        this.accountIds.add(accountId);
+        this.save();
     }
 
     public ArrayList<String> getAccountIds()

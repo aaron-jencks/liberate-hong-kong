@@ -62,7 +62,7 @@ public abstract class ASaveable implements ISaveable {
         return arr;
     }
 
-    public static Field[] getAllFields(Class itemClass){
+    public static Field[] getAllFields(Class itemClass) {
         Field[] f0 = itemClass.getDeclaredFields();
         Field[] f1 = itemClass.getSuperclass().getDeclaredFields();
         Field[] f2 = itemClass.getSuperclass().getSuperclass().getDeclaredFields();
@@ -70,7 +70,7 @@ public abstract class ASaveable implements ISaveable {
         return add(f, f2);
     }
 
-    private static Field[] add(Field[] a1, Field[] a2){
+    private static Field[] add(Field[] a1, Field[] a2) {
         Field[] a0 = new Field[a1.length + a2.length];
         System.arraycopy(a1, 0, a0, 0, a1.length);
         System.arraycopy(a2, 0, a0, a1.length, a2.length);
@@ -91,14 +91,16 @@ public abstract class ASaveable implements ISaveable {
             obj = loadJsonObject(removeLeadingA(this.getClass().getSuperclass().getSimpleName()), id);
             append = false;
         }
-        
+
         // add the type and id
         obj.put("type", removeLeadingA(type));
         obj.put("ID", id);
         // add each field
         try {
             for (Field f : fields) {
-                obj.put(f.getName(), f.get(this));
+                if (f.canAccess(this)) {
+                    obj.put(f.getName(), f.get(this));
+                }
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -106,9 +108,8 @@ public abstract class ASaveable implements ISaveable {
         if (append) {
             // append the new obj to the entity file
             appendToFile(obj, removeLeadingA(type));
-        }
-        else{
-            //update the existing entry for the object
+        } else {
+            // update the existing entry for the object
             updateObjectInFile(obj, removeLeadingA(type));
         }
         return id;
@@ -116,19 +117,20 @@ public abstract class ASaveable implements ISaveable {
 
     /**
      * Replace the existing obj in the data file with the new one
+     * 
      * @param obj
      * @param fileName
      */
-    public static void updateObjectInFile(JSONObject obj, String fileName){
+    public static void updateObjectInFile(JSONObject obj, String fileName) {
         // get the full path to the data dir
         String s = Paths.get("").toAbsolutePath().toString();
         s = s + File.separator + "data" + File.separator;
         String fullFile = s + fileName + ".json";
         // turn the file into a json array
         JSONArray objArray = read(fullFile);
-        for(int i = 0; i < objArray.length(); i++){
+        for (int i = 0; i < objArray.length(); i++) {
             JSONObject testObj = objArray.getJSONObject(i);
-            if(testObj.getString("ID").equals(obj.getString("ID"))){
+            if (testObj.getString("ID").equals(obj.getString("ID"))) {
                 objArray.remove(i);
                 objArray.put(obj);
             }
@@ -138,6 +140,7 @@ public abstract class ASaveable implements ISaveable {
 
     /**
      * Add the item to the existing data file
+     * 
      * @param obj
      * @param fileName
      */
@@ -178,7 +181,7 @@ public abstract class ASaveable implements ISaveable {
         return returnObject;
     }
 
-    public static JSONArray loadAllAsJson(String className){
+    public static JSONArray loadAllAsJson(String className) {
         String s = Paths.get("").toAbsolutePath().toString();
         s = s + File.separator + "data" + File.separator;
         String fullFile = s + className + ".json";
@@ -189,18 +192,8 @@ public abstract class ASaveable implements ISaveable {
 
         String s = Paths.get("").toAbsolutePath().toString();
         String classFileName = removeLeadingNamespace(classObject.getName());
-        File file = new File(s + File.separator + "data" + File.separator + classFileName + ".json");
         try {
-            Scanner sc = new Scanner(file);
-            String content = "";
-            while (sc.hasNextLine()) {
-                // get the next line in file
-                String line = sc.nextLine();
-                content += line;
-            }
-            sc.close();
-            // make the string into json
-            JSONArray arr = new JSONArray(content);
+            JSONArray arr = loadAllAsJson(classFileName);
             // check if it has the ID we are searching for
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
@@ -214,16 +207,28 @@ public abstract class ASaveable implements ISaveable {
                 // fill all the attributes
                 Field[] fields = getAllFields(clazz);
                 for (Field f : fields) {
-                    f.set(inst, obj.get(f.getName()));
+                    if (f.canAccess(inst)) {
+                        f.set(inst, obj.get(f.getName()));
+                    }
                 }
-                sc.close();
                 return inst;
             }
 
-        } catch (FileNotFoundException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         throw new UnknownError("Unable to load");
+    }
+
+    public static JSONArray add(JSONArray a1, JSONArray a2){
+        JSONArray master = new JSONArray();
+        for(int i = 0; i < a1.length(); i++){
+            master.put(a1.getJSONObject(i));
+        }
+        for(int i = 0; i < a2.length(); i++){
+            master.put(a2.getJSONObject(i));
+        }
+        return master;
     }
 
     static String removeLeadingA(String str) {

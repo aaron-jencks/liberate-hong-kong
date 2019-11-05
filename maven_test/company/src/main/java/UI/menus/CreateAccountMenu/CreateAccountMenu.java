@@ -8,12 +8,12 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Entity.Customer;
+import company.Entity.Abstract.ABankAccount;
 
 public class CreateAccountMenu extends AMenu {
 
     private String firstName = new String();
     private String lastName = new String();
-    private String accountId = new String();
     private String accept = new String();
 
     public CreateAccountMenu(ITermController parent) {
@@ -78,11 +78,11 @@ public class CreateAccountMenu extends AMenu {
         get_display_string();
 
         Customer c = new Customer(firstName, lastName);
+        String accountNumber = ABankAccount.createAccount();
 
-        accountId = c.createAccount();
 
         try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountId
+            accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber
                     + "\n Press any key to return to the account menu.", (String s) -> {
                         return true;
                     });

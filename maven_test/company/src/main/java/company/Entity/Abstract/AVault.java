@@ -8,13 +8,19 @@ import company.Entity.Interface.IVault;
 import company.exceptions.EmployeeNotFoundException;
 
 import java.util.HashMap;
+import java.util.UUID;
 
-public abstract class AVault implements IVault
+public abstract class AVault extends ASaveable implements IVault
 {
     private long lastEmployeeID = 0;
     protected HashMap<Long, ICustomer> customers = new HashMap<Long, ICustomer>();
     protected HashMap<Long, IEmployee> employees = new HashMap<Long, IEmployee>();
     protected HashMap<Long, IAccount> accounts = new HashMap<Long, IAccount>();
+
+    public static Vault load(UUID id){
+        Object o = ASaveable.load(Vault.class, id);
+        return (Vault)o;
+    }
 
     public HashMap<Long, ICustomer> getCustomers()
     {

@@ -18,31 +18,22 @@ public abstract class ABankAccount extends AAccount implements IBankAccount {
         return (BankAccount)o;
     }
 
+    public static JSONArray loadAllBankAccounts(){
+        JSONArray banks = loadAllAsJson("BankAccount");
+        JSONArray credit = loadAllAsJson("CreditAccount");
+        return add(banks, credit);
+    }
+
     public static BankAccount findById(String accountId) {
-        // JSONArray arr = ASaveable.loadAllAsJson("BankAccount");
-        JSONArray arr = new JSONArray();
+        JSONArray arr = loadAllBankAccounts();
         for (int i = 0; i < arr.length(); i++) {
             JSONObject obj = arr.getJSONObject(i);
             if (obj.getString("accountNumber").equals(accountId)) {
-                Object inst = instantiate("BankAccount");
-                Class<?> clazz = inst.getClass();
-                // fill all the attributes
-                Field[] fields = clazz.getSuperclass().getDeclaredFields();
-                if (fields.length == 0) {
-                    fields = clazz.getSuperclass().getSuperclass().getDeclaredFields();
-                }
-                for (Field f : fields) {
-                    try {
-                        f.set(inst, obj.get(f.getName()));
-                    }
-                    catch (IllegalAccessException | IllegalArgumentException | JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return (BankAccount) inst;
+                UUID id = UUID.fromString(obj.getString("ID"));
+                return load(id);
             }
         }
-        return new BankAccount();
+        return null;
     }
 
     public long closeAccount(){
@@ -50,5 +41,14 @@ public abstract class ABankAccount extends AAccount implements IBankAccount {
         this.setAmount(0);
         this.save();
         return amt;
+    }
+
+    public static String createAccount(){
+        BankAccount ba = new BankAccount();
+        ba.setAmount(0l);
+        UUID id = UUID.randomUUID();
+        ba.setAccountNumber(id.toString());
+        ba.save();
+        return id.toString();
     }
 }

@@ -71,16 +71,6 @@ public abstract class AEmployee extends APerson implements IEmployee
         return false;
     }
 
-    private static JSONArray add(JSONArray a1, JSONArray a2){
-        JSONArray master = new JSONArray();
-        for(int i = 0; i < a1.length(); i++){
-            master.put(a1.getJSONObject(i));
-        }
-        for(int i = 0; i < a2.length(); i++){
-            master.put(a2.getJSONObject(i));
-        }
-        return master;
-    }
 
     public static JSONArray LoadAllEmployees(){
         JSONArray tellers = ASaveable.loadAllAsJson("Teller");
