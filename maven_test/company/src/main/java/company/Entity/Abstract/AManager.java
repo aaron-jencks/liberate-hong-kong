@@ -1,5 +1,7 @@
 package company.Entity.Abstract;
 
+import java.util.UUID;
+
 import company.Entity.Abstract.AEmployee;
 import company.Entity.Interface.IManager;
 import company.Entity.Interface.IEmployee;
@@ -7,7 +9,7 @@ import company.Entity.Interface.IEmployee;
 public abstract class AManager extends AEmployee implements IManager {
 
 
-    public AManager(String firstName, String lastName, String employeeUsername, long employeeID) {
+    public AManager(String firstName, String lastName, String employeeUsername, UUID employeeID) {
         super(firstName, lastName, employeeUsername, employeeID);
     }
 

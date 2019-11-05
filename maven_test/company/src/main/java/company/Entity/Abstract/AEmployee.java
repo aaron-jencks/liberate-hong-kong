@@ -1,10 +1,6 @@
 package company.Entity.Abstract;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,14 +10,14 @@ import company.Entity.Interface.IEmployee;
 public abstract class AEmployee extends APerson implements IEmployee
 {
 
-    protected long employeeID = 0;
+    protected UUID employeeID;
     protected String employeeUsername = new String();
     protected String employeePassword = new String();
     protected String employeeSecurityQuestion = new String();
     protected String employeeSecurityAnswer = new String();
 
 
-    public AEmployee(String firstName, String lastName, String employeeUsername, long employeeID) {
+    public AEmployee(String firstName, String lastName, String employeeUsername, UUID employeeID) {
         super(firstName, lastName);
         this.employeeUsername = employeeUsername;
         this.employeePassword = "";
@@ -30,7 +26,7 @@ public abstract class AEmployee extends APerson implements IEmployee
 
     public AEmployee(){
         super();
-        this.employeeID = 0l;
+        this.employeeID = UUID.randomUUID();
         this.employeePassword = null;
         this.employeeSecurityAnswer = null;
         this.employeeSecurityQuestion = null;
@@ -100,12 +96,12 @@ public abstract class AEmployee extends APerson implements IEmployee
         return false;
     }
 
-    public long getEmployeeID()
+    public UUID getEmployeeID()
     {
         return employeeID;
     }
 
-    public IEmployee setEmployeeID(long employeeID)
+    public IEmployee setEmployeeID(UUID employeeID)
     {
         this.employeeID = employeeID;
         return this;

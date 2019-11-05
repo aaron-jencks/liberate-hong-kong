@@ -13,10 +13,12 @@ import java.util.UUID;
 
 public abstract class AVault extends ASaveable implements IVault
 {
-    private long lastEmployeeID = 0;
-    protected HashMap<Long, ICustomer> customers = new HashMap<Long, ICustomer>();
-    protected HashMap<Long, IEmployee> employees = new HashMap<Long, IEmployee>();
-    protected HashMap<Long, IAccount> accounts = new HashMap<Long, IAccount>();
+    protected HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
+    protected HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
+    protected HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
+    public ArrayList<UUID> customerIds = new ArrayList<>();
+    public ArrayList<UUID> employeeIds = new ArrayList<>();
+    public ArrayList<UUID> accountIds = new ArrayList<>();
 
     public static Vault load(UUID id){
         Object o = ASaveable.load(Vault.class, id);
@@ -25,33 +27,31 @@ public abstract class AVault extends ASaveable implements IVault
 
     @Override
     public UUID save() {
-        ArrayList<UUID> cArr =  new ArrayList<>();
-        ArrayList<UUID> eArr = new ArrayList<>();
-        ArrayList<UUID> aArr = new ArrayList<>();
         for(ICustomer c: this.customers.values()){
-            cArr.add(c.save());
+            customerIds.add(c.save());
         }
         for(IEmployee e: this.employees.values()){
-            eArr.add(e.save());
+            employeeIds.add(e.save());
         }
         for(IAccount a: this.accounts.values()){
-            aArr.add(a.save());
+            accountIds.add(a.save());
         }
+        System.out.println(employeeIds.toArray().toString());
         return UUID.randomUUID();
     }
 
-    public HashMap<Long, ICustomer> getCustomers()
+    public HashMap<UUID, ICustomer> getCustomers()
     {
         return customers;
     }
 
-    public AVault setCustomers(HashMap<Long, ICustomer> customers)
+    public AVault setCustomers(HashMap<UUID, ICustomer> customers)
     {
         this.customers = customers;
         return this;
     }
 
-    public HashMap<Long, IEmployee> getEmployees()
+    public HashMap<UUID, IEmployee> getEmployees()
     {
         return employees;
     }
@@ -66,7 +66,7 @@ public abstract class AVault extends ASaveable implements IVault
         return null;
     }
 
-    public IEmployee getEmployee(long employee_id)
+    public IEmployee getEmployee(UUID employee_id)
     {
         return employees.get(employee_id);
     }
@@ -79,69 +79,83 @@ public abstract class AVault extends ASaveable implements IVault
         return null;
     }
 
-    public AVault setEmployees(HashMap<Long, IEmployee> employees)
+    public ICustomer getCustomer(UUID customerId){
+        return customers.get(customerId);
+    }
+
+    public ICustomer getCustomer(Person p){
+        if (employees != null) {
+            for (ICustomer customer : customers.values()) {
+                if ((APerson) customer == p)
+                    return customer;
+            }
+        }
+        return null;
+    }
+
+    public AVault setEmployees(HashMap<UUID, IEmployee> employees)
     {
         this.employees = employees;
         return this;
     }
 
-    public HashMap<Long, IAccount> getAccounts()
+    public HashMap<UUID, IAccount> getAccounts()
     {
         return accounts;
     }
 
-    public AVault setAccounts(HashMap<Long, IAccount> accounts)
+    public AVault setAccounts(HashMap<UUID, IAccount> accounts)
     {
         this.accounts = accounts;
         return this;
     }
 
-    public long createTeller(Person p)
+    public UUID createTeller(Person p)
     {
-        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
+        UUID new_id = UUID.randomUUID();
         Teller t = new Teller(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, t);
         return new_id;
     }
 
-    public long createLoanOfficer(Person p)
+    public UUID createLoanOfficer(Person p)
     {
-        long new_id = ++lastEmployeeID;
+        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
         LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, lo);
         return new_id;
     }
 
-    public long createManager(Person p)
+    public UUID createManager(Person p)
     {
-        long new_id = ++lastEmployeeID;
+        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Manager m = new Manager(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, m);
         return new_id;
     }
 
-    public long createHRManager(Person p)
+    public UUID createHRManager(Person p)
     {
-        long new_id = ++lastEmployeeID;
+        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
         HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, hrm);
         return new_id;
     }
 
-    public long createOwner(Person p)
+    public UUID createOwner(Person p)
     {
-        long new_id = ++lastEmployeeID;
+        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username, new_id);
         this.employees.put(new_id, o);
         return new_id;
     }
 
-    public long fireEmployee(long employee_id)
+    public UUID fireEmployee(UUID employee_id)
     {
         employees.remove(employee_id);
         return employee_id;
