@@ -1,4 +1,4 @@
 package company.Entity.Interface;
 
-public interface ICustomer {
+public interface ICustomer extends IPerson{
 }

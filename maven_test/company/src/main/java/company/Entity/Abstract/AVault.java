@@ -7,6 +7,7 @@ import company.Entity.Interface.IEmployee;
 import company.Entity.Interface.IVault;
 import company.exceptions.EmployeeNotFoundException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -20,6 +21,23 @@ public abstract class AVault extends ASaveable implements IVault
     public static Vault load(UUID id){
         Object o = ASaveable.load(Vault.class, id);
         return (Vault)o;
+    }
+
+    @Override
+    public UUID save() {
+        ArrayList<UUID> cArr =  new ArrayList<>();
+        ArrayList<UUID> eArr = new ArrayList<>();
+        ArrayList<UUID> aArr = new ArrayList<>();
+        for(ICustomer c: this.customers.values()){
+            cArr.add(c.save());
+        }
+        for(IEmployee e: this.employees.values()){
+            eArr.add(e.save());
+        }
+        for(IAccount a: this.accounts.values()){
+            aArr.add(a.save());
+        }
+        return UUID.randomUUID();
     }
 
     public HashMap<Long, ICustomer> getCustomers()
