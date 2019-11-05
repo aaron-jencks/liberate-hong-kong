@@ -9,8 +9,6 @@ import company.Entity.Interface.IEmployee;
 
 public abstract class AEmployee extends APerson implements IEmployee
 {
-
-    protected UUID employeeID;
     protected String employeeUsername = new String();
     protected String employeePassword = new String();
     protected String employeeSecurityQuestion = new String();
@@ -21,12 +19,10 @@ public abstract class AEmployee extends APerson implements IEmployee
         super(firstName, lastName);
         this.employeeUsername = employeeUsername;
         this.employeePassword = "";
-        this.employeeID = employeeID;
     }
 
     public AEmployee(){
         super();
-        this.employeeID = UUID.randomUUID();
         this.employeePassword = null;
         this.employeeSecurityAnswer = null;
         this.employeeSecurityQuestion = null;

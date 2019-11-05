@@ -1,8 +1,5 @@
 package company.Entity.Abstract;
 
-import java.util.UUID;
-
-import company.Entity.Person;
 import company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
@@ -12,11 +9,13 @@ public abstract class APerson extends ASaveable implements IPerson
     protected String lastName;
 
     public APerson(String firstName, String lastName) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     public APerson(){
+        super();
         this.firstName = null;
         this.lastName = null;
     }

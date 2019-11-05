@@ -25,6 +25,10 @@ public abstract class ASaveable implements ISaveable {
 
     public UUID objId;
 
+    public ASaveable(){
+        this.objId = UUID.randomUUID();
+    }
+
     public static void write(String fileName, boolean append, String content) {
         BufferedWriter buffOut = null;
         try {

@@ -9,6 +9,7 @@ public abstract class AAccount extends ASaveable implements IAccount
     protected String accountNumber;
 
     public AAccount(){
+        super();
         this.accountNumber = null;
         this.amount = 0l;
     }
