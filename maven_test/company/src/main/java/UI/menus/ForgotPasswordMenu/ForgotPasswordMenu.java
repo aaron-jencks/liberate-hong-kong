@@ -1,6 +1,7 @@
 package UI.menus.ForgotPasswordMenu;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import UI.menus.LoginMenu.LoginMenu;
 import UI.IMenuItem;
@@ -15,7 +16,7 @@ import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
 
 public class ForgotPasswordMenu extends LoginMenu {
-    protected long user_id = 0;
+    protected UUID user_id;
     protected String security_question = new String();
     protected String security_answer = new String();
     protected String confirm_password = new String();

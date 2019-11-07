@@ -34,7 +34,7 @@ public class AppTest
     @Test
     public void tellerTestEmployee(){
         Teller t = new Teller();
-        t.setEmployeeID(123l).setEmployeeUsername("user")
+        t.setEmployeeUsername("user")
         .setEmployeePassword("pass").setEmployeeSecurityQuestion("question")
         .setEmployeeSecurityAnswer("answer").setFirstName("first").setLastName("last");
         UUID id = t.save();
@@ -46,7 +46,7 @@ public class AppTest
     @Test
     public void tellerTestPerson(){
         Teller t = new Teller();
-        t.setEmployeeID(123l).setEmployeeUsername("user")
+        t.setEmployeeUsername("user")
         .setEmployeePassword("pass").setEmployeeSecurityQuestion("question")
         .setEmployeeSecurityAnswer("answer").setFirstName("first").setLastName("last");
         UUID id = t.save();
@@ -69,9 +69,8 @@ public class AppTest
     public void vaultTest(){
         Vault v = new Vault();
         Person p0 = new Person("first", "last");
-        long pId = v.createTeller(p0);
-        UUID id = v.save();
-        Vault v0 = AVault.load(id);
+        UUID pId = v.createTeller(p0);
+        Vault v0 = AVault.load(pId);
         boolean isSame = v0.getEmployees().get(pId).getFirstName().equals(p0.getFirstName());
         assertTrue(isSame);
     }

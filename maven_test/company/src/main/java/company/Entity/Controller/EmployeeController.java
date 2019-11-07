@@ -52,7 +52,7 @@ public class EmployeeController implements IEmployeeController {
         IEmployee employee = vault.getEmployee(username);
         if(employee == null)
             throw new EmployeeNotFoundException("Employee not found", username);
-        return employee.getEmployeeID();
+        return employee.getObjectId();
     }
 
     public IEmployee findEmployee(UUID user_id) throws EmployeeNotFoundException {

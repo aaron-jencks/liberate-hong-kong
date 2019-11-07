@@ -12,6 +12,7 @@ import UI.AMenu;
 import company.Entity.Vault;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Hello world!
@@ -24,7 +25,7 @@ public class App
         TermController term = new TermController();
         Vault vault = new Vault();
 
-        long user_id = vault.createTeller(new Person("John", "Smith"));
+        UUID user_id = vault.createTeller(new Person("John", "Smith"));
         IEmployee t = vault.getEmployee(user_id);
         t.setEmployeePassword("p");
         t.setEmployeeUsername("u");

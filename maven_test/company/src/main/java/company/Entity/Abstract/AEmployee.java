@@ -15,7 +15,7 @@ public abstract class AEmployee extends APerson implements IEmployee
     protected String employeeSecurityAnswer = new String();
 
 
-    public AEmployee(String firstName, String lastName, String employeeUsername, UUID employeeID) {
+    public AEmployee(String firstName, String lastName, String employeeUsername) {
         super(firstName, lastName);
         this.employeeUsername = employeeUsername;
         this.employeePassword = "";
@@ -90,17 +90,6 @@ public abstract class AEmployee extends APerson implements IEmployee
             }
         }
         return false;
-    }
-
-    public UUID getEmployeeID()
-    {
-        return employeeID;
-    }
-
-    public IEmployee setEmployeeID(UUID employeeID)
-    {
-        this.employeeID = employeeID;
-        return this;
     }
 
     public String getEmployeePassword()

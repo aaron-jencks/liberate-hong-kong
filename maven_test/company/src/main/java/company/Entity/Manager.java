@@ -6,7 +6,7 @@ import company.Entity.Abstract.AManager;
 
 public class Manager extends AManager {
 
-    public Manager(String firstName, String lastName, String employeeUsername, UUID employeeID) {
-        super(firstName, lastName, employeeUsername, employeeID);
+    public Manager(String firstName, String lastName, String employeeUsername) {
+        super(firstName, lastName, employeeUsername);
     }
 }

@@ -113,46 +113,41 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createTeller(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        UUID new_id = UUID.randomUUID();
-        Teller t = new Teller(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, t);
-        return new_id;
+        Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
+        this.employees.put(t.objId, t);
+        return t.objId;
     }
 
     public UUID createLoanOfficer(Person p)
     {
-        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, lo);
-        return new_id;
+        LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
+        this.employees.put(lo.objId, lo);
+        return lo.objId;
     }
 
     public UUID createManager(Person p)
     {
-        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        Manager m = new Manager(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, m);
-        return new_id;
+        Manager m = new Manager(p.getFirstName(), p.getLastName(), username);
+        this.employees.put(m.objId, m);
+        return m.objId;
     }
 
     public UUID createHRManager(Person p)
     {
-        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, hrm);
-        return new_id;
+        HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username);
+        this.employees.put(hrm.objId, hrm);
+        return hrm.objId;
     }
 
     public UUID createOwner(Person p)
     {
-        UUID new_id = UUID.randomUUID();
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        Owner o = new Owner(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, o);
-        return new_id;
+        Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
+        this.employees.put(o.objId, o);
+        return o.objId;
     }
 
     public UUID fireEmployee(UUID employee_id)

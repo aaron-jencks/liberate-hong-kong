@@ -10,8 +10,8 @@ import company.Entity.Customer;
 
 public abstract class ALoanOfficer extends AEmployee implements ILoanOfficer {
 
-    public ALoanOfficer(String firstName, String lastName, String employeeUsername, UUID employeeID) {
-        super(firstName, lastName, employeeUsername, employeeID);
+    public ALoanOfficer(String firstName, String lastName, String employeeUsername) {
+        super(firstName, lastName, employeeUsername);
     }
 
     public void CreateAccount(CreditAccount account, Customer customer)

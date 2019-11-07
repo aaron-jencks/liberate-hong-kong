@@ -273,4 +273,10 @@ public abstract class ASaveable implements ISaveable {
         }
         throw new IllegalArgumentException("Don't know how to instantiate " + className);
     }
+
+    @Override
+    public UUID getObjectId() {
+        return this.objId;
+    }
+
 }

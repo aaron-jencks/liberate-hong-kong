@@ -4,4 +4,5 @@ import java.util.UUID;
 
 public interface ISaveable {
     UUID save();
+    UUID getObjectId();
 }
