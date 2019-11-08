@@ -1,4 +1,4 @@
 package company.Entity.Interface;
 
-public interface IBankAccount {
+public interface IBankAccount extends IAccount{
 }

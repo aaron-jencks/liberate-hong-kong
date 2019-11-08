@@ -23,7 +23,7 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         TermController term = new TermController();
-        Vault vault = new Vault();
+        Vault vault = Vault.getInstance();
 
         UUID user_id = vault.createTeller(new Person("John", "Smith"));
         IEmployee t = vault.getEmployee(user_id);

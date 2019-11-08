@@ -78,7 +78,9 @@ public class CreateAccountMenu extends AMenu {
         get_display_string();
 
         Customer c = new Customer(firstName, lastName);
-        String accountNumber = ABankAccount.createAccount();
+        //TODO put this back
+        // String accountNumber = ABankAccount.createAccount();
+        String accountNumber = "";
 
 
         try {

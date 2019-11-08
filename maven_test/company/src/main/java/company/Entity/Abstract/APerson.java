@@ -28,6 +28,7 @@ public abstract class APerson extends ASaveable implements IPerson
     public IPerson setFirstName(String firstName)
     {
         this.firstName = firstName;
+        this.save();
         return this;
     }
 
@@ -39,6 +40,7 @@ public abstract class APerson extends ASaveable implements IPerson
     public IPerson setLastName(String lastName)
     {
         this.lastName = lastName;
+        this.save();
         return this;
     }
 }

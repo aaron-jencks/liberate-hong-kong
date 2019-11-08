@@ -4,6 +4,7 @@ import company.Entity.*;
 import company.Entity.Interface.IAccount;
 import company.Entity.Interface.ICustomer;
 import company.Entity.Interface.IEmployee;
+import company.Entity.Interface.ISaveable;
 import company.Entity.Interface.IVault;
 import company.exceptions.EmployeeNotFoundException;
 
@@ -21,7 +22,7 @@ public abstract class AVault extends ASaveable implements IVault
     public ArrayList<UUID> accountIds = new ArrayList<>();
 
     public static Vault load(UUID id){
-        Object o = ASaveable.load(Vault.class, id);
+        Object o = ISaveable.load(Vault.class, id);
         return (Vault)o;
     }
 
@@ -96,6 +97,7 @@ public abstract class AVault extends ASaveable implements IVault
     public AVault setEmployees(HashMap<UUID, IEmployee> employees)
     {
         this.employees = employees;
+        this.save();
         return this;
     }
 
@@ -107,9 +109,11 @@ public abstract class AVault extends ASaveable implements IVault
     public AVault setAccounts(HashMap<UUID, IAccount> accounts)
     {
         this.accounts = accounts;
+        this.save();
         return this;
     }
 
+    @Override
     public UUID createTeller(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
@@ -118,6 +122,7 @@ public abstract class AVault extends ASaveable implements IVault
         return t.objId;
     }
 
+    @Override
     public UUID createLoanOfficer(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
@@ -126,6 +131,7 @@ public abstract class AVault extends ASaveable implements IVault
         return lo.objId;
     }
 
+    @Override
     public UUID createManager(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
@@ -134,6 +140,7 @@ public abstract class AVault extends ASaveable implements IVault
         return m.objId;
     }
 
+    @Override
     public UUID createHRManager(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
@@ -142,6 +149,7 @@ public abstract class AVault extends ASaveable implements IVault
         return hrm.objId;
     }
 
+    @Override
     public UUID createOwner(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();

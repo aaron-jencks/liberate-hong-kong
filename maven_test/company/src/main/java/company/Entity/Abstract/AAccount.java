@@ -4,35 +4,24 @@ import company.Entity.Interface.IAccount;
 
 public abstract class AAccount extends ASaveable implements IAccount
 {
-
     protected long amount;
-    protected String accountNumber;
 
     public AAccount(){
         super();
-        this.accountNumber = null;
         this.amount = 0l;
     }
 
+    @Override
     public long getAmount()
     {
         return amount;
     }
 
-    public AAccount setAmount(long amount)
+    @Override
+    public IAccount setAmount(long amount)
     {
         this.amount = amount;
-        return this;
-    }
-
-    public String getAccountNumber()
-    {
-        return accountNumber;
-    }
-
-    public AAccount setAccountNumber(String accountNumber)
-    {
-        this.accountNumber = accountNumber;
+        this.save();
         return this;
     }
 }
