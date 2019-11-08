@@ -3,6 +3,6 @@ package company.Controller.Interface;
 import company.Entity.Interface.IAccount;
 
 public interface IAccountController {
-    public void Deposit(IAccount account, long amount);
-    public void Withdrawal(IAccount account, long amount);
+    public void deposit(IAccount account, long amount);
+    public void withdrawal(IAccount account, long amount);
 }

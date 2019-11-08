@@ -17,5 +17,6 @@ public interface IVault extends ISaveable
     public UUID createManager(Person p);
     public UUID createHRManager(Person p);
     public UUID createOwner(Person p);
+    public UUID createCustomer(Person p);
 
 }

@@ -6,8 +6,8 @@ import company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
 {
-    protected String firstName;
-    protected String lastName;
+    private String firstName;
+    private String lastName;
 
     public APerson(String firstName, String lastName) {
         super();

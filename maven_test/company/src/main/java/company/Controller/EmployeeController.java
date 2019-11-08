@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import company.Controller.Interface.IEmployeeController;
 import company.Entity.Person;
+import company.Entity.Vault;
 import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
@@ -12,13 +13,12 @@ public class EmployeeController implements IEmployeeController {
     private AVault vault;
 
     public EmployeeController(AVault vault) {
-        this.vault = vault;
+        this.vault = Vault.getInstance();
     }
 
     @Override
     public UUID createEmployee(String first_name, String last_name, String position) throws Exception {
         Person p = new Person(first_name, last_name);
-
         IEmployee employee = vault.getEmployee(p);
         if (employee != null)
             throw new Exception("Person is already an employee");

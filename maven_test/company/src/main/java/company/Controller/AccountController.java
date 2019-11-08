@@ -5,13 +5,13 @@ import company.Entity.Interface.IAccount;
 
 public class AccountController implements IAccountController {
     @Override
-    public void Deposit(IAccount account, long amount)
+    public void deposit(IAccount account, long amount)
     {
         // TODO
     }
 
     @Override
-    public void Withdrawal(IAccount account, long amount)
+    public void withdrawal(IAccount account, long amount)
     {
         // TODO
     }

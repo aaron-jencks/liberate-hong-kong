@@ -6,10 +6,10 @@ import company.Entity.Interface.IEmployee;
 
 public abstract class AEmployee extends APerson implements IEmployee
 {
-    protected String employeeUsername = new String();
-    protected String employeePassword = new String();
-    protected String employeeSecurityQuestion = new String();
-    protected String employeeSecurityAnswer = new String();
+    private String employeeUsername = new String();
+    private String employeePassword = new String();
+    private String employeeSecurityQuestion = new String();
+    private String employeeSecurityAnswer = new String();
 
 
     public AEmployee(String firstName, String lastName, String employeeUsername) {

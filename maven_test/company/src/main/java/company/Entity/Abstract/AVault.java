@@ -25,21 +25,6 @@ public abstract class AVault extends ASaveable implements IVault
         return (Vault)o;
     }
 
-    @Override
-    public UUID save() {
-        for(ICustomer c: this.customers.values()){
-            customerIds.add(c.save());
-        }
-        for(IEmployee e: this.employees.values()){
-            employeeIds.add(e.save());
-        }
-        for(IAccount a: this.accounts.values()){
-            accountIds.add(a.save());
-        }
-        System.out.println(employeeIds.toArray().toString());
-        return UUID.randomUUID();
-    }
-
     public HashMap<UUID, ICustomer> getCustomers()
     {
         return customers;
@@ -155,6 +140,13 @@ public abstract class AVault extends ASaveable implements IVault
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
         this.employees.put(o.getObjectId(), o);
         return o.getObjectId();
+    }
+
+    @Override
+    public UUID createCustomer(Person p) {
+        Customer c = new Customer(p.getFirstName(), p.getLastName());
+        this.customers.put(p.getObjectId(), c);
+        return c.getObjectId();
     }
 
     public UUID fireEmployee(UUID employee_id)
