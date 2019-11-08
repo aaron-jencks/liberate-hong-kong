@@ -13,6 +13,7 @@ public abstract class APerson extends ASaveable implements IPerson
         super();
         this.firstName = firstName;
         this.lastName = lastName;
+        this.save();
     }
 
     public APerson(){

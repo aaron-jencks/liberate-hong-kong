@@ -47,4 +47,10 @@ public abstract class ASaveable implements ISaveable {
         return this.objId;
     }
 
+    @Override
+    public void setObjectId(UUID id) {
+        this.objId = id;
+        this.save();
+    }
+
 }

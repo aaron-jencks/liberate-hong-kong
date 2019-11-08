@@ -16,6 +16,7 @@ public abstract class AEmployee extends APerson implements IEmployee
         super(firstName, lastName);
         this.employeeUsername = employeeUsername;
         this.employeePassword = "";
+        this.save();
     }
 
     public AEmployee(){

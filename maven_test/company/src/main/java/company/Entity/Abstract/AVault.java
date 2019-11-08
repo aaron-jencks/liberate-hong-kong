@@ -102,6 +102,7 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
+        t.setObjectId(p.getObjectId();
         this.employees.put(t.getObjectId(), t);
         return t.getObjectId();
     }
@@ -111,6 +112,7 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
+        lo.setObjectId(p.getObjectId());
         this.employees.put(lo.getObjectId(), lo);
         return lo.getObjectId();
     }
@@ -120,6 +122,7 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Manager m = new Manager(p.getFirstName(), p.getLastName(), username);
+        m.setObjectId(p.getObjectId());
         this.employees.put(m.getObjectId(), m);
         return m.getObjectId();
     }
@@ -129,6 +132,7 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username);
+        hrm.setObjectId(p.getObjectId());
         this.employees.put(hrm.getObjectId(), hrm);
         return hrm.getObjectId();
     }
@@ -138,6 +142,7 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
+        o.setObjectId(p.getObjectId());
         this.employees.put(o.getObjectId(), o);
         return o.getObjectId();
     }
@@ -145,8 +150,23 @@ public abstract class AVault extends ASaveable implements IVault
     @Override
     public UUID createCustomer(Person p) {
         Customer c = new Customer(p.getFirstName(), p.getLastName());
+        c.setObjectId(p.getObjectId());
         this.customers.put(p.getObjectId(), c);
         return c.getObjectId();
+    }
+
+    @Override
+    public UUID createBankAccount(Customer c) {
+        BankAccount ba = new BankAccount();
+        c.addAccount(ba.getObjectId());
+        return ba.getObjectId();
+    }
+
+    @Override
+    public UUID createCreditAccount(Customer c) {
+        CreditAccount ca = new CreditAccount();
+        c.addAccount(ca.getObjectId());
+        return ca.getObjectId();
     }
 
     public UUID fireEmployee(UUID employee_id)

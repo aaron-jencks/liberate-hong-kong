@@ -25,6 +25,7 @@ public class VaultTest{
         Vault v = Vault.getInstance();
     }
 
+    @Test
     public void VaultCustomerTest(){
         Vault v = Vault.getInstance();
         Person p = new Person("first", "last");

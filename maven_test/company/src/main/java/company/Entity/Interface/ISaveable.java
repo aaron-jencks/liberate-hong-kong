@@ -29,6 +29,7 @@ public interface ISaveable {
 
     UUID save();
     UUID getObjectId();
+    void setObjectId(UUID id);
 
     /**
      * Check if the obj exists, update the existing or add a new one
@@ -116,6 +117,7 @@ public interface ISaveable {
                     f.set(inst, obj.get(f.getName()));
                 } catch (Exception e) {
                     try {
+
                         f.set(inst, UUID.fromString((String)obj.get(f.getName())));
                     } catch (ClassCastException ec) {
                         //load the ids for relations
@@ -126,6 +128,8 @@ public interface ISaveable {
                             ids.add(UUID.fromString((String)a.get(i)));
                         }
                         f.set(inst, ids);
+                    } catch(JSONException je){
+                        System.out.println(f.getName() + " Not found in " + obj.toString());
                     }
                     
                 }

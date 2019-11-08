@@ -14,6 +14,7 @@ public abstract class ACustomer extends APerson implements ICustomer
     public ACustomer(String firstName, String lastName) {
         super(firstName, lastName);
         this.accountIds = new ArrayList<>();
+        this.save();
     }
 
     public ACustomer(){
