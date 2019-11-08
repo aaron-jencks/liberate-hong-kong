@@ -1,7 +1,5 @@
 package company.Entity.Abstract;
 
-import java.util.UUID;
-
 import company.Entity.Abstract.AEmployee;
 import company.Entity.Interface.IManager;
 import company.Entity.Interface.IEmployee;

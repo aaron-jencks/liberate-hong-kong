@@ -1,6 +1,7 @@
 package UI.menus.DeleteAccountMenu;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -8,7 +9,6 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Entity.BankAccount;
-import company.Entity.Abstract.AAccount;
 import company.Entity.Abstract.ABankAccount;
 
 public class DeleteAccountMenu extends AMenu {
@@ -61,7 +61,7 @@ public class DeleteAccountMenu extends AMenu {
 
         get_display_string();
 
-        BankAccount ba = ABankAccount.findById(accountId);
+        BankAccount ba = ABankAccount.load(UUID.fromString(accountId));
         if (ba == null) {
             try {
                 accept = UIUtil.get_input(sc, accept, prompt + " No account was found with the given account id", (String s) -> {

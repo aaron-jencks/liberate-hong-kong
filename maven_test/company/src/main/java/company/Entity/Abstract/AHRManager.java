@@ -1,10 +1,7 @@
 package company.Entity.Abstract;
 
-import java.util.UUID;
-
 import company.Entity.Abstract.AManager;
 import company.Entity.Interface.IHRManager;
-import company.Entity.Interface.IEmployee;
 import company.Entity.Interface.IPerson;
 
 public abstract class AHRManager extends AManager implements IHRManager {

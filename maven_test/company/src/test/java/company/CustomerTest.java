@@ -17,7 +17,6 @@ public class CustomerTest{
     @Test
     public void CustomerPersonTest(){
         Customer c = new Customer("first", "last");
-        
     }
 
 }

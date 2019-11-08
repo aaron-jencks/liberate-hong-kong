@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Test;
 
 import company.Entity.Teller;
-import company.Entity.Abstract.ATeller;
 import company.Entity.Interface.ISaveable;
 import company.Entity.Interface.ITeller;
 

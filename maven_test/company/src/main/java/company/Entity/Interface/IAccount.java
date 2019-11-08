@@ -1,6 +1,8 @@
 package company.Entity.Interface;
 
+import java.util.UUID;
+
 public interface IAccount extends ISaveable {
     public long getAmount();
-    public IAccount setAmount(long amount);
+    public UUID setAmount(long amount);
 }

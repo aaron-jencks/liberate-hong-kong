@@ -1,7 +1,5 @@
 package company.Entity;
 
-import java.util.UUID;
-
 import company.Entity.Abstract.AManager;
 
 public class Manager extends AManager {

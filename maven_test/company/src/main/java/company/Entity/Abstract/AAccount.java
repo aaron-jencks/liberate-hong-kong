@@ -1,6 +1,11 @@
 package company.Entity.Abstract;
 
+import java.util.UUID;
+
+import org.json.JSONArray;
+
 import company.Entity.Interface.IAccount;
+import company.Entity.Interface.ISaveable;
 
 public abstract class AAccount extends ASaveable implements IAccount
 {
@@ -11,6 +16,12 @@ public abstract class AAccount extends ASaveable implements IAccount
         this.amount = 0l;
     }
 
+    public static JSONArray loadAllBankAccounts(){
+        JSONArray banks = ISaveable.loadAllAsJson("BankAccount");
+        JSONArray credit = ISaveable.loadAllAsJson("CreditAccount");
+        return ISaveable.add(banks, credit);
+    }
+
     @Override
     public long getAmount()
     {
@@ -18,10 +29,9 @@ public abstract class AAccount extends ASaveable implements IAccount
     }
 
     @Override
-    public IAccount setAmount(long amount)
+    public UUID setAmount(long amount)
     {
         this.amount = amount;
-        this.save();
-        return this;
+        return this.save();
     }
 }

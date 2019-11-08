@@ -3,8 +3,6 @@ package company.Entity.Abstract;
 import company.Entity.Abstract.AEmployee;
 import company.Entity.Interface.ILoanOfficer;
 
-import java.util.UUID;
-
 import company.Entity.CreditAccount;
 import company.Entity.Customer;
 
