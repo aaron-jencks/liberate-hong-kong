@@ -1,14 +1,14 @@
 package UI.menus.FireMenu;
 
+import java.util.Scanner;
+import java.util.UUID;
+
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.Controller.EmployeeController;
-
-import java.util.Scanner;
-import java.util.UUID;
+import company.Controller.EmployeeController;
 
 public class FireMenu extends AMenu {
     private EmployeeController controller;

@@ -1,6 +1,6 @@
-package company.Entity.Controller;
+package company.Controller;
 
-import company.Entity.Interface.IAccountController;
+import company.Controller.Interface.IAccountController;
 import company.Entity.Interface.IAccount;
 
 public class AccountController implements IAccountController {

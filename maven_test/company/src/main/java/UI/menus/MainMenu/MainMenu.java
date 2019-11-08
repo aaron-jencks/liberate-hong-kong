@@ -4,10 +4,9 @@ import UI.AMenu;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.FireMenu.items.FireMenuItem;
-import UI.menus.MainMenu.items.AccountMenuItem;
 import UI.menus.HireMenu.items.HireMenuItem;
-import company.Entity.Controller.EmployeeController;
-import company.Entity.Interface.IEmployeeController;
+import UI.menus.MainMenu.items.AccountMenuItem;
+import company.Controller.EmployeeController;
 
 public class MainMenu extends AMenu {
     public MainMenu(ITermController parent, EmployeeController employeeController) {

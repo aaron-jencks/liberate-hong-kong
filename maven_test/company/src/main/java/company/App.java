@@ -1,18 +1,17 @@
 package company;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import UI.AMenu;
+import UI.IMenuItem;
 import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
-import company.Entity.Controller.EmployeeController;
-import company.Entity.Interface.IEmployee;
+import company.Controller.EmployeeController;
 import company.Entity.Person;
-import company.Entity.Teller;
-import UI.IMenuItem;
-import UI.AMenu;
 import company.Entity.Vault;
-
-import java.io.IOException;
-import java.util.UUID;
+import company.Entity.Interface.IEmployee;
 
 /**
  * Hello world!

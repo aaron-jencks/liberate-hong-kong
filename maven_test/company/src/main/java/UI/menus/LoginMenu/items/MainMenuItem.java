@@ -4,7 +4,7 @@ import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
 import UI.menus.MainMenu.MainMenu;
-import company.Entity.Controller.EmployeeController;
+import company.Controller.EmployeeController;
 
 public class MainMenuItem extends AMenuItem {
     protected EmployeeController employeeController;

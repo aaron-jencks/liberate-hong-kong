@@ -12,7 +12,7 @@ public interface IPerson extends ISaveable {
     }
 
     public String getFirstName();
-    public IPerson setFirstName(String firstName);
+    public UUID setFirstName(String firstName);
     public String getLastName();
-    public IPerson setLastName(String lastName);
+    public UUID setLastName(String lastName);
 }

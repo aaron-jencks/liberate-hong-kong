@@ -3,15 +3,13 @@ package UI.menus.ForgotPasswordMenu;
 import java.util.Scanner;
 import java.util.UUID;
 
-import UI.menus.LoginMenu.LoginMenu;
-import UI.IMenuItem;
-import UI.controller.ITermController;
-import UI.menus.LoginMenu.items.MainMenuItem;
-import UI.UIUtil;
 import UI.AlignmentType;
+import UI.IMenuItem;
+import UI.UIUtil;
+import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.Abstract.AEmployee;
-import company.Entity.Controller.EmployeeController;
+import UI.menus.LoginMenu.LoginMenu;
+import company.Controller.EmployeeController;
 import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
 

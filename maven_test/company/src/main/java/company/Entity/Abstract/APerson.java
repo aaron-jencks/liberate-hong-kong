@@ -1,5 +1,7 @@
 package company.Entity.Abstract;
 
+import java.util.UUID;
+
 import company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
@@ -24,11 +26,10 @@ public abstract class APerson extends ASaveable implements IPerson
         return firstName;
     }
 
-    public IPerson setFirstName(String firstName)
+    public UUID setFirstName(String firstName)
     {
         this.firstName = firstName;
-        this.save();
-        return this;
+        return this.save();
     }
 
     public String getLastName()
@@ -36,10 +37,9 @@ public abstract class APerson extends ASaveable implements IPerson
         return lastName;
     }
 
-    public IPerson setLastName(String lastName)
+    public UUID setLastName(String lastName)
     {
         this.lastName = lastName;
-        this.save();
-        return this;
+        return this.save();
     }
 }

@@ -27,7 +27,6 @@ public interface ISaveable {
     static String ENTITY_NS_CONST = "company.Entity.";
 
     UUID save();
-
     UUID getObjectId();
 
     /**
@@ -169,14 +168,19 @@ public interface ISaveable {
      * @return
      */
     static String removeLeadingNamespace(String str) {
-        if (str.subSequence(0, 15).equals(ENTITY_NS_CONST)) {
-            return str.substring(15);
+        try {
+            if (str.subSequence(0, 15).equals(ENTITY_NS_CONST)) {
+                return str.substring(15);
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to remove leading namespace");
         }
+        
         return str;
     }
 
     /**
-     * Instantiate an object of the given type //TODO is this still needed?
+     * Instantiate an object of the given type
      * 
      * @param className
      * @return
@@ -232,8 +236,10 @@ public interface ISaveable {
         Field[] f0 = itemClass.getDeclaredFields();
         Field[] f1 = itemClass.getSuperclass().getDeclaredFields();
         Field[] f2 = itemClass.getSuperclass().getSuperclass().getDeclaredFields();
-        Field[] f = add(f0, f1);
-        return add(f, f2);
+        Field[] f3 = itemClass.getSuperclass().getSuperclass().getSuperclass().getDeclaredFields();
+        Field[] fa = add(f0, f1);
+        Field[] fb = add(f2, f3);
+        return add(fa, fb);
     }
 
     /**
@@ -307,11 +313,20 @@ public interface ISaveable {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch(JSONException e){
+            System.out.println(fileName + " not a valid json file");
         }
         return arr;
     }
 
+    /**
+     * Wipe the file clean
+     * If you're wiping a file for a class you probably want to pass MyClass.class.getName()
+     * @param fileName
+     */
     public static void clearFile(String fileName) {
+        fileName = removeLeadingNamespace(fileName);
+        fileName = removeLeadingLetter(fileName);
         String s = Paths.get("").toAbsolutePath().toString();
         s = s + File.separator + DATA_DIR_CONST + File.separator + fileName + DATA_FILE_EXT_CONST;
         try {

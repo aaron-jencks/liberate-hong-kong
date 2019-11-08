@@ -1,7 +1,8 @@
-package company.Entity.Interface;
+package company.Controller.Interface;
 
 import java.util.UUID;
 
+import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
 
 public interface IEmployeeController {

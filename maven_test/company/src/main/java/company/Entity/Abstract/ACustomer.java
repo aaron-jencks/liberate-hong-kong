@@ -26,17 +26,15 @@ public abstract class ACustomer extends APerson implements ICustomer
     }
 
     @Override
-    public ACustomer addAccount(UUID accountId){
+    public UUID addAccount(UUID accountId){
         this.accountIds.add(accountId);
-        this.save();
-        return this;
+        return this.save();
     }
 
     @Override
-    public ICustomer removeAccount(UUID accountId) {
+    public UUID removeAccount(UUID accountId) {
         accountIds.remove(accountId);
-        this.save();
-        return this;
+        return this.save();
     }
 
     @Override
@@ -46,10 +44,9 @@ public abstract class ACustomer extends APerson implements ICustomer
     }
 
     @Override
-    public ACustomer setAccountIds(ArrayList<UUID> accountIds)
+    public UUID setAccountIds(ArrayList<UUID> accountIds)
     {
         this.accountIds = accountIds;
-        this.save();
-        return this;
+        return this.save();
     }
 }

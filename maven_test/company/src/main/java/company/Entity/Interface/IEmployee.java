@@ -92,11 +92,11 @@ public interface IEmployee extends IPerson {
 
 
     public String getEmployeeUsername();
-    public IEmployee setEmployeeUsername(String username);
+    public UUID setEmployeeUsername(String username);
     public String getEmployeePassword();
-    public IEmployee setEmployeePassword(String password);
+    public UUID setEmployeePassword(String password);
     public String getEmployeeSecurityQuestion();
-    public IEmployee setEmployeeSecurityQuestion(String employeeSecurityQuestion);
+    public UUID setEmployeeSecurityQuestion(String employeeSecurityQuestion);
     public String getEmployeeSecurityAnswer();
-    public IEmployee setEmployeeSecurityAnswer(String employeeSecurityAnswer);
+    public UUID setEmployeeSecurityAnswer(String employeeSecurityAnswer);
 }

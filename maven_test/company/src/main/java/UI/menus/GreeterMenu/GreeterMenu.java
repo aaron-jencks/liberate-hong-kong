@@ -2,9 +2,10 @@ package UI.menus.GreeterMenu;
 
 import UI.AMenu;
 import UI.controller.ITermController;
-import UI.menus.GreeterMenu.items.*;
 import UI.global_menu_items.ExitItem;
-import company.Entity.Controller.EmployeeController;
+import UI.menus.GreeterMenu.items.ForgotPasswordItem;
+import UI.menus.GreeterMenu.items.LoginItem;
+import company.Controller.EmployeeController;
 
 public class GreeterMenu extends AMenu {
     public GreeterMenu(ITermController parent, EmployeeController employeeController)

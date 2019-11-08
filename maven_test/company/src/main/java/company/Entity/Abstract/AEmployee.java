@@ -2,9 +2,6 @@ package company.Entity.Abstract;
 
 import java.util.UUID;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import company.Entity.Interface.IEmployee;
 
 public abstract class AEmployee extends APerson implements IEmployee
@@ -34,11 +31,10 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeePassword;
     }
 
-    public IEmployee setEmployeePassword(String employeePassword)
+    public UUID setEmployeePassword(String employeePassword)
     {
         this.employeePassword = employeePassword;
-        this.save();
-        return this;
+        return this.save();
     }
 
     public String getEmployeeUsername()
@@ -46,11 +42,10 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeUsername;
     }
 
-    public IEmployee setEmployeeUsername(String employeeUsername)
+    public UUID setEmployeeUsername(String employeeUsername)
     {
         this.employeeUsername = employeeUsername;
-        this.save();
-        return this;
+        return this.save();
     }
 
     public String getEmployeeSecurityQuestion()
@@ -58,11 +53,10 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeSecurityQuestion;
     }
 
-    public IEmployee setEmployeeSecurityQuestion(String employeeSecurityQuestion)
+    public UUID setEmployeeSecurityQuestion(String employeeSecurityQuestion)
     {
         this.employeeSecurityQuestion = employeeSecurityQuestion;
-        this.save();
-        return this;
+        return this.save();
     }
 
     public String getEmployeeSecurityAnswer()
@@ -70,11 +64,10 @@ public abstract class AEmployee extends APerson implements IEmployee
         return employeeSecurityAnswer;
     }
 
-    public IEmployee setEmployeeSecurityAnswer(String employeeSecurityAnswer)
+    public UUID setEmployeeSecurityAnswer(String employeeSecurityAnswer)
     {
         this.employeeSecurityAnswer = employeeSecurityAnswer;
-        this.save();
-        return this;
+        return this.save();
     }
 
 }

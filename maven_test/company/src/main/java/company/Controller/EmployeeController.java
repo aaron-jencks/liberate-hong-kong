@@ -1,12 +1,11 @@
-package company.Entity.Controller;
-
-import company.Entity.Abstract.AVault;
-import company.Entity.Interface.IEmployee;
-import company.Entity.Interface.IEmployeeController;
+package company.Controller;
 
 import java.util.UUID;
 
+import company.Controller.Interface.IEmployeeController;
 import company.Entity.Person;
+import company.Entity.Abstract.AVault;
+import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
 
 public class EmployeeController implements IEmployeeController {

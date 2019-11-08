@@ -1,4 +1,4 @@
-package company.Entity.Interface;
+package company.Controller.Interface;
 
 import company.Entity.Interface.IAccount;
 
