@@ -11,6 +11,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -114,7 +115,19 @@ public interface ISaveable {
                 try {
                     f.set(inst, obj.get(f.getName()));
                 } catch (Exception e) {
-                    f.set(inst, UUID.fromString((String)obj.get(f.getName())));
+                    try {
+                        f.set(inst, UUID.fromString((String)obj.get(f.getName())));
+                    } catch (ClassCastException ec) {
+                        //load the ids for relations
+                        JSONArray a = (JSONArray) obj.get(f.getName());
+                        ArrayList<UUID> ids = new ArrayList<>();
+                        for(int i = 0; i < a.length(); i++){
+                            
+                            ids.add(UUID.fromString((String)a.get(i)));
+                        }
+                        f.set(inst, ids);
+                    }
+                    
                 }
             }
             return inst;
@@ -310,7 +323,7 @@ public interface ISaveable {
             }
             arr = new JSONArray(contentBuilder.toString());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(fileName + " : file not found.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch(JSONException e){

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public abstract class ASaveable implements ISaveable {
 
-    private UUID objId;
+    protected UUID objId;
 
     public ASaveable() {
         this.objId = UUID.randomUUID();

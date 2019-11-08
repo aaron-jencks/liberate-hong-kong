@@ -16,9 +16,9 @@ public abstract class AVault extends ASaveable implements IVault
     protected HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
     protected HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
     protected HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
-    public ArrayList<UUID> customerIds = new ArrayList<>();
-    public ArrayList<UUID> employeeIds = new ArrayList<>();
-    public ArrayList<UUID> accountIds = new ArrayList<>();
+    protected ArrayList<UUID> customerIds = new ArrayList<>();
+    protected ArrayList<UUID> employeeIds = new ArrayList<>();
+    protected ArrayList<UUID> accountIds = new ArrayList<>();
 
     public static Vault load(UUID id){
         Object o = ISaveable.load(Vault.class, id);

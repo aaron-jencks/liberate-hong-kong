@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Test;
 
 import company.Entity.Person;
-import company.Entity.Abstract.APerson;
 import company.Entity.Interface.IPerson;
 import company.Entity.Interface.ISaveable;
 
@@ -40,7 +39,7 @@ public class PersonTest {
         boolean isSame = p.getFirstName().equals(p2.getFirstName());
         boolean sameId = p.getObjectId().equals(p2.getObjectId());
         assertTrue("Loaded person names do not match { " + p.getFirstName() + " != " + p2.getFirstName() +  " }", isSame);
-        assertTrue("Loaded persons do not have same objIds { " + p.getObjectId() + " != " + p2.getObjectId() + " }", sameId);    
+        assertTrue("Loaded persons do not have same objIds { " + p.getObjectId() + " != " + p2.getObjectId() + " }", sameId);
     }
 
     /**

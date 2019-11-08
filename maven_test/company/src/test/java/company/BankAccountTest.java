@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import company.Entity.BankAccount;
 import company.Entity.Abstract.ABankAccount;
-import company.Entity.Interface.IBankAccount;
 import company.Entity.Interface.ISaveable;
 
 public class BankAccountTest{
