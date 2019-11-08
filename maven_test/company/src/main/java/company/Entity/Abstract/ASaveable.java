@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public abstract class ASaveable implements ISaveable {
 
-    public UUID objId;
+    private UUID objId;
 
     public ASaveable(){
         this.objId = UUID.randomUUID();
@@ -17,22 +17,13 @@ public abstract class ASaveable implements ISaveable {
 
     @Override
     public UUID save() {
-        UUID id = UUID.randomUUID();
         JSONObject obj = new JSONObject();
-        boolean append = true;
         String type = this.getClass().getSimpleName();
+        System.out.println("TYPE " + type);
         // get the fields
         Field[] fields = ISaveable.getAllFields(this.getClass());
-        // if it has an id it should already be stored and can be loaded
-        if (this.objId != null) {
-            id = this.objId;
-            obj = ISaveable.loadJsonObject(ISaveable.removeLeadingLetter(this.getClass().getSuperclass().getSimpleName()), id);
-            append = false;
-        }
-
         // add the type and id
-        obj.put("type", ISaveable.removeLeadingLetter(type));
-        obj.put("ID", id);
+        obj.put(ISaveable.TYPE_STR_CONST, ISaveable.removeLeadingLetter(type));
         // add each field
         try {
             for (Field f : fields) {
@@ -43,14 +34,8 @@ public abstract class ASaveable implements ISaveable {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        if (append) {
-            // append the new obj to the entity file
-            ISaveable.appendToFile(obj, ISaveable.removeLeadingLetter(type));
-        } else {
-            // update the existing entry for the object
-            ISaveable.updateObjectInFile(obj, ISaveable.removeLeadingLetter(type));
-        }
-        return id;
+        ISaveable.saveToFile(obj, ISaveable.removeLeadingLetter(type));
+        return this.getObjectId();
     }
 
     @Override

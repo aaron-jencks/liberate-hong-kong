@@ -118,8 +118,8 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
-        this.employees.put(t.objId, t);
-        return t.objId;
+        this.employees.put(t.getObjectId(), t);
+        return t.getObjectId();
     }
 
     @Override
@@ -127,8 +127,8 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
-        this.employees.put(lo.objId, lo);
-        return lo.objId;
+        this.employees.put(lo.getObjectId(), lo);
+        return lo.getObjectId();
     }
 
     @Override
@@ -136,8 +136,8 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Manager m = new Manager(p.getFirstName(), p.getLastName(), username);
-        this.employees.put(m.objId, m);
-        return m.objId;
+        this.employees.put(m.getObjectId(), m);
+        return m.getObjectId();
     }
 
     @Override
@@ -145,8 +145,8 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username);
-        this.employees.put(hrm.objId, hrm);
-        return hrm.objId;
+        this.employees.put(hrm.getObjectId(), hrm);
+        return hrm.getObjectId();
     }
 
     @Override
@@ -154,8 +154,8 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
-        this.employees.put(o.objId, o);
-        return o.objId;
+        this.employees.put(o.getObjectId(), o);
+        return o.getObjectId();
     }
 
     public UUID fireEmployee(UUID employee_id)

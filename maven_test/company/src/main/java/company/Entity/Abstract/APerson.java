@@ -4,7 +4,6 @@ import company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
 {
-
     protected String firstName;
     protected String lastName;
 

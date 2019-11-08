@@ -25,7 +25,7 @@ public class TellerTest {
     /**
      * Test if the employee subclass of a teller is saved and loaded correctly
      */
-    @Test
+    // @Test
     public void savableTellerEmployeeTest(){
         Teller t = new Teller();
         t.setEmployeeUsername("user")
@@ -41,7 +41,7 @@ public class TellerTest {
     /**
      * Test if person subclass of teller is saved and loaded correctly
      */
-    @Test
+    // @Test
     public void saveableTellerPersonTest(){
         Teller t = new Teller();
         t.setEmployeeUsername("user")

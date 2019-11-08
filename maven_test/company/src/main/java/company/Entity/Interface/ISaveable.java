@@ -15,13 +15,37 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public interface ISaveable {
+
+    static String ID_STR_CONST = "objId";
+    static String TYPE_STR_CONST = "Type";
+    static String DATA_DIR_CONST = "data";
+    static String DATA_FILE_EXT_CONST = ".json";
+    static String ENTITY_NS_CONST = "company.Entity.";
+
     UUID save();
+
     UUID getObjectId();
 
-    
+    /**
+     * Check if the obj exists, update the existing or add a new one
+     * 
+     * @param obj
+     * @param fileName
+     */
+    public static void saveToFile(JSONObject obj, String fileName) {
+        JSONObject o = loadJsonObject(fileName, (UUID) obj.get(ID_STR_CONST));
+        try {
+            o.get(ID_STR_CONST);
+            updateObjectInFile(obj, fileName);
+        } catch (JSONException e) {
+            appendToFile(obj, fileName);
+        }
+    }
+
     /**
      * Add the item to the existing data file
      * 
@@ -29,15 +53,11 @@ public interface ISaveable {
      * @param fileName
      */
     public static void appendToFile(JSONObject obj, String fileName) {
-        // get the full path to the data dir
-        String s = Paths.get("").toAbsolutePath().toString();
-        s = s + File.separator + "data" + File.separator;
-        String fullFile = s + fileName + ".json";
         // turn the file into a json array
-        JSONArray objArray = read(fullFile);
+        JSONArray objArray = read(fileName);
         // add the new obj to the
         objArray.put(obj);
-        write(fullFile, false, objArray.toString());
+        write(fileName, false, objArray.toString());
     }
 
     /**
@@ -48,16 +68,13 @@ public interface ISaveable {
      * @return
      */
     public static JSONObject loadJsonObject(String className, UUID id) {
-        String s = Paths.get("").toAbsolutePath().toString();
-        s = s + File.separator + "data" + File.separator;
-        String fullFile = s + className + ".json";
         JSONObject returnObject = new JSONObject();
         // pull the array for all objects of given type
-        JSONArray arr = ISaveable.read(fullFile);
+        JSONArray arr = ISaveable.read(className);
         for (int i = 0; i < arr.length(); i++) {
             JSONObject obj = arr.getJSONObject(i);
             // check if it has the ID we are searching for
-            UUID testId = UUID.fromString((String) obj.get("ID"));
+            UUID testId = UUID.fromString((String) obj.get(ID_STR_CONST));
             if (testId.equals(id)) {
                 returnObject = obj;
             }
@@ -66,48 +83,42 @@ public interface ISaveable {
     }
 
     /**
-     * Read all the objects from the file for the given class name and return them as a jsonArray
+     * Read all the objects from the file for the given class name and return them
+     * as a jsonArray
+     * 
      * @param className
      * @return
      */
     public static JSONArray loadAllAsJson(String className) {
-        String s = Paths.get("").toAbsolutePath().toString();
-        s = s + File.separator + "data" + File.separator;
-        String fullFile = s + className + ".json";
-        return ISaveable.read(fullFile);
+        return ISaveable.read(className);
     }
 
     /**
      * Load the object of the given type with the supplied id
+     * 
      * @param classObject
      * @param uuid
      * @return
      */
     public static Object load(Class classObject, UUID uuid) {
-
         String s = Paths.get("").toAbsolutePath().toString();
         String classFileName = removeLeadingNamespace(classObject.getName());
         try {
-            JSONArray arr = loadAllAsJson(classFileName);
-            // check if it has the ID we are searching for
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                UUID id = UUID.fromString((String) obj.get("ID"));
-                if (!id.equals(uuid)) {
-                    continue;
+            JSONObject obj = loadJsonObject(classFileName, uuid);
+            // instantiate it into an object
+            Object inst = instantiate(removeLeadingLetter(obj.get(TYPE_STR_CONST).toString()));
+            Class<?> clazz = inst.getClass();
+            // fill all the attributes
+            Field[] fields = getAllFields(clazz);
+            for (Field f : fields) {
+                f.setAccessible(true);
+                try {
+                    f.set(inst, obj.get(f.getName()));
+                } catch (Exception e) {
+                    f.set(inst, UUID.fromString((String)obj.get(f.getName())));
                 }
-                // instantiate it into an object
-                Object inst = instantiate(removeLeadingLetter(obj.get("type").toString()));
-                Class<?> clazz = inst.getClass();
-                // fill all the attributes
-                Field[] fields = getAllFields(clazz);
-                for (Field f : fields) {
-                    if (f.canAccess(inst)) {
-                        f.set(inst, obj.get(f.getName()));
-                    }
-                }
-                return inst;
             }
+            return inst;
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -117,16 +128,17 @@ public interface ISaveable {
 
     /**
      * Helper function to add two json arrays
+     * 
      * @param a1
      * @param a2
      * @return
      */
-    public static JSONArray add(JSONArray a1, JSONArray a2){
+    public static JSONArray add(JSONArray a1, JSONArray a2) {
         JSONArray master = new JSONArray();
-        for(int i = 0; i < a1.length(); i++){
+        for (int i = 0; i < a1.length(); i++) {
             master.put(a1.getJSONObject(i));
         }
-        for(int i = 0; i < a2.length(); i++){
+        for (int i = 0; i < a2.length(); i++) {
             master.put(a2.getJSONObject(i));
         }
         return master;
@@ -134,6 +146,7 @@ public interface ISaveable {
 
     /**
      * Helper function to remove the leading A or I from the class name
+     * 
      * @param str
      * @return
      */
@@ -151,25 +164,26 @@ public interface ISaveable {
 
     /**
      * Helper function to remove the leading namespace 'company.Entity'
+     * 
      * @param str
      * @return
      */
     static String removeLeadingNamespace(String str) {
-        if (str.subSequence(0, 15).equals("company.Entity.")) {
+        if (str.subSequence(0, 15).equals(ENTITY_NS_CONST)) {
             return str.substring(15);
         }
         return str;
     }
 
     /**
-     * Instantiate an object of the given type
-     * //TODO is this still needed?
+     * Instantiate an object of the given type //TODO is this still needed?
+     * 
      * @param className
      * @return
      */
     static Object instantiate(String className) {
         // Load the class.
-        className = "company.Entity." + className;
+        className = ENTITY_NS_CONST + className;
         Class<?> clazz;
         try {
             clazz = Class.forName(className);
@@ -190,30 +204,27 @@ public interface ISaveable {
     }
 
     /**
-     * Replace the existing obj in the data file with the new one
+     * Replace the existing obj in the data file with the new one Searches by ID
      * 
      * @param obj
      * @param fileName
      */
     public static void updateObjectInFile(JSONObject obj, String fileName) {
-        // get the full path to the data dir
-        String s = Paths.get("").toAbsolutePath().toString();
-        s = s + File.separator + "data" + File.separator;
-        String fullFile = s + fileName + ".json";
         // turn the file into a json array
-        JSONArray objArray = read(fullFile);
+        JSONArray objArray = read(fileName);
         for (int i = 0; i < objArray.length(); i++) {
             JSONObject testObj = objArray.getJSONObject(i);
-            if (testObj.getString("ID").equals(obj.getString("ID"))) {
+            if (testObj.getString(ID_STR_CONST).equals(obj.getString(ID_STR_CONST))) {
                 objArray.remove(i);
                 objArray.put(obj);
             }
         }
-        write(fullFile, false, objArray.toString());
+        write(fileName, false, objArray.toString());
     }
 
     /**
      * Traverse the class hierarchy to find all the fields of the given class
+     * 
      * @param itemClass
      * @return
      */
@@ -227,6 +238,7 @@ public interface ISaveable {
 
     /**
      * Helper function to add two simple arrays of fields together
+     * 
      * @param a1
      * @param a2
      * @return
@@ -240,15 +252,24 @@ public interface ISaveable {
 
     /**
      * Write the content to the file
-     * @param fileName the name of the file to be written (it will figure out the full path)
-     * @param append boolean if it should append to the file or not
-     * @param content the content to be written
+     * 
+     * @param fileName the name of the file to be written (it will figure out the
+     *                 full path)
+     * @param append   boolean if it should append to the file or not
+     * @param content  the content to be written
      */
     public static void write(String fileName, boolean append, String content) {
         BufferedWriter buffOut = null;
+        String fullFilePath = Paths.get("").toAbsolutePath().toString();
+        fullFilePath = fullFilePath + File.separator + DATA_DIR_CONST + File.separator;
+        fileName = fileName + DATA_FILE_EXT_CONST;
+        File dir = new File(fullFilePath);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        fullFilePath = fullFilePath + fileName;
         try {
-            String s = Paths.get("").toAbsolutePath().toString();
-            buffOut = new BufferedWriter(new FileWriter(fileName, append));
+            buffOut = new BufferedWriter(new FileWriter(fullFilePath, append));
             buffOut.write(content);
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,24 +287,37 @@ public interface ISaveable {
     }
 
     /**
-     * Read the data from the given file (full path) and return it as a json array
-     * @param filePath
+     * Read the data from the given file and return it as a json array
+     * 
+     * @param fileName
      * @return
      */
-    public static JSONArray read(String filePath) {
+    public static JSONArray read(String fileName) {
         StringBuilder contentBuilder = new StringBuilder();
         JSONArray arr = new JSONArray();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        String s = Paths.get("").toAbsolutePath().toString();
+        s = s + File.separator + DATA_DIR_CONST + File.separator + fileName + DATA_FILE_EXT_CONST;
+        try (BufferedReader br = new BufferedReader(new FileReader(s))) {
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
                 contentBuilder.append(sCurrentLine).append("\n");
             }
             arr = new JSONArray(contentBuilder.toString());
         } catch (FileNotFoundException e) {
-            arr = new JSONArray();
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return arr;
+    }
+
+    public static void clearFile(String fileName) {
+        String s = Paths.get("").toAbsolutePath().toString();
+        s = s + File.separator + DATA_DIR_CONST + File.separator + fileName + DATA_FILE_EXT_CONST;
+        try {
+            new FileWriter(s, false).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
