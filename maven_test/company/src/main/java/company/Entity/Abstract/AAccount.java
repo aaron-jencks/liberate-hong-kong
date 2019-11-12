@@ -10,7 +10,7 @@ public abstract class AAccount extends ASaveable implements IAccount
 
     public AAccount(){
         this.accountNumber = null;
-        this.amount = 0l;
+        this.amount = 0L;
     }
 
     public long getAmount()

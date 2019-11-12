@@ -13,9 +13,9 @@ import java.util.UUID;
 public abstract class AVault extends ASaveable implements IVault
 {
     private long lastEmployeeID = 0;
-    protected HashMap<Long, ICustomer> customers = new HashMap<Long, ICustomer>();
-    protected HashMap<Long, IEmployee> employees = new HashMap<Long, IEmployee>();
-    protected HashMap<Long, IAccount> accounts = new HashMap<Long, IAccount>();
+    private HashMap<Long, ICustomer> customers = new HashMap<Long, ICustomer>();
+    private HashMap<Long, IEmployee> employees = new HashMap<Long, IEmployee>();
+    private HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
 
     public static Vault load(UUID id){
         Object o = ASaveable.load(Vault.class, id);
@@ -67,15 +67,28 @@ public abstract class AVault extends ASaveable implements IVault
         return this;
     }
 
-    public HashMap<Long, IAccount> getAccounts()
+    public HashMap<UUID, IAccount> getAccounts()
     {
         return accounts;
     }
 
-    public AVault setAccounts(HashMap<Long, IAccount> accounts)
+    public AVault setAccounts(HashMap<UUID, IAccount> accounts)
     {
         this.accounts = accounts;
         return this;
+    }
+
+    /**
+     * Adds a new account to the Vault's list of accounts
+     *
+     * @param newAccount the new bank account to add
+     * @return the account number
+     */
+    public String addAccount(IAccount newAccount)
+    {
+//        TODO
+//        this.accounts.put(newAccount);
+        return "";
     }
 
     public long createTeller(Person p)
@@ -126,6 +139,14 @@ public abstract class AVault extends ASaveable implements IVault
     public long fireEmployee(long employee_id)
     {
         employees.remove(employee_id);
+        return employee_id;
+    }
+
+    public long promoteEmployee(long employee_id, String position)
+    {
+        IEmployee existing_employee = this.getEmployee(employee_id);
+
+
         return employee_id;
     }
 }

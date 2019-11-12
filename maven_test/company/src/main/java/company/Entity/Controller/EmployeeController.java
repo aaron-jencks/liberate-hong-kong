@@ -66,6 +66,14 @@ public class EmployeeController implements IEmployeeController {
         return vault.fireEmployee(employee_id);
     }
 
+    public long promoteEmployee(long employee_id, String position) throws EmployeeNotFoundException {
+        IEmployee employee = vault.getEmployee(employee_id);
+        if (employee == null)
+            throw new EmployeeNotFoundException("Employee not found", employee_id);
+
+        return vault.promoteEmployee(employee_id, position);
+    }
+
     public long modifyEmployeePassword(long employee_id, String password) throws EmployeeNotFoundException
     {
         IEmployee employee = vault.getEmployee(employee_id);
