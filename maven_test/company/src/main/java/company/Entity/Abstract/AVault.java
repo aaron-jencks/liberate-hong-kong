@@ -6,7 +6,6 @@ import company.Entity.Interface.ICustomer;
 import company.Entity.Interface.IEmployee;
 import company.Entity.Interface.ISaveable;
 import company.Entity.Interface.IVault;
-import company.exceptions.EmployeeNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +13,9 @@ import java.util.UUID;
 
 public abstract class AVault extends ASaveable implements IVault
 {
-    protected HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
-    protected HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
-    protected HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
+    private HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
+    private HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
+    private HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
     protected ArrayList<UUID> customerIds = new ArrayList<>();
     protected ArrayList<UUID> employeeIds = new ArrayList<>();
     protected ArrayList<UUID> accountIds = new ArrayList<>();
