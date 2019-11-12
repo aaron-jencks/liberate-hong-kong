@@ -102,7 +102,7 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
-        t.setObjectId(p.getObjectId();
+        t.setObjectId(p.getObjectId());
         this.employees.put(t.getObjectId(), t);
         return t.getObjectId();
     }

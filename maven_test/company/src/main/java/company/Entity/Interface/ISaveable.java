@@ -28,6 +28,7 @@ public interface ISaveable {
     static String ENTITY_NS_CONST = "company.Entity.";
 
     UUID save();
+    void delete();
     UUID getObjectId();
     void setObjectId(UUID id);
 
@@ -59,6 +60,23 @@ public interface ISaveable {
         // add the new obj to the
         objArray.put(obj);
         write(fileName, false, objArray.toString());
+    }
+
+    /**
+     * Remove the given json object from the file
+     * @param obj
+     * @param fileName
+     */
+    public static void removeFromFile(JSONObject obj, String fileName){
+        JSONArray objArray = read(fileName);
+        JSONArray newArray = new JSONArray();
+        for(int i = 0; i < objArray.length(); i++){
+            JSONObject o = objArray.getJSONObject(i);
+            if(!o.getString(ID_STR_CONST).equals(obj.getString(ID_STR_CONST))){
+                newArray.put(o);
+            }
+        }
+        write(fileName, false, newArray.toString());
     }
 
     /**

@@ -1,14 +1,20 @@
 package UI.menus.CreateAccountMenu;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
+import company.Entity.BankAccount;
 import company.Entity.Customer;
+import company.Entity.Person;
+import company.Entity.Vault;
 import company.Entity.Abstract.ABankAccount;
+import company.Entity.Abstract.ACustomer;
+import company.Entity.Abstract.AVault;
 
 public class CreateAccountMenu extends AMenu {
 
@@ -77,11 +83,12 @@ public class CreateAccountMenu extends AMenu {
 
         get_display_string();
 
-        Customer c = new Customer(firstName, lastName);
-        //TODO put this back
-        // String accountNumber = ABankAccount.createAccount();
-        String accountNumber = "";
-
+        Vault v = Vault.getInstance();
+        UUID cId = v.createCustomer(new Person(firstName, lastName));
+        Customer c = ACustomer.load(cId);
+        UUID bId = v.createBankAccount(c);
+        BankAccount b = ABankAccount.load(bId);
+        String accountNumber = b.getObjectId().toString();
 
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber

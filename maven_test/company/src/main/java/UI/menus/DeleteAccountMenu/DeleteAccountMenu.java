@@ -71,6 +71,7 @@ public class DeleteAccountMenu extends AMenu {
                 e.printStackTrace();
             }
         } else {
+            
             // long amt = ba.closeAccount();
             //TODO put this back
             long amt = 0l;

@@ -18,6 +18,12 @@ public abstract class ASaveable implements ISaveable {
     }
 
     @Override
+    public void delete() {
+        JSONObject o = ISaveable.loadJsonObject(this.getClass().getSimpleName(), this.objId);
+        ISaveable.removeFromFile(o, this.getClass().getSimpleName());
+    }
+
+    @Override
     public UUID save() {
         JSONObject obj = new JSONObject();
         String type = this.getClass().getSimpleName();
