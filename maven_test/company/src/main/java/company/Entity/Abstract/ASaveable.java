@@ -69,4 +69,30 @@ public abstract class ASaveable implements ISaveable {
         this.save();
     }
 
+    @Override
+    public String toString() {
+        JSONObject obj = new JSONObject();
+        String type = this.getClass().getSimpleName();
+        String output = "";
+        // get the fields
+        Field[] fields = ISaveable.getAllFields(this.getClass());
+        // add the type and id
+        obj.put(ISaveable.TYPE_STR_CONST, ISaveable.removeLeadingLetter(type));
+        // add each field
+        for (Field f : fields) {
+            f.setAccessible(true);
+            try {
+                // obj.put(f.getName(), f.get(this));
+                output += f.getName() + " : " + f.get(this) + ", ";
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return output;
+    }
+
 }

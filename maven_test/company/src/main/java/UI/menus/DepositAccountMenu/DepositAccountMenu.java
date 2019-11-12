@@ -1,17 +1,23 @@
 package UI.menus.DepositAccountMenu;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
+import company.Entity.BankAccount;
+import company.Entity.Abstract.ABankAccount;
+import company.Entity.Abstract.ASaveable;
+import company.Entity.Interface.ISaveable;
 
 public class DepositAccountMenu extends AMenu {
     private String accountNumber;
     private String depositAmount;
     private String accept;
+    private String totalAmount;
 
     public DepositAccountMenu(ITermController parent) {
         super(parent);
@@ -56,6 +62,8 @@ public class DepositAccountMenu extends AMenu {
             e.printStackTrace();
         }
 
+        BankAccount ba = ABankAccount.load(UUID.fromString(accountNumber));
+
         get_display_string();
 
         try {
@@ -68,6 +76,7 @@ public class DepositAccountMenu extends AMenu {
 
         get_display_string();
 
+        
 
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber

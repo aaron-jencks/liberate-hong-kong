@@ -22,6 +22,16 @@ public abstract class AAccount extends ASaveable implements IAccount
         return ISaveable.add(banks, credit);
     }
 
+    public void deposit(long amount){
+        this.amount += amount;
+        this.save();
+    }
+
+    public void withdrawl(long amount){
+        this.amount -= amount;
+        this.save();
+    }
+
     @Override
     public long getAmount()
     {
@@ -38,7 +48,7 @@ public abstract class AAccount extends ASaveable implements IAccount
     /**
      * Delete the account and return the amount
      */
-    public long removeAccount(){
+    public long closeAccount(){
         long amt = this.amount;
         this.delete();
         return amt;

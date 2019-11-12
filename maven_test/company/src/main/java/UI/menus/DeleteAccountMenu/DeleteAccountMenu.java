@@ -71,10 +71,7 @@ public class DeleteAccountMenu extends AMenu {
                 e.printStackTrace();
             }
         } else {
-            
-            // long amt = ba.closeAccount();
-            //TODO put this back
-            long amt = 0l;
+            long amt = ba.closeAccount();
             try {
                 accept = UIUtil.get_input(sc, accept, prompt + " The account with the given account id has been closed. The balance remaining on the account was " + amt, (String s) -> {
                             return true;
