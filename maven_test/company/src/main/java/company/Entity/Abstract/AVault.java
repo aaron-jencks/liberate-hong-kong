@@ -4,36 +4,40 @@ import company.Entity.*;
 import company.Entity.Interface.IAccount;
 import company.Entity.Interface.ICustomer;
 import company.Entity.Interface.IEmployee;
+import company.Entity.Interface.ISaveable;
 import company.Entity.Interface.IVault;
 import company.exceptions.EmployeeNotFoundException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 public abstract class AVault extends ASaveable implements IVault
 {
-    private long lastEmployeeID = 0;
-    private HashMap<Long, ICustomer> customers = new HashMap<Long, ICustomer>();
-    private HashMap<Long, IEmployee> employees = new HashMap<Long, IEmployee>();
-    private HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
+    protected HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
+    protected HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
+    protected HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
+    protected ArrayList<UUID> customerIds = new ArrayList<>();
+    protected ArrayList<UUID> employeeIds = new ArrayList<>();
+    protected ArrayList<UUID> accountIds = new ArrayList<>();
 
     public static Vault load(UUID id){
-        Object o = ASaveable.load(Vault.class, id);
+        Object o = ISaveable.load(Vault.class, id);
         return (Vault)o;
     }
 
-    public HashMap<Long, ICustomer> getCustomers()
+    public HashMap<UUID, ICustomer> getCustomers()
     {
         return customers;
     }
 
-    public AVault setCustomers(HashMap<Long, ICustomer> customers)
+    public AVault setCustomers(HashMap<UUID, ICustomer> customers)
     {
         this.customers = customers;
         return this;
     }
 
-    public HashMap<Long, IEmployee> getEmployees()
+    public HashMap<UUID, IEmployee> getEmployees()
     {
         return employees;
     }
@@ -48,7 +52,7 @@ public abstract class AVault extends ASaveable implements IVault
         return null;
     }
 
-    public IEmployee getEmployee(long employee_id)
+    public IEmployee getEmployee(UUID employee_id)
     {
         return employees.get(employee_id);
     }
@@ -61,9 +65,24 @@ public abstract class AVault extends ASaveable implements IVault
         return null;
     }
 
-    public AVault setEmployees(HashMap<Long, IEmployee> employees)
+    public ICustomer getCustomer(UUID customerId){
+        return customers.get(customerId);
+    }
+
+    public ICustomer getCustomer(Person p){
+        if (employees != null) {
+            for (ICustomer customer : customers.values()) {
+                if ((APerson) customer == p)
+                    return customer;
+            }
+        }
+        return null;
+    }
+
+    public AVault setEmployees(HashMap<UUID, IEmployee> employees)
     {
         this.employees = employees;
+        this.save();
         return this;
     }
 
@@ -75,78 +94,92 @@ public abstract class AVault extends ASaveable implements IVault
     public AVault setAccounts(HashMap<UUID, IAccount> accounts)
     {
         this.accounts = accounts;
+        this.save();
         return this;
     }
 
-    /**
-     * Adds a new account to the Vault's list of accounts
-     *
-     * @param newAccount the new bank account to add
-     * @return the account number
-     */
-    public String addAccount(IAccount newAccount)
+    @Override
+    public UUID createTeller(Person p)
     {
-//        TODO
-//        this.accounts.put(newAccount);
-        return "";
-    }
-
-    public long createTeller(Person p)
-    {
-        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        Teller t = new Teller(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, t);
-        return new_id;
+        Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
+        t.setObjectId(p.getObjectId());
+        this.employees.put(t.getObjectId(), t);
+        return t.getObjectId();
     }
 
-    public long createLoanOfficer(Person p)
+    @Override
+    public UUID createLoanOfficer(Person p)
     {
-        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, lo);
-        return new_id;
+        LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
+        lo.setObjectId(p.getObjectId());
+        this.employees.put(lo.getObjectId(), lo);
+        return lo.getObjectId();
     }
 
-    public long createManager(Person p)
+    @Override
+    public UUID createManager(Person p)
     {
-        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        Manager m = new Manager(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, m);
-        return new_id;
+        Manager m = new Manager(p.getFirstName(), p.getLastName(), username);
+        m.setObjectId(p.getObjectId());
+        this.employees.put(m.getObjectId(), m);
+        return m.getObjectId();
     }
 
-    public long createHRManager(Person p)
+    @Override
+    public UUID createHRManager(Person p)
     {
-        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, hrm);
-        return new_id;
+        HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username);
+        hrm.setObjectId(p.getObjectId());
+        this.employees.put(hrm.getObjectId(), hrm);
+        return hrm.getObjectId();
     }
 
-    public long createOwner(Person p)
+    @Override
+    public UUID createOwner(Person p)
     {
-        long new_id = ++lastEmployeeID;
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        Owner o = new Owner(p.getFirstName(), p.getLastName(), username, new_id);
-        this.employees.put(new_id, o);
-        return new_id;
+        Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
+        o.setObjectId(p.getObjectId());
+        this.employees.put(o.getObjectId(), o);
+        return o.getObjectId();
     }
 
-    public long fireEmployee(long employee_id)
+    @Override
+    public UUID createCustomer(Person p) {
+        Customer c = new Customer(p.getFirstName(), p.getLastName());
+        c.setObjectId(p.getObjectId());
+        this.customers.put(p.getObjectId(), c);
+        return c.getObjectId();
+    }
+
+    @Override
+    public UUID createBankAccount(Customer c) {
+        BankAccount ba = new BankAccount();
+        c.addAccount(ba.getObjectId());
+        return ba.getObjectId();
+    }
+
+    @Override
+    public UUID createCreditAccount(Customer c) {
+        CreditAccount ca = new CreditAccount();
+        c.addAccount(ca.getObjectId());
+        return ca.getObjectId();
+    }
+
+    public UUID fireEmployee(UUID employee_id)
     {
         employees.remove(employee_id);
         return employee_id;
     }
 
-    public long promoteEmployee(long employee_id, String position)
+    public UUID promoteEmployee(UUID employee_id, String position)
     {
         IEmployee existing_employee = this.getEmployee(employee_id);
-
-
+//        TODO
         return employee_id;
     }
 }

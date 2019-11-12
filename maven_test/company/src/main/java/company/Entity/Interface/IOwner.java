@@ -1,4 +1,4 @@
 package company.Entity.Interface;
 
-public interface IOwner {
+public interface IOwner extends IHRManager{
 }

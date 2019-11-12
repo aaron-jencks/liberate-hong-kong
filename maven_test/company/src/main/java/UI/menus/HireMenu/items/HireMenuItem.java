@@ -3,9 +3,8 @@ package UI.menus.HireMenu.items;
 import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
-import UI.menus.AccountMenu.AccountMenu;
 import UI.menus.HireMenu.HireMenu;
-import company.Entity.Controller.EmployeeController;
+import company.Controller.EmployeeController;
 
 public class HireMenuItem extends AMenuItem {
     protected EmployeeController employeeController;

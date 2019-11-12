@@ -1,13 +1,14 @@
 package UI.menus.FireMenu;
 
+import java.util.Scanner;
+import java.util.UUID;
+
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.Controller.EmployeeController;
-
-import java.util.Scanner;
+import company.Controller.EmployeeController;
 
 public class FireMenu extends AMenu {
     private EmployeeController controller;
@@ -44,14 +45,14 @@ public class FireMenu extends AMenu {
         if(!is_valid)
             display();
 
-        Integer employee_id = 0;
+        String employee_id = "";
 
         while(true) {
             String padding = get_display_string();
 
             while (confirm.toUpperCase().indexOf('Y') < 0) {
                 try {
-                    employee_id = UIUtil.get_input(sc, employee_id, padding + "Employee ID: ", (Integer x) -> {
+                    employee_id = UIUtil.get_input(sc, employee_id, padding + "Employee ID: ", (String x) -> {
                         return true;
                     });
                     confirm = UIUtil.get_input(sc, confirm, padding + "Confirm firing this person? ", (String s) -> {
@@ -65,7 +66,7 @@ public class FireMenu extends AMenu {
             }
 
             try {
-                long id = controller.fireEmployee((long)employee_id);
+                UUID id = controller.fireEmployee(UUID.fromString(employee_id));
                 confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been fired. Press enter to continue.", (String s) -> {
                     return true;
                 });

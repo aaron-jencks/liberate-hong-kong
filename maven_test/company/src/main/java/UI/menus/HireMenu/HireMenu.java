@@ -1,13 +1,14 @@
 package UI.menus.HireMenu;
 
+import java.util.Scanner;
+import java.util.UUID;
+
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.Controller.EmployeeController;
-
-import java.util.Scanner;
+import company.Controller.EmployeeController;
 
 public class HireMenu extends AMenu {
     private EmployeeController controller;
@@ -73,7 +74,7 @@ public class HireMenu extends AMenu {
             }
 
             try {
-                long id = controller.createEmployee(first_name, last_name, position);
+                UUID id = controller.createEmployee(first_name, last_name, position);
                 confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been created. Press enter to continue.", (String s) -> {
                     return true;
                 });

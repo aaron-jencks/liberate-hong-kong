@@ -1,37 +1,37 @@
 package company.Entity.Abstract;
 
+import java.util.UUID;
+
+import org.json.JSONArray;
+
 import company.Entity.Interface.IAccount;
+import company.Entity.Interface.ISaveable;
 
 public abstract class AAccount extends ASaveable implements IAccount
 {
-
     protected long amount;
-    protected String accountNumber;
 
     public AAccount(){
-        this.accountNumber = null;
+        super();
         this.amount = 0L;
     }
 
+    public static JSONArray loadAllBankAccounts(){
+        JSONArray banks = ISaveable.loadAllAsJson("BankAccount");
+        JSONArray credit = ISaveable.loadAllAsJson("CreditAccount");
+        return ISaveable.add(banks, credit);
+    }
+
+    @Override
     public long getAmount()
     {
         return amount;
     }
 
-    public AAccount setAmount(long amount)
+    @Override
+    public UUID setAmount(long amount)
     {
         this.amount = amount;
-        return this;
-    }
-
-    public String getAccountNumber()
-    {
-        return accountNumber;
-    }
-
-    public AAccount setAccountNumber(String accountNumber)
-    {
-        this.accountNumber = accountNumber;
-        return this;
+        return this.save();
     }
 }

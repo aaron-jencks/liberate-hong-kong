@@ -2,21 +2,22 @@ package company.Entity.Abstract;
 
 import java.util.UUID;
 
-import company.Entity.Person;
 import company.Entity.Interface.IPerson;
 
 public abstract class APerson extends ASaveable implements IPerson
 {
-
-    protected String firstName;
-    protected String lastName;
+    private String firstName;
+    private String lastName;
 
     public APerson(String firstName, String lastName) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
+        this.save();
     }
 
     public APerson(){
+        super();
         this.firstName = null;
         this.lastName = null;
     }
@@ -26,10 +27,10 @@ public abstract class APerson extends ASaveable implements IPerson
         return firstName;
     }
 
-    public IPerson setFirstName(String firstName)
+    public UUID setFirstName(String firstName)
     {
         this.firstName = firstName;
-        return this;
+        return this.save();
     }
 
     public String getLastName()
@@ -37,9 +38,9 @@ public abstract class APerson extends ASaveable implements IPerson
         return lastName;
     }
 
-    public IPerson setLastName(String lastName)
+    public UUID setLastName(String lastName)
     {
         this.lastName = lastName;
-        return this;
+        return this.save();
     }
 }

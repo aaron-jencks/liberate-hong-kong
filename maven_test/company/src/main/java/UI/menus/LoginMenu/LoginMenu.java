@@ -1,20 +1,20 @@
 package UI.menus.LoginMenu;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import UI.AMenu;
 import UI.AlignmentType;
 import UI.IMenuItem;
+import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.items.MainMenuItem;
-import company.Entity.Abstract.AEmployee;
-import UI.UIUtil;
-import company.Entity.Controller.EmployeeController;
+import company.Controller.EmployeeController;
 import company.exceptions.EmployeeNotFoundException;
 
 public class LoginMenu extends AMenu {
-    protected long user_id = 0;
+    protected UUID user_id;
     protected String username = new String();
     protected String password = new String();
 

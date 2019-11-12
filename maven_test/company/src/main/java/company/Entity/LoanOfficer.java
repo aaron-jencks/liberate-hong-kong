@@ -4,8 +4,8 @@ import company.Entity.Abstract.AEmployee;
 import company.Entity.Interface.ILoanOfficer;
 
 public class LoanOfficer extends AEmployee implements ILoanOfficer {
-    public LoanOfficer(String firstName, String lastName, String employeeUsername, long employeeID) {
-        super(firstName, lastName, employeeUsername, employeeID);
+    public LoanOfficer(String firstName, String lastName, String employeeUsername) {
+        super(firstName, lastName, employeeUsername);
     }
 
     @Override

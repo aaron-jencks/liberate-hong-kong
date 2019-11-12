@@ -1,10 +1,10 @@
 package UI.menus.GreeterMenu.items;
 
+import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
-import UI.AMenu;
 import UI.menus.LoginMenu.LoginMenu;
-import company.Entity.Controller.EmployeeController;
+import company.Controller.EmployeeController;
 
 public class LoginItem extends AMenuItem {
     protected EmployeeController employeeController;

@@ -1,27 +1,29 @@
-package company.Entity.Controller;
+package company.Controller;
 
+import java.util.UUID;
+
+import company.Controller.Interface.IEmployeeController;
+import company.Entity.Person;
+import company.Entity.Vault;
 import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
-import company.Entity.Interface.IEmployeeController;
-import company.Entity.Person;
 import company.exceptions.EmployeeNotFoundException;
 
 public class EmployeeController implements IEmployeeController {
     private AVault vault;
 
     public EmployeeController(AVault vault) {
-        this.vault = vault;
+        this.vault = Vault.getInstance();
     }
 
     @Override
-    public long createEmployee(String first_name, String last_name, String position) throws Exception {
+    public UUID createEmployee(String first_name, String last_name, String position) throws Exception {
         Person p = new Person(first_name, last_name);
-
         IEmployee employee = vault.getEmployee(p);
         if (employee != null)
             throw new Exception("Person is already an employee");
 
-        long employee_id = -1;
+        UUID employee_id;
         switch (position) {
             case "Teller":
                 employee_id = vault.createTeller(p);
@@ -45,28 +47,28 @@ public class EmployeeController implements IEmployeeController {
         return employee_id;
     }
 
-    public long findEmployee(String username) throws EmployeeNotFoundException {
+    public UUID findEmployee(String username) throws EmployeeNotFoundException {
         IEmployee employee = vault.getEmployee(username);
         if(employee == null)
             throw new EmployeeNotFoundException("Employee not found", username);
-        return employee.getEmployeeID();
+        return employee.getObjectId();
     }
 
-    public IEmployee findEmployee(long user_id) throws EmployeeNotFoundException {
+    public IEmployee findEmployee(UUID user_id) throws EmployeeNotFoundException {
         IEmployee employee = vault.getEmployee(user_id);
         if(employee == null)
             throw new EmployeeNotFoundException("Employee not found", user_id);
         return employee;
     }
 
-    public long fireEmployee(long employee_id) throws EmployeeNotFoundException {
+    public UUID fireEmployee(UUID employee_id) throws EmployeeNotFoundException {
         IEmployee employee = vault.getEmployee(employee_id);
         if (employee == null)
             throw new EmployeeNotFoundException("Employee not found", employee_id);
         return vault.fireEmployee(employee_id);
     }
 
-    public long promoteEmployee(long employee_id, String position) throws EmployeeNotFoundException {
+    public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException {
         IEmployee employee = vault.getEmployee(employee_id);
         if (employee == null)
             throw new EmployeeNotFoundException("Employee not found", employee_id);
@@ -74,7 +76,7 @@ public class EmployeeController implements IEmployeeController {
         return vault.promoteEmployee(employee_id, position);
     }
 
-    public long modifyEmployeePassword(long employee_id, String password) throws EmployeeNotFoundException
+    public UUID modifyEmployeePassword(UUID employee_id, String password) throws EmployeeNotFoundException
     {
         IEmployee employee = vault.getEmployee(employee_id);
         if(employee == null)

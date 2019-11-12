@@ -1,10 +1,10 @@
 package UI.menus.GreeterMenu.items;
 
+import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
-import UI.AMenu;
 import UI.menus.ForgotPasswordMenu.ForgotPasswordMenu;
-import company.Entity.Controller.EmployeeController;
+import company.Controller.EmployeeController;
 
 public class ForgotPasswordItem extends AMenuItem {
     protected EmployeeController employeeController;

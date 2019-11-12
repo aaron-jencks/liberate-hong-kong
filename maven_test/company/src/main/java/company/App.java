@@ -1,17 +1,17 @@
 package company;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import UI.AMenu;
+import UI.IMenuItem;
 import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
-import company.Entity.Controller.EmployeeController;
-import company.Entity.Interface.IEmployee;
+import company.Controller.EmployeeController;
 import company.Entity.Person;
-import company.Entity.Teller;
-import UI.IMenuItem;
-import UI.AMenu;
 import company.Entity.Vault;
-
-import java.io.IOException;
+import company.Entity.Interface.IEmployee;
 
 /**
  * Hello world!
@@ -22,9 +22,9 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         TermController term = new TermController();
-        Vault vault = new Vault();
+        Vault vault = Vault.getInstance();
 
-        long user_id = vault.createTeller(new Person("John", "Smith"));
+        UUID user_id = vault.createTeller(new Person("John", "Smith"));
         IEmployee t = vault.getEmployee(user_id);
         t.setEmployeePassword("p");
         t.setEmployeeUsername("u");

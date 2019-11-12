@@ -3,12 +3,8 @@ package UI;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import UI.IMenu;
-import UI.IMenuItem;
-import UI.MenuItemValidator;
-import UI.UIUtil;
 import UI.controller.ITermController;
-import company.Entity.Controller.EmployeeController;
+import company.Controller.EmployeeController;
 
 public abstract class AMenu implements IMenu {
 
