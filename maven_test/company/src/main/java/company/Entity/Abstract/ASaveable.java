@@ -12,17 +12,27 @@ public abstract class ASaveable implements ISaveable {
 
     private UUID objId;
 
+    /**
+     * Simple constructor
+     * Sets the uuid
+     */
     public ASaveable() {
         this.objId = UUID.randomUUID();
         this.save();
     }
 
+    /**
+     * Delete self from db
+     */
     @Override
     public void delete() {
         JSONObject o = ISaveable.loadJsonObject(this.getClass().getSimpleName(), this.objId);
         ISaveable.removeFromFile(o, this.getClass().getSimpleName());
     }
 
+    /**
+     * Save self to db
+     */
     @Override
     public UUID save() {
         JSONObject obj = new JSONObject();

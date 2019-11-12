@@ -34,4 +34,13 @@ public abstract class AAccount extends ASaveable implements IAccount
         this.amount = amount;
         return this.save();
     }
+
+    /**
+     * Delete the account and return the amount
+     */
+    public long removeAccount(){
+        long amt = this.amount;
+        this.delete();
+        return amt;
+    }
 }
