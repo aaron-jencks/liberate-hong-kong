@@ -4,6 +4,7 @@ import UI.AlignmentType;
 
 import java.lang.Iterable;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -205,47 +206,50 @@ public class UIUtil {
     @SuppressWarnings("unchecked")
 	public static <T> T get_input(Scanner sc, T out, String prompt, Predicate<T> valid) throws Exception
 	{
-        boolean first = true;
 		do {
-            if(first)
-                first = false;
-            else
+            System.out.print(prompt);
+
+            while(!sc.hasNextLine());   // Waits until an entry is made
+
+            try {
+                if(out.getClass() == Integer.class)
+                {
+                    // while(!sc.hasNextInt());	// Waits until a valid entry was chosen
+                    out = (T)(Object)sc.nextInt();
+                }
+                else if(out.getClass() == Double.class)
+                {
+                    // while(!sc.hasNextDouble());	// Waits until a valid entry was chosen
+                    out = (T)(Object)sc.nextDouble();
+                }
+                else if(out.getClass() == String.class)
+                {
+                    // while(!sc.hasNextLine());
+                    out = (T)(Object)sc.nextLine();
+                }
+                else
+                {
+                    throw new Exception("Unallowed input type requested");
+                }
+            }
+            catch(InputMismatchException e)
             {
+                // Invalid input by definition, continue and try again
+                // System.out.println("Moving cursor to column " + (prompt.length() + 1 + out.toString().length() + 1));
                 System.out.println("\033[" + 
                                    (prompt.length() + 1 + out.toString().length() + 1) + 
                                    "G\033[A\033[38;5;9mInvalid response, try again...\033[0m");
+
+                // Read in the extra '\n'
+                if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
+
+                continue;
             }
-
-            System.out.print(prompt);
-
-			if(out.getClass() == Integer.class)
-			{
-				while(!sc.hasNextInt());	// Waits until a valid entry was chosen
-                out = (T)(Object)sc.nextInt();
-                
-                // Read in the extra '\n'
-                if(sc.hasNextLine())
-                    sc.nextLine();
-			}
-			else if(out.getClass() == Double.class)
-			{
-				while(!sc.hasNextDouble());	// Waits until a valid entry was chosen
-                out = (T)(Object)sc.nextDouble();
-
-                // Read in the extra '\n'
-                if(sc.hasNextLine())
-                    sc.nextLine();
-			}
-			else if(out.getClass() == String.class)
-			{
-                while(!sc.hasNextLine());
-                out = (T)(Object)sc.nextLine();
-			}
-			else
-			{
-				throw new Exception("Unallowed input type requested");
-			}
-		}while(!valid.test(out));
+            
+        }while(!valid.test(out));
+        
+        // Read in the extra '\n'
+        if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
 		
 		return out;
 	}

@@ -13,7 +13,7 @@ public abstract class AAccount extends ASaveable implements IAccount
 
     public AAccount(){
         super();
-        this.amount = 0l;
+        this.amount = 0L;
     }
 
     public static JSONArray loadAllBankAccounts(){

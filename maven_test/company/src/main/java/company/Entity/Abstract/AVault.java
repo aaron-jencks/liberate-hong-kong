@@ -13,9 +13,9 @@ import java.util.UUID;
 
 public abstract class AVault extends ASaveable implements IVault
 {
-    protected HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
-    protected HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
-    protected HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
+    private HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
+    private HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
+    private HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
     protected ArrayList<UUID> customerIds = new ArrayList<>();
     protected ArrayList<UUID> employeeIds = new ArrayList<>();
     protected ArrayList<UUID> accountIds = new ArrayList<>();
@@ -172,6 +172,13 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID fireEmployee(UUID employee_id)
     {
         employees.remove(employee_id);
+        return employee_id;
+    }
+
+    public UUID promoteEmployee(UUID employee_id, String position)
+    {
+        IEmployee existing_employee = this.getEmployee(employee_id);
+//        TODO
         return employee_id;
     }
 }

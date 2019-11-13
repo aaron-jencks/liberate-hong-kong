@@ -107,6 +107,7 @@ public abstract class AMenu implements IMenu {
         if(!is_availabled)
             populate_availabled();
 
+        UIUtil.clrscr();
         System.out.print(get_display_string());
 
         is_valid = true;

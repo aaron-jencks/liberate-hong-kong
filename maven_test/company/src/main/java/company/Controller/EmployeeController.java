@@ -23,7 +23,7 @@ public class EmployeeController implements IEmployeeController {
         if (employee != null)
             throw new Exception("Person is already an employee");
 
-        UUID employee_id = null;
+        UUID employee_id;
         switch (position) {
             case "Teller":
                 employee_id = vault.createTeller(p);
@@ -66,6 +66,14 @@ public class EmployeeController implements IEmployeeController {
         if (employee == null)
             throw new EmployeeNotFoundException("Employee not found", employee_id);
         return vault.fireEmployee(employee_id);
+    }
+
+    public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException {
+        IEmployee employee = vault.getEmployee(employee_id);
+        if (employee == null)
+            throw new EmployeeNotFoundException("Employee not found", employee_id);
+
+        return vault.promoteEmployee(employee_id, position);
     }
 
     public UUID modifyEmployeePassword(UUID employee_id, String password) throws EmployeeNotFoundException
