@@ -37,8 +37,6 @@ public class TermController implements ITermController {
     @Override
     public void set_main_window(IMenu window)
     {
-        //term.clear();
-        UIUtil.clrscr();
         active_windows.push(window);
         window.display();
         current = window;
@@ -48,7 +46,9 @@ public class TermController implements ITermController {
     public IMenuItem interact()
     {
         if(current != null)
+        {
             return current.prompt();
+        }
         return null;
     }
 

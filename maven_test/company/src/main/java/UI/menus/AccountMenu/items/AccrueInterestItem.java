@@ -23,23 +23,24 @@ public class AccrueInterestItem extends AMenuItem {
 
         try {
             confirm = UIUtil.get_input(sc, confirm, padding + "Are you sure that you want to accrue interest on ALL credit accounts?(y/[N])", (String s) -> {
-                return s.charAt(0) == '\n' || s.toUpperCase().charAt(0) == 'Y' || s.toUpperCase().charAt(0) == 'N';
+                return s.length() == 0 || s.toUpperCase().charAt(0) == 'Y' || s.toUpperCase().charAt(0) == 'N';
             });
 
-            char temp_confirm = confirm.toUpperCase().charAt(0);
-            if(temp_confirm == 'N' || temp_confirm == '\n')
-                return null;
-            else
+            if(confirm.length() > 0)
             {
-                // TODO accrue the interest
-                return null;
+                char temp_confirm = confirm.toUpperCase().charAt(0);
+                if(temp_confirm == 'Y')
+                {
+                    // TODO accrue the interest
+                }
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     @Override
