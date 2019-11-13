@@ -241,7 +241,7 @@ public class UIUtil {
                                    "G\033[A\033[38;5;9mInvalid response, try again...\033[0m");
 
                 // Read in the extra '\n'
-                if(sc.hasNextLine()) sc.nextLine();
+                if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
 
                 continue;
             }
