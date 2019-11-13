@@ -249,7 +249,7 @@ public class UIUtil {
         }while(!valid.test(out));
         
         // Read in the extra '\n'
-        if(sc.hasNextLine()) sc.nextLine();
+        if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
 		
 		return out;
 	}
