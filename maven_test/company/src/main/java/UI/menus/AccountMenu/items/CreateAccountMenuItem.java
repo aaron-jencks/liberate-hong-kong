@@ -9,7 +9,6 @@ public class CreateAccountMenuItem extends AMenuItem {
 
     public CreateAccountMenuItem(ITermController parent) {
         super(parent);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

@@ -10,14 +10,12 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Entity.BankAccount;
 import company.Entity.Abstract.ABankAccount;
-import company.Entity.Abstract.ASaveable;
-import company.Entity.Interface.ISaveable;
 
 public class DepositAccountMenu extends AMenu {
-    private String accountNumber;
-    private String depositAmount;
-    private String accept;
-    private String totalAmount;
+    private String accountNumber = new String();
+    private String depositAmount = new String();
+    private String accept = new String();
+    private String totalAmount = new String();
 
     public DepositAccountMenu(ITermController parent) {
         super(parent);
@@ -61,13 +59,28 @@ public class DepositAccountMenu extends AMenu {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        try {
+            UUID id = UUID.fromString(accountNumber);
+        } catch (IllegalArgumentException e) {
+            // accountNumber = new String();
+            // invalidate();
+            // return null;
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + " Invalid account number. "
+                        + "\n Press any key to return to the account menu.", (String s) -> {
+                            return true;
+                        });
+            } catch (Exception q) {
+                e.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
         BankAccount ba = ABankAccount.load(UUID.fromString(accountNumber));
-
+        long startAmount = ba.getAmount();
         get_display_string();
 
         try {
-            depositAmount = UIUtil.get_input(sc, depositAmount, prompt, (String s) -> {
+            depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account balance: " + Long.toString(startAmount) + ". \n Enter deposit amount: ", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -76,10 +89,11 @@ public class DepositAccountMenu extends AMenu {
 
         get_display_string();
 
-        
+        ba.deposit(Long.parseLong(depositAmount));
+        totalAmount = Long.toString(ba.getAmount());
 
         try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber
+            accept = UIUtil.get_input(sc, accept, prompt + " Amount deposited. Total amount on account = " + totalAmount
                     + "\n Press any key to return to the account menu.", (String s) -> {
                         return true;
                     });

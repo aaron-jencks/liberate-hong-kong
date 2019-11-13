@@ -9,7 +9,6 @@ public class DeleteAccountMenuItem extends AMenuItem {
 
     public DeleteAccountMenuItem(ITermController parent) {
         super(parent);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
