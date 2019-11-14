@@ -17,12 +17,9 @@ public class AccountMenu extends AMenu {
         title = "Create an account";
         items.add(new CreateAccountMenuItem(this.parent));
         items.add(new DeleteAccountMenuItem(this.parent));
-<<<<<<< HEAD
         items.add(new DepositAccountMenuItem(this.parent));
         items.add(new WithdrawlAccountMenuItem(this.parent));
-=======
         items.add(new CreateCreditAccountMenuItem(this.parent));
->>>>>>> ben_dev2
         items.add(new AccrueInterestItem(this.parent));
         items.add(new ExitItem(this.parent));
     }
