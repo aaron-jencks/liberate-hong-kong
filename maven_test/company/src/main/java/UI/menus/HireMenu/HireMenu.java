@@ -69,8 +69,6 @@ public class HireMenu extends AMenu {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             }
 
             try {

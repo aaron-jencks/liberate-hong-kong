@@ -104,6 +104,18 @@ public abstract class AVault extends ASaveable implements IVault
         Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
         t.setObjectId(p.getObjectId());
         this.employees.put(t.getObjectId(), t);
+        this.save();
+        return t.getObjectId();
+    }
+
+    @Override
+    public UUID convertToTeller(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        Teller t = new Teller(employee.getFirstName(), employee.getLastName(), username);
+        t.setObjectId(id);
+        this.employees.put(t.getObjectId(), t);
+        this.save();
         return t.getObjectId();
     }
 
@@ -114,6 +126,18 @@ public abstract class AVault extends ASaveable implements IVault
         LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
         lo.setObjectId(p.getObjectId());
         this.employees.put(lo.getObjectId(), lo);
+        this.save();
+        return lo.getObjectId();
+    }
+
+    @Override
+    public UUID convertToLoanOfficer(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        LoanOfficer lo = new LoanOfficer(employee.getFirstName(), employee.getLastName(), username);
+        lo.setObjectId(id);
+        this.employees.put(lo.getObjectId(), lo);
+        this.save();
         return lo.getObjectId();
     }
 
@@ -124,6 +148,18 @@ public abstract class AVault extends ASaveable implements IVault
         Manager m = new Manager(p.getFirstName(), p.getLastName(), username);
         m.setObjectId(p.getObjectId());
         this.employees.put(m.getObjectId(), m);
+        this.save();
+        return m.getObjectId();
+    }
+
+    @Override
+    public UUID convertToManager(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        Manager m = new Manager(employee.getFirstName(), employee.getLastName(), username);
+        m.setObjectId(id);
+        this.employees.put(m.getObjectId(), m);
+        this.save();
         return m.getObjectId();
     }
 
@@ -134,6 +170,18 @@ public abstract class AVault extends ASaveable implements IVault
         HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username);
         hrm.setObjectId(p.getObjectId());
         this.employees.put(hrm.getObjectId(), hrm);
+        this.save();
+        return hrm.getObjectId();
+    }
+
+    @Override
+    public UUID convertToHRManager(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        HRManager hrm = new HRManager(employee.getFirstName(), employee.getLastName(), username);
+        hrm.setObjectId(id);
+        this.employees.put(hrm.getObjectId(), hrm);
+        this.save();
         return hrm.getObjectId();
     }
 
@@ -144,6 +192,18 @@ public abstract class AVault extends ASaveable implements IVault
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
         o.setObjectId(p.getObjectId());
         this.employees.put(o.getObjectId(), o);
+        this.save();
+        return o.getObjectId();
+    }
+
+    @Override
+    public UUID convertToOwner(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        Owner o = new Owner(employee.getFirstName(), employee.getLastName(), username);
+        o.setObjectId(id);
+        this.employees.put(o.getObjectId(), o);
+        this.save();
         return o.getObjectId();
     }
 
@@ -152,6 +212,7 @@ public abstract class AVault extends ASaveable implements IVault
         Customer c = new Customer(p.getFirstName(), p.getLastName());
         c.setObjectId(p.getObjectId());
         this.customers.put(p.getObjectId(), c);
+        this.save();
         return c.getObjectId();
     }
 
@@ -159,6 +220,7 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createBankAccount(Customer c) {
         BankAccount ba = new BankAccount();
         c.addAccount(ba.getObjectId());
+        this.save();
         return ba.getObjectId();
     }
 
@@ -166,19 +228,51 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createCreditAccount(Customer c) {
         CreditAccount ca = new CreditAccount();
         c.addAccount(ca.getObjectId());
+        this.save();
         return ca.getObjectId();
     }
 
     public UUID fireEmployee(UUID employee_id)
     {
         employees.remove(employee_id);
+        this.save();
         return employee_id;
     }
 
-    public UUID promoteEmployee(UUID employee_id, String position)
+    /**
+     * Changes the position of the existing employee.
+     * @param employee_id UUID of the existing employee
+     * @param position position the employee will have
+     * @return UUID of the promoted employee
+     * @throws IllegalStateException if position is not a valid position
+     */
+    public UUID promoteEmployee(UUID employee_id, String position) throws IllegalStateException
     {
         IEmployee existing_employee = this.getEmployee(employee_id);
-//        TODO
+
+        fireEmployee(employee_id);
+
+        switch (position) {
+            case "Teller":
+                convertToTeller(existing_employee, employee_id);
+                break;
+            case "Loan Officer":
+                convertToLoanOfficer(existing_employee, employee_id);
+                break;
+            case "Manager":
+                convertToManager(existing_employee, employee_id);
+                break;
+            case "HR Manager":
+                convertToHRManager(existing_employee, employee_id);
+                break;
+            case "Owner":
+                convertToOwner(existing_employee, employee_id);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + position);
+        }
+
+        this.save();
         return employee_id;
     }
 }

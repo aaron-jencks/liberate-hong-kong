@@ -40,7 +40,11 @@ public interface ISaveable {
      */
     public static void saveToFile(JSONObject obj, String fileName) {
         try {
+<<<<<<< HEAD
             JSONObject o = loadJsonObject(fileName, (UUID) obj.get(ID_STR_CONST));
+=======
+            JSONObject o = loadJsonObject(fileName,(UUID) obj.get(ID_STR_CONST));
+>>>>>>> ben_dev2
             o.get(ID_STR_CONST);
             updateObjectInFile(obj, fileName);
         } catch (JSONException e) {
