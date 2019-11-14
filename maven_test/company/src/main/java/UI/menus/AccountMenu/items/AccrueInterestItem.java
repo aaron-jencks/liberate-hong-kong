@@ -6,6 +6,7 @@ import UI.AMenu;
 import UI.AMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
+import company.Controller.AccountController;
 
 public class AccrueInterestItem extends AMenuItem {
 
@@ -30,9 +31,7 @@ public class AccrueInterestItem extends AMenuItem {
             {
                 char temp_confirm = confirm.toUpperCase().charAt(0);
                 if(temp_confirm == 'Y')
-                {
-                    // TODO accrue the interest
-                }
+                    AccountController.getInstance().accrueInterest();
             }
         }
         catch(Exception e)
