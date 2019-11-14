@@ -67,6 +67,14 @@ public class EmployeeController implements IEmployeeController {
         return vault.fireEmployee(employee_id);
     }
 
+    /**
+     * Promotes an existing employee to a new position if they exist and are not already in the position.
+     * @param employee_id UUID of the existing employee
+     * @param position the new position the employee will have
+     * @return UUID of the promoted employee
+     * @throws EmployeeNotFoundException if the employee id cannot be found in the vault
+     * @throws Exception if the given position is not valid
+     */
     public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException, Exception {
         IEmployee employee = vault.getEmployee(employee_id);
         if (employee == null)

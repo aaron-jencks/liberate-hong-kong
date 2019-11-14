@@ -225,6 +225,13 @@ public abstract class AVault extends ASaveable implements IVault
         return employee_id;
     }
 
+    /**
+     * Changes the position of the existing employee.
+     * @param employee_id UUID of the existing employee
+     * @param position position the employee will have
+     * @return UUID of the promoted employee
+     * @throws IllegalStateException if position is not a valid position
+     */
     public UUID promoteEmployee(UUID employee_id, String position) throws IllegalStateException
     {
         IEmployee existing_employee = this.getEmployee(employee_id);
