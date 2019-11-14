@@ -25,8 +25,22 @@ public abstract class ACreditAccount extends AAccount implements ICreditAccount 
         interestRate = rate;
     }
 
+    public long payDebt(long amount)
+    {
+        if(amount > this.amount)
+        {
+            this.amount = 0;
+            return amount - this.amount;
+        }
+        else
+        {
+            this.amount -= amount;
+            return 0;
+        }
+    }
+
     public void accrueInterest()
     {
-        amount *= interestRate;
+        amount += amount * interestRate;
     }
 }
