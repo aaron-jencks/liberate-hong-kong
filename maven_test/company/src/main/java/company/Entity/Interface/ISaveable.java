@@ -345,7 +345,7 @@ public interface ISaveable {
             }
             arr = new JSONArray(contentBuilder.toString());
         } catch (FileNotFoundException e) {
-            System.out.println(fileName + " : file not found.");
+            // System.out.println(fileName + " : file not found.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch(JSONException e){

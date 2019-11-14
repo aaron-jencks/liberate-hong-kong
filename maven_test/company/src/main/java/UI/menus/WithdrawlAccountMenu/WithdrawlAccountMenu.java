@@ -78,7 +78,7 @@ public class WithdrawlAccountMenu extends AMenu {
         get_display_string();
 
         try {
-            withdrawlAmount = UIUtil.get_input(sc, withdrawlAmount, prompt + " Current account balance: " + Long.toString(startAmount) + ". \n Enter deposit amount: ", (String s) -> {
+            withdrawlAmount = UIUtil.get_input(sc, withdrawlAmount, prompt + " Current account balance: " + Long.toString(startAmount) + ". \n Enter withdraw amount: ", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -87,11 +87,24 @@ public class WithdrawlAccountMenu extends AMenu {
 
         get_display_string();
 
+        if(Math.subtractExact(startAmount, Long.parseLong(withdrawlAmount)) < 0){
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + " Insufficent funds "
+                        + "\n Press any key to return to the account menu.", (String s) -> {
+                            return true;
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    
+            return new ExitItem(this.parent);
+        }
+
         ba.withdrawl(Long.parseLong(withdrawlAmount));
         totalAmount = Long.toString(ba.getAmount());
 
         try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Amount deposited. Total amount on account = " + totalAmount
+            accept = UIUtil.get_input(sc, accept, prompt + " Amount withdrawn. Total amount on account = " + totalAmount
                     + "\n Press any key to return to the account menu.", (String s) -> {
                         return true;
                     });

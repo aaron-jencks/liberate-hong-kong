@@ -82,8 +82,8 @@ public abstract class ASaveable implements ISaveable {
         for (Field f : fields) {
             f.setAccessible(true);
             try {
-                // obj.put(f.getName(), f.get(this));
-                output += f.getName() + " : " + f.get(this) + ", ";
+                obj.put(f.getName(), f.get(this));
+                // output += f.getName() + " : " + f.get(this) + ", ";
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IllegalArgumentException e) {
