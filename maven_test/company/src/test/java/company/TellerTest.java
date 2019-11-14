@@ -15,7 +15,7 @@ public class TellerTest {
 
     @After
     public void cleanUp(){
-        ISaveable.clearFile(Teller.class.getName());
+        // ISaveable.clearFile(Teller.class.getName());
     }
 
     /**

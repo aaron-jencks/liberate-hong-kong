@@ -16,7 +16,7 @@ public class CustomerTest{
 
     @After
     public void cleanUp(){
-        ISaveable.clearFile(Customer.class.getName());
+        // ISaveable.clearFile(Customer.class.getName());
     }
 
 

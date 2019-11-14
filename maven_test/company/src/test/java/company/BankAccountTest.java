@@ -15,7 +15,7 @@ public class BankAccountTest{
 
     @After
     public void cleanUp(){
-        ISaveable.clearFile(BankAccount.class.getName());
+        // ISaveable.clearFile(BankAccount.class.getName());
     }
 
     @Test

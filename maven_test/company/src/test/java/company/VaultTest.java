@@ -17,7 +17,7 @@ public class VaultTest{
 
     @After
     public void cleanUp(){
-        ISaveable.clearFile(Vault.class.getName());
+        // ISaveable.clearFile(Vault.class.getName());
     }
 
     @Test

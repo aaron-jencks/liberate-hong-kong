@@ -57,7 +57,7 @@ public class SavableTest {
         JSONObject o2 = a2.getJSONObject(0);
         boolean isSame = o2.getString("Message").equals(o.get("Message"));
         assertTrue("Failed to read/write simple json to file", isSame);
-        ISaveable.clearFile("test");
+        // ISaveable.clearFile("test");
     }
 
     /**

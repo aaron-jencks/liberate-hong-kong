@@ -15,7 +15,7 @@ public class PersonTest {
 
     @After
     public void clearFiles(){
-        ISaveable.clearFile(Person.class.getName());
+        // ISaveable.clearFile(Person.class.getName());
     }
 
     /**

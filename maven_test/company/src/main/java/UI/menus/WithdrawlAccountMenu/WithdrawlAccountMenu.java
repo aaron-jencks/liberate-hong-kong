@@ -60,6 +60,19 @@ public class WithdrawlAccountMenu extends AMenu {
             e.printStackTrace();
         }
 
+        try {
+            UUID id = UUID.fromString(accountNumber);
+        } catch (Exception e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + " Account not found. " + totalAmount
+                        + "\n Press any key to return to the account menu.", (String s) -> {
+                            return true;
+                        });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
         BankAccount ba = ABankAccount.load(UUID.fromString(accountNumber));
         long startAmount = ba.getAmount();
         get_display_string();
