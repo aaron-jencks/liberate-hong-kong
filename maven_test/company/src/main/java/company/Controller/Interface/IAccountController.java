@@ -6,5 +6,9 @@ import company.Entity.Interface.ICreditAccount;
 public interface IAccountController {
     public void deposit(IAccount account, long amount);
     public void withdrawal(IAccount account, long amount);
+
+    /**
+     * Accrues interest on all credit accounts in the vault
+     */
     public void accrueInterest();
 }
