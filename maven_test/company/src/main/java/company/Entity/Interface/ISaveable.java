@@ -38,8 +38,8 @@ public interface ISaveable {
      * @param fileName
      */
     public static void saveToFile(JSONObject obj, String fileName) {
-        JSONObject o = loadJsonObject(fileName, (UUID) obj.get(ID_STR_CONST));
         try {
+            JSONObject o = loadJsonObject(fileName,(UUID) obj.get(ID_STR_CONST));
             o.get(ID_STR_CONST);
             updateObjectInFile(obj, fileName);
         } catch (JSONException e) {
@@ -331,7 +331,7 @@ public interface ISaveable {
         } catch (IOException e) {
             e.printStackTrace();
         } catch(JSONException e){
-            System.out.println(fileName + " not a valid json file");
+            // System.out.println(fileName + " not a valid json file");
         }
         return arr;
     }
