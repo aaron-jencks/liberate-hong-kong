@@ -108,11 +108,31 @@ public abstract class AVault extends ASaveable implements IVault
     }
 
     @Override
+    public UUID convertToTeller(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        Teller t = new Teller(employee.getFirstName(), employee.getLastName(), username);
+        t.setObjectId(id);
+        this.employees.put(t.getObjectId(), t);
+        return t.getObjectId();
+    }
+
+    @Override
     public UUID createLoanOfficer(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
         lo.setObjectId(p.getObjectId());
+        this.employees.put(lo.getObjectId(), lo);
+        return lo.getObjectId();
+    }
+
+    @Override
+    public UUID convertToLoanOfficer(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        LoanOfficer lo = new LoanOfficer(employee.getFirstName(), employee.getLastName(), username);
+        lo.setObjectId(id);
         this.employees.put(lo.getObjectId(), lo);
         return lo.getObjectId();
     }
@@ -128,6 +148,16 @@ public abstract class AVault extends ASaveable implements IVault
     }
 
     @Override
+    public UUID convertToManager(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        Manager m = new Manager(employee.getFirstName(), employee.getLastName(), username);
+        m.setObjectId(id);
+        this.employees.put(m.getObjectId(), m);
+        return m.getObjectId();
+    }
+
+    @Override
     public UUID createHRManager(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
@@ -138,11 +168,31 @@ public abstract class AVault extends ASaveable implements IVault
     }
 
     @Override
+    public UUID convertToHRManager(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        HRManager hrm = new HRManager(employee.getFirstName(), employee.getLastName(), username);
+        hrm.setObjectId(id);
+        this.employees.put(hrm.getObjectId(), hrm);
+        return hrm.getObjectId();
+    }
+
+    @Override
     public UUID createOwner(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
         o.setObjectId(p.getObjectId());
+        this.employees.put(o.getObjectId(), o);
+        return o.getObjectId();
+    }
+
+    @Override
+    public UUID convertToOwner(IEmployee employee, UUID id)
+    {
+        String username = employee.getFirstName().charAt(0) + employee.getLastName();
+        Owner o = new Owner(employee.getFirstName(), employee.getLastName(), username);
+        o.setObjectId(id);
         this.employees.put(o.getObjectId(), o);
         return o.getObjectId();
     }
@@ -178,33 +228,29 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID promoteEmployee(UUID employee_id, String position) throws IllegalStateException
     {
         IEmployee existing_employee = this.getEmployee(employee_id);
-        Person p = (Person)existing_employee;
 
         fireEmployee(employee_id);
 
-        UUID tmp_employee_id;
         switch (position) {
             case "Teller":
-                tmp_employee_id = createTeller(p);
+                convertToTeller(existing_employee, employee_id);
                 break;
             case "Loan Officer":
-                tmp_employee_id = createLoanOfficer(p);
+                convertToLoanOfficer(existing_employee, employee_id);
                 break;
             case "Manager":
-                tmp_employee_id = createManager(p);
+                convertToManager(existing_employee, employee_id);
                 break;
             case "HR Manager":
-                tmp_employee_id = createHRManager(p);
+                convertToHRManager(existing_employee, employee_id);
                 break;
             case "Owner":
-                tmp_employee_id = createOwner(p);
+                convertToOwner(existing_employee, employee_id);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + position);
         }
 
-        IEmployee tmp_employee = getEmployee(tmp_employee_id);
-        tmp_employee.setObjectId(employee_id);
         return employee_id;
     }
 }

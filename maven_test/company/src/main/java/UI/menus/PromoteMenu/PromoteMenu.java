@@ -9,6 +9,7 @@ import company.Controller.EmployeeController;
 import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
 import company.Entity.Vault;
+import company.exceptions.EmployeeNotFoundException;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -68,28 +69,51 @@ public class PromoteMenu extends AMenu {
                 }
             }
 
+            UUID employee_id;
             try {
-                UUID employee_id = UUID.fromString(employee_id_str);
-
-                UUID id = controller.promoteEmployee(employee_id, position);
-                UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been promoted. Press enter to continue.", (String s) -> true);
-
-                return new ExitItem(parent);
+                employee_id = UUID.fromString(employee_id_str);
             }
-            catch (IllegalArgumentException e) {
+            catch(IllegalArgumentException e) {
                 try {
                     UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
                 }
-                catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                catch (Exception e1) { e1.printStackTrace(); }
+
                 invalidate();
+                return null;
+            }
+
+            UUID tmp_id;
+            try {
+                tmp_id = controller.promoteEmployee(employee_id, position);
+            }
+            catch(EmployeeNotFoundException e) {
+                try {
+                    UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
+
+                invalidate();
+//                return null;
                 return new ExitItem(parent);
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch(Exception e) {
+                try {
+                    UIUtil.get_input(sc, confirm, padding + e.getMessage() + " Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
+
+                invalidate();
+//                return null;
                 return new ExitItem(parent);
             }
+
+            try {
+                UIUtil.get_input(sc, confirm, padding + "Employee " + tmp_id + " has been promoted. Press enter to continue.", (String s) -> true);
+            }
+            catch (Exception e) { e.printStackTrace(); }
+
+            return new ExitItem(parent);
         }
 
 

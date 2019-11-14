@@ -75,25 +75,26 @@ public class EmployeeController implements IEmployeeController {
         switch (position) {
             case "Teller":
                 if (Teller.class.isAssignableFrom(employee.getClass()))
-                    throw new Exception("Employee is already a Teller");
+                    throw new Exception("Employee is already a Teller.");
                 break;
             case "Loan Officer":
                 if (LoanOfficer.class.isAssignableFrom(employee.getClass()))
-                    throw new Exception("Employee is already a Loan Officer");
+                    throw new Exception("Employee is already a Loan Officer.");
                 break;
             case "Manager":
                 if (Manager.class.isAssignableFrom(employee.getClass()))
-                    throw new Exception("Employee is already a Manager");
+                    throw new Exception("Employee is already a Manager.");
                 break;
             case "HR Manager":
                 if (HRManager.class.isAssignableFrom(employee.getClass()))
-                    throw new Exception("Employee is already a HR Manager");
+                    throw new Exception("Employee is already a HR Manager.");
                 break;
             case "Owner":
                 if (Owner.class.isAssignableFrom(employee.getClass()))
-                    throw new Exception("Employee is already an Owner");
+                    throw new Exception("Employee is already an Owner.\n" + employee.getClass());
+                break;
             default:
-                throw new IllegalStateException("Unexpected value: " + position);
+                throw new IllegalStateException("Unexpected value: \"" + position + "\"");
         }
 
         return vault.promoteEmployee(employee_id, position);
