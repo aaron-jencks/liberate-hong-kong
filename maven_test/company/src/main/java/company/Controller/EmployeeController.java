@@ -3,8 +3,7 @@ package company.Controller;
 import java.util.UUID;
 
 import company.Controller.Interface.IEmployeeController;
-import company.Entity.Person;
-import company.Entity.Vault;
+import company.Entity.*;
 import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
@@ -68,10 +67,34 @@ public class EmployeeController implements IEmployeeController {
         return vault.fireEmployee(employee_id);
     }
 
-    public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException {
+    public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException, Exception {
         IEmployee employee = vault.getEmployee(employee_id);
         if (employee == null)
             throw new EmployeeNotFoundException("Employee not found", employee_id);
+
+        switch (position) {
+            case "Teller":
+                if (Teller.class.isAssignableFrom(employee.getClass()))
+                    throw new Exception("Employee is already a Teller");
+                break;
+            case "Loan Officer":
+                if (LoanOfficer.class.isAssignableFrom(employee.getClass()))
+                    throw new Exception("Employee is already a Loan Officer");
+                break;
+            case "Manager":
+                if (Manager.class.isAssignableFrom(employee.getClass()))
+                    throw new Exception("Employee is already a Manager");
+                break;
+            case "HR Manager":
+                if (HRManager.class.isAssignableFrom(employee.getClass()))
+                    throw new Exception("Employee is already a HR Manager");
+                break;
+            case "Owner":
+                if (Owner.class.isAssignableFrom(employee.getClass()))
+                    throw new Exception("Employee is already an Owner");
+            default:
+                throw new IllegalStateException("Unexpected value: " + position);
+        }
 
         return vault.promoteEmployee(employee_id, position);
     }

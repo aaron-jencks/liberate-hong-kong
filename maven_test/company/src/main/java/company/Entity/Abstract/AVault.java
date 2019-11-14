@@ -175,10 +175,36 @@ public abstract class AVault extends ASaveable implements IVault
         return employee_id;
     }
 
-    public UUID promoteEmployee(UUID employee_id, String position)
+    public UUID promoteEmployee(UUID employee_id, String position) throws IllegalStateException
     {
         IEmployee existing_employee = this.getEmployee(employee_id);
-//        TODO
+        Person p = (Person)existing_employee;
+
+        fireEmployee(employee_id);
+
+        UUID tmp_employee_id;
+        switch (position) {
+            case "Teller":
+                tmp_employee_id = createTeller(p);
+                break;
+            case "Loan Officer":
+                tmp_employee_id = createLoanOfficer(p);
+                break;
+            case "Manager":
+                tmp_employee_id = createManager(p);
+                break;
+            case "HR Manager":
+                tmp_employee_id = createHRManager(p);
+                break;
+            case "Owner":
+                tmp_employee_id = createOwner(p);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + position);
+        }
+
+        IEmployee tmp_employee = getEmployee(tmp_employee_id);
+        tmp_employee.setObjectId(employee_id);
         return employee_id;
     }
 }

@@ -6,6 +6,9 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
+import company.Entity.Abstract.AVault;
+import company.Entity.Interface.IEmployee;
+import company.Entity.Vault;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -40,14 +43,15 @@ public class PromoteMenu extends AMenu {
     public IMenuItem prompt()
     {
 //        TODO
+        Vault vault = Vault.getInstance();
+
         Scanner sc = new Scanner(System.in);
         String confirm = "";
 
         if(!is_valid)
             display();
 
-        String first_name = "";
-        String last_name = "";
+        String employee_id_str = "";
         String position = "";
 
         while(true) {
@@ -55,30 +59,31 @@ public class PromoteMenu extends AMenu {
 
             while (confirm.toUpperCase().indexOf('Y') < 0) {
                 try {
-                    first_name = UIUtil.get_input(sc, first_name, padding + "First Name: ", (String s) -> {
-                        return true;
-                    });
-                    last_name = UIUtil.get_input(sc, last_name, padding + "Last Name: ", (String s) -> {
-                        return true;
-                    });
-                    position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> {
-                        return true;
-                    });
-                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm hiring this person? ", (String s) -> {
-                        return true;
-                    });
+                    employee_id_str = UIUtil.get_input(sc, employee_id_str, padding + "Employee ID: ", (String s) -> true);
+                    position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> { return true;});
+
+                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm changing this employee's position? ", (String s) -> { return true;});
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             }
 
             try {
-                UUID id = controller.createEmployee(first_name, last_name, position);
-                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been created. Press enter to continue.", (String s) -> {
-                    return true;
-                });
+                UUID employee_id = UUID.fromString(employee_id_str);
+
+                UUID id = controller.promoteEmployee(employee_id, position);
+                UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been promoted. Press enter to continue.", (String s) -> true);
+
+                return new ExitItem(parent);
+            }
+            catch (IllegalArgumentException e) {
+                try {
+                    UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                invalidate();
                 return new ExitItem(parent);
             }
             catch (Exception e) {
