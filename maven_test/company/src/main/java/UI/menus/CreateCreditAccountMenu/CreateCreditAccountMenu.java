@@ -80,12 +80,11 @@ public class CreateCreditAccountMenu extends AMenu {
         }
 
         get_display_string();
-        Person p = new Person(firstName, lastName);
         Vault vault = Vault.getInstance();
 
-        ICustomer c = vault.getCustomer(p);
+        ICustomer c = vault.getCustomer(firstName, lastName);
         if (c == null) {
-            UUID new_customer = vault.createCustomer(p);
+            UUID new_customer = vault.createCustomer(new Person(firstName, lastName));
             c = vault.getCustomer(new_customer);
         }
 
