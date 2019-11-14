@@ -78,6 +78,16 @@ public abstract class AVault extends ASaveable implements IVault
         return null;
     }
 
+    public ICustomer getCustomer(String firstName, String lastName) {
+        if (employees != null) {
+            for (ICustomer customer : customers.values()) {
+                if (customer.getFirstName().equals(firstName) && customer.getLastName().equals(lastName))
+                    return customer;
+            }
+        }
+        return null;
+    }
+
     public AVault setEmployees(HashMap<UUID, IEmployee> employees)
     {
         this.employees = employees;
