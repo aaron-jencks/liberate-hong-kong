@@ -8,7 +8,7 @@ import company.Entity.Interface.ICreditAccount;
 import company.Entity.Interface.ISaveable;
 
 public abstract class ACreditAccount extends AAccount implements ICreditAccount {
-    private double interestRate;
+    private double interestRate = 0.05;
 
     public static CreditAccount load(UUID id){
         Object o = ISaveable.load(CreditAccount.class, id);

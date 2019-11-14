@@ -10,6 +10,7 @@ import UI.menus.AccountMenu.items.DeleteAccountMenuItem;
 import UI.menus.AccountMenu.items.DepositAccountMenuItem;
 import UI.menus.AccountMenu.items.PayCreditAccountMenuItem;
 import UI.menus.AccountMenu.items.WithdrawlAccountMenuItem;
+import UI.menus.AccountMenu.items.EditInterestRateMenuItem;
 
 public class AccountMenu extends AMenu {
 
@@ -23,6 +24,7 @@ public class AccountMenu extends AMenu {
         items.add(new WithdrawlAccountMenuItem(this.parent));
         items.add(new CreateCreditAccountMenuItem(this.parent));
         items.add(new AccrueInterestItem(this.parent));
+        items.add(new EditInterestRateMenuItem(this.parent));
         items.add(new ExitItem(this.parent));
     }
     
