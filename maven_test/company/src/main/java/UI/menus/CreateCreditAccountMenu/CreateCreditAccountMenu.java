@@ -18,7 +18,6 @@ public class CreateCreditAccountMenu extends AMenu {
 
     private String firstName = "";
     private String lastName = "";
-    private String accept = "";
 
     public CreateCreditAccountMenu(ITermController parent) {
         super(parent);
@@ -60,23 +59,24 @@ public class CreateCreditAccountMenu extends AMenu {
 
         if (!is_valid)
             display();
+        String confirm = "";
 
-        try {
-            firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> {
-                return true;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        while (confirm.toUpperCase().indexOf('Y') < 0) {
+            firstName = "";
+            lastName = "";
 
-        get_display_string();
+            try {
+                get_display_string();
+                firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> true);
 
-        try {
-            lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> {
-                return true;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+                get_display_string();
+                lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> true);
+
+                get_display_string();
+                confirm = UIUtil.get_input(sc, confirm, prompt + "Confirm creating this credit account? (y/N) ", (String s) -> true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         get_display_string();
@@ -84,18 +84,16 @@ public class CreateCreditAccountMenu extends AMenu {
         Vault vault = Vault.getInstance();
 
         ICustomer c = vault.getCustomer(p);
-        if (c == null)
-            c = new Customer(firstName, lastName);
+        if (c == null) {
+            UUID new_customer = vault.createCustomer(p);
+            c = vault.getCustomer(new_customer);
+        }
 
-        //TODO put this back
         UUID accountNumber = vault.createCreditAccount((Customer)c);
 
-
         try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber
-                    + "\n Press any key to return to the account menu.", (String s) -> {
-                        return true;
-                    });
+            UIUtil.get_input(sc, confirm, "\n" + prompt + "Account created.\n" + prompt + "Account id = " + accountNumber
+                    + "\n" + prompt + "Press any key to return to the account menu.", (String s) -> true);
         } catch (Exception e) {
             e.printStackTrace();
         }
