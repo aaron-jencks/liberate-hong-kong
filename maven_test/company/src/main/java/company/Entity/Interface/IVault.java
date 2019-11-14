@@ -9,49 +9,49 @@ public interface IVault extends ISaveable
 {
     /**
      * Finds an employee using the given person as a search parameter
-     * @param p
+     * @param p Person to check if they are an employee
      * @return Returns the found employee, or null if it wasn't found.
      */
     public IEmployee getEmployee(Person p);
 
     /**
      * Finds an employee by using their UUID as the search parameter
-     * @param employee_id
+     * @param employee_id UUID of the employee
      * @return Returns the found employee, or null if it wasn't found.
      */
     public IEmployee getEmployee(UUID employee_id);
 
     /**
      * Finds an employee using their username as a search parameter
-     * @param username
+     * @param username username of the employee
      * @return Returns the found employee, or null if it wasn't found.
      */
     public IEmployee getEmployee(String username);
 
     /**
      * Finds a customer using the given person as a search parameter
-     * @param p
+     * @param p Person to check if they are a customer
      * @return Returns the found customer, or null if it wasn't found.
      */
     public ICustomer getCustomer(Person p);
 
     /**
      * Finds a customer using the given customer's UUID as a search parameter
-     * @param customerId
+     * @param customerId UUID of the customer
      * @return Returns the found customer, or null if it wasn't found.
      */
     public ICustomer getCustomer(UUID customerId);
 
     /**
      * Creates a new Teller from the given person
-     * @param p
+     * @param p Person to make an new employee as a teller
      * @return returns the UUID to the new Teller
      */
     public UUID createTeller(Person p);
 
     /**
      * Converts a given employee to a Teller
-     * @param employee
+     * @param employee existing Employee that will be converted to a Teller
      * @param id UUID to assign to the Teller
      * @return returns the UUID that was passed in.
      */

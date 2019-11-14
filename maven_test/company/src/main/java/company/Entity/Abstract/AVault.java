@@ -6,6 +6,7 @@ import company.Entity.Interface.ICustomer;
 import company.Entity.Interface.IEmployee;
 import company.Entity.Interface.ISaveable;
 import company.Entity.Interface.IVault;
+import company.exceptions.InvalidPositionException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -254,10 +255,9 @@ public abstract class AVault extends ASaveable implements IVault
      * @param employee_id UUID of the existing employee
      * @param position position the employee will have
      * @return UUID of the promoted employee
-     * @throws IllegalStateException if position is not a valid position
+     * @throws InvalidPositionException if position is not a valid position
      */
-    public UUID promoteEmployee(UUID employee_id, String position) throws IllegalStateException
-    {
+    public UUID promoteEmployee(UUID employee_id, String position) throws IllegalStateException, InvalidPositionException {
         IEmployee existing_employee = this.getEmployee(employee_id);
 
         fireEmployee(employee_id);
@@ -279,7 +279,7 @@ public abstract class AVault extends ASaveable implements IVault
                 convertToOwner(existing_employee, employee_id);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + position);
+                throw new InvalidPositionException(position);
         }
 
         this.save();

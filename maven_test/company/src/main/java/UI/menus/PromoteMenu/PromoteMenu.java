@@ -10,6 +10,7 @@ import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
 import company.Entity.Vault;
 import company.exceptions.EmployeeNotFoundException;
+import company.exceptions.InvalidPositionException;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -80,7 +81,8 @@ public class PromoteMenu extends AMenu {
                 catch (Exception e1) { e1.printStackTrace(); }
 
                 invalidate();
-                return null;
+//                return null;
+                return new ExitItem(parent);
             }
 
             UUID tmp_id;
@@ -90,6 +92,16 @@ public class PromoteMenu extends AMenu {
             catch(EmployeeNotFoundException e) {
                 try {
                     UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
+
+                invalidate();
+//                return null;
+                return new ExitItem(parent);
+            }
+            catch(InvalidPositionException e) {
+                try {
+                    UIUtil.get_input(sc, confirm, padding + e.getMessage() + " Press enter to continue.", (String s) -> true);
                 }
                 catch (Exception e1) { e1.printStackTrace(); }
 

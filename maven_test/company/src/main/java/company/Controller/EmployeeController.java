@@ -7,6 +7,7 @@ import company.Entity.*;
 import company.Entity.Abstract.AVault;
 import company.Entity.Interface.IEmployee;
 import company.exceptions.EmployeeNotFoundException;
+import company.exceptions.InvalidPositionException;
 
 public class EmployeeController implements IEmployeeController {
     private AVault vault;
@@ -16,7 +17,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     @Override
-    public UUID createEmployee(String first_name, String last_name, String position) throws Exception {
+    public UUID createEmployee(String first_name, String last_name, String position) throws InvalidPositionException, Exception {
         Person p = new Person(first_name, last_name);
         IEmployee employee = vault.getEmployee(p);
         if (employee != null)
@@ -40,7 +41,7 @@ public class EmployeeController implements IEmployeeController {
                 employee_id = vault.createOwner(p);
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + position);
+                throw new InvalidPositionException(position);
         }
 
         return employee_id;
@@ -67,15 +68,7 @@ public class EmployeeController implements IEmployeeController {
         return vault.fireEmployee(employee_id);
     }
 
-    /**
-     * Promotes an existing employee to a new position if they exist and are not already in the position.
-     * @param employee_id UUID of the existing employee
-     * @param position the new position the employee will have
-     * @return UUID of the promoted employee
-     * @throws EmployeeNotFoundException if the employee id cannot be found in the vault
-     * @throws Exception if the given position is not valid
-     */
-    public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException, Exception {
+    public UUID promoteEmployee(UUID employee_id, String position) throws EmployeeNotFoundException, InvalidPositionException, Exception {
         IEmployee employee = vault.getEmployee(employee_id);
         if (employee == null)
             throw new EmployeeNotFoundException("Employee not found", employee_id);
@@ -102,7 +95,7 @@ public class EmployeeController implements IEmployeeController {
                     throw new Exception("Employee is already an Owner.\n" + employee.getClass());
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: \"" + position + "\"");
+                throw new InvalidPositionException(position);
         }
 
         return vault.promoteEmployee(employee_id, position);

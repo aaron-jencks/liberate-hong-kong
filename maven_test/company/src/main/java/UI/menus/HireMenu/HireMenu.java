@@ -9,6 +9,7 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
+import company.exceptions.InvalidPositionException;
 
 public class HireMenu extends AMenu {
     private EmployeeController controller;
@@ -78,8 +79,22 @@ public class HireMenu extends AMenu {
                 });
                 return new ExitItem(parent);
             }
+            catch(InvalidPositionException e) {
+                try {
+                    UIUtil.get_input(sc, confirm, padding + e.getMessage() + " Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
+
+                invalidate();
+//                return null;
+                return new ExitItem(parent);
+            }
             catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    UIUtil.get_input(sc, confirm, padding + e.getMessage() + " Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
+
                 return new ExitItem(parent);
             }
         }
