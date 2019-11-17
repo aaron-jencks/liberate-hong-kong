@@ -135,7 +135,51 @@ public interface ISaveable {
                     f.set(inst, obj.get(f.getName()));
                 } catch (Exception e) {
                     try {
+                        f.set(inst, UUID.fromString((String)obj.get(f.getName())));
+                    } catch (ClassCastException ec) {
+                        //load the ids for relations
+                        JSONArray a = (JSONArray) obj.get(f.getName());
+                        ArrayList<UUID> ids = new ArrayList<>();
+                        for(int i = 0; i < a.length(); i++){
+                            
+                            ids.add(UUID.fromString((String)a.get(i)));
+                        }
+                        f.set(inst, ids);
+                    } catch(JSONException je){
+                        System.out.println(f.getName() + " Not found in " + obj.toString());
+                    }
+                    
+                }
+            }
+            return inst;
 
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        throw new UnknownError("Unable to load");
+    }
+
+    /**
+     * Load an object of type with jsonobj
+     * @param classObject
+     * @param obj
+     * @return
+     */
+    public static Object load(Class classObject, JSONObject obj) {
+        String s = Paths.get("").toAbsolutePath().toString();
+        String classFileName = removeLeadingNamespace(classObject.getName());
+        try {
+            // instantiate it into an object
+            Object inst = instantiate(removeLeadingLetter(obj.get(TYPE_STR_CONST).toString()));
+            Class<?> clazz = inst.getClass();
+            // fill all the attributes
+            Field[] fields = getAllFields(clazz);
+            for (Field f : fields) {
+                f.setAccessible(true);
+                try {
+                    f.set(inst, obj.get(f.getName()));
+                } catch (Exception e) {
+                    try {
                         f.set(inst, UUID.fromString((String)obj.get(f.getName())));
                     } catch (ClassCastException ec) {
                         //load the ids for relations

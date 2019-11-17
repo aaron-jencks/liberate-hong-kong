@@ -11,6 +11,10 @@ public abstract class AManager extends AEmployee implements IManager {
         super(firstName, lastName, employeeUsername);
     }
 
+    public AManager(){
+        super();
+    }
+
     public void Fire(IEmployee e)
     {
         // TODO

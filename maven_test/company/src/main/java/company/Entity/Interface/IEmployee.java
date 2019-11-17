@@ -5,7 +5,24 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import company.Entity.Teller;
+
 public interface IEmployee extends IPerson {
+
+    public static IEmployee load(JSONObject obj){
+        UUID objId = (UUID) obj.get(ISaveable.ID_STR_CONST);
+        String type = obj.getString(ISaveable.TYPE_STR_CONST);
+        IEmployee e = null;
+        switch (type) {
+            case "Teller":
+                e = ITeller.load(objId);
+                break;
+            default:
+                System.out.println("Unable to load IEmployee with type = " + type);
+                break;
+        }
+        return e;
+    }
 
     /**
      * Grab all the different employee types and return them as json Objects in a json Array

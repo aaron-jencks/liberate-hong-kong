@@ -8,6 +8,14 @@ public class LoanOfficer extends AEmployee implements ILoanOfficer {
         super(firstName, lastName, employeeUsername);
     }
 
+    public LoanOfficer(Person p, String username){
+        super(p,username);
+    }
+
+    public LoanOfficer(){
+        super();
+    }
+
     @Override
     public void CreateAccount(CreditAccount account, Customer customer) {
 

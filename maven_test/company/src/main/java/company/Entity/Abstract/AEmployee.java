@@ -19,6 +19,24 @@ public abstract class AEmployee extends APerson implements IEmployee
         this.save();
     }
 
+    public AEmployee(APerson person){
+        super(person.getFirstName(), person.getLastName());
+        this.employeeUsername = null;
+        this.employeePassword = "";
+        this.setObjectId(person.getObjectId());
+        this.save();
+        person.delete();
+    }
+
+    public AEmployee(APerson person, String employeeUsername){
+        super(person.getFirstName(), person.getLastName());
+        this.employeeUsername = employeeUsername;
+        this.employeePassword = "";
+        this.setObjectId(person.getObjectId());
+        this.save();
+        person.delete();
+    }
+
     public AEmployee(){
         super();
         this.employeePassword = null;

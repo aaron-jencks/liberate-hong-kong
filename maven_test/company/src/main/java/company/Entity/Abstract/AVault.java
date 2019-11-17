@@ -11,110 +11,127 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class AVault extends ASaveable implements IVault
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public abstract class AVault implements IVault
 {
-    private HashMap<UUID, ICustomer> customers = new HashMap<UUID, ICustomer>();
-    private HashMap<UUID, IEmployee> employees = new HashMap<UUID, IEmployee>();
-    private HashMap<UUID, IAccount> accounts = new HashMap<UUID, IAccount>();
-    protected ArrayList<UUID> customerIds = new ArrayList<>();
-    protected ArrayList<UUID> employeeIds = new ArrayList<>();
-    protected ArrayList<UUID> accountIds = new ArrayList<>();
 
-    public static Vault load(UUID id){
-        Object o = ISaveable.load(Vault.class, id);
-        return (Vault)o;
-    }
-
-    public HashMap<UUID, ICustomer> getCustomers()
+    /**
+     * Get all saved customers
+     * @return
+     */
+    public JSONArray getCustomers()
     {
-        return customers;
+        return ISaveable.loadAllAsJson(ACustomer.class.getSimpleName());
     }
 
-    public AVault setCustomers(HashMap<UUID, ICustomer> customers)
+    /**
+     * Get all saved employees
+     */
+    public JSONArray getEmployees()
     {
-        this.customers = customers;
-        return this;
+        return IEmployee.loadAllEmployees();
     }
 
-    public HashMap<UUID, IEmployee> getEmployees()
-    {
-        return employees;
-    }
-
+    /**
+     * Get a saved employee that matches the person
+     */
     public IEmployee getEmployee(Person p) {
-        if (employees != null) {
-            for (IEmployee employee : employees.values()) {
-                if ((APerson) employee == p)
-                    return employee;
-            }
-        }
-        return null;
+        return getEmployee(p.getObjectId());
     }
 
+    /**
+     * Get the saved employee with the id
+     */
     public IEmployee getEmployee(UUID employee_id)
     {
-        return employees.get(employee_id);
+        JSONArray e = getEmployees();
+        for(int i = 0; i < e.length(); i++){
+            JSONObject o = e.getJSONObject(i);
+            UUID oId = (UUID) o.get(ISaveable.ID_STR_CONST);
+            if (oId.equals(employee_id)) {
+                return IEmployee.load(o);
+            }
+        }
+        return null;
     }
 
+    /**
+     * Get the saved employee with the username
+     */
     public IEmployee getEmployee(String username)
     {
-        for(IEmployee e : employees.values())
-            if(e.getEmployeeUsername().equals(username))
-                return e;
+        JSONArray e = getEmployees();
+        for(int i = 0; i < e.length(); i++){
+            JSONObject o = e.getJSONObject(i);
+            String user = o.getString("employeeUsername");
+            if (user.equals(username)) {
+                return IEmployee.load(o);
+            }
+        }
         return null;
     }
 
+    /**
+     * Get the saved customer with the customer id
+     */
     public ICustomer getCustomer(UUID customerId){
-        return customers.get(customerId);
+        return ICustomer.load(customerId);
     }
 
+    /**
+     * Get the saved customer that matches the person
+     */
     public ICustomer getCustomer(Person p){
-        if (employees != null) {
-            for (ICustomer customer : customers.values()) {
-                if ((APerson) customer == p)
-                    return customer;
-            }
-        }
-        return null;
+        return getCustomer(p.getObjectId());
     }
 
+    /**
+     * Get the saved customer with matching names
+     * @param firstName
+     * @param lastName
+     * @return
+     */
     public ICustomer getCustomer(String firstName, String lastName) {
-        if (employees != null) {
-            for (ICustomer customer : customers.values()) {
-                if (customer.getFirstName().equals(firstName) && customer.getLastName().equals(lastName))
-                    return customer;
+        JSONArray c = getCustomers();
+        for(int i = 0; i < c.length(); i++){
+            JSONObject o = c.getJSONObject(i);
+            String first = o.getString("firstName");
+            String last = o.getString("lastName");
+            if (last.equals(lastName) && first.equals(firstName)) {
+                return ICustomer.load(o);
             }
         }
         return null;
     }
 
-    public AVault setEmployees(HashMap<UUID, IEmployee> employees)
+    /**
+     * Load all the accounts
+     */
+    public JSONArray getAccounts()
     {
-        this.employees = employees;
-        this.save();
-        return this;
+        return IAccount.loadAllAccounts();
     }
 
-    public HashMap<UUID, IAccount> getAccounts()
-    {
-        return accounts;
-    }
-
-    public AVault setAccounts(HashMap<UUID, IAccount> accounts)
-    {
-        this.accounts = accounts;
-        this.save();
-        return this;
+    @Override
+    public IAccount getAccount(UUID accountId){
+        JSONArray a = getAccounts();
+        for(int i = 0; i < a.length(); i++){
+            JSONObject o = a.getJSONObject(i);
+            UUID id = (UUID) o.get(ISaveable.ID_STR_CONST);
+            if (id.equals(accountId)) {
+                return IAccount.load(o);
+            }
+        }
+        return null;
     }
 
     @Override
     public UUID createTeller(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        Teller t = new Teller(p.getFirstName(), p.getLastName(), username);
-        t.setObjectId(p.getObjectId());
-        this.employees.put(t.getObjectId(), t);
-        this.save();
+        Teller t = new Teller(p, username);
         return t.getObjectId();
     }
 
@@ -124,8 +141,7 @@ public abstract class AVault extends ASaveable implements IVault
         String username = employee.getFirstName().charAt(0) + employee.getLastName();
         Teller t = new Teller(employee.getFirstName(), employee.getLastName(), username);
         t.setObjectId(id);
-        this.employees.put(t.getObjectId(), t);
-        this.save();
+        
         return t.getObjectId();
     }
 
@@ -133,10 +149,7 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createLoanOfficer(Person p)
     {
         String username = p.getFirstName().charAt(0) + p.getLastName();
-        LoanOfficer lo = new LoanOfficer(p.getFirstName(), p.getLastName(), username);
-        lo.setObjectId(p.getObjectId());
-        this.employees.put(lo.getObjectId(), lo);
-        this.save();
+        LoanOfficer lo = new LoanOfficer(p, username);
         return lo.getObjectId();
     }
 
@@ -145,9 +158,6 @@ public abstract class AVault extends ASaveable implements IVault
     {
         String username = employee.getFirstName().charAt(0) + employee.getLastName();
         LoanOfficer lo = new LoanOfficer(employee.getFirstName(), employee.getLastName(), username);
-        lo.setObjectId(id);
-        this.employees.put(lo.getObjectId(), lo);
-        this.save();
         return lo.getObjectId();
     }
 
@@ -157,8 +167,6 @@ public abstract class AVault extends ASaveable implements IVault
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Manager m = new Manager(p.getFirstName(), p.getLastName(), username);
         m.setObjectId(p.getObjectId());
-        this.employees.put(m.getObjectId(), m);
-        this.save();
         return m.getObjectId();
     }
 
@@ -168,8 +176,6 @@ public abstract class AVault extends ASaveable implements IVault
         String username = employee.getFirstName().charAt(0) + employee.getLastName();
         Manager m = new Manager(employee.getFirstName(), employee.getLastName(), username);
         m.setObjectId(id);
-        this.employees.put(m.getObjectId(), m);
-        this.save();
         return m.getObjectId();
     }
 
@@ -179,8 +185,6 @@ public abstract class AVault extends ASaveable implements IVault
         String username = p.getFirstName().charAt(0) + p.getLastName();
         HRManager hrm = new HRManager(p.getFirstName(), p.getLastName(), username);
         hrm.setObjectId(p.getObjectId());
-        this.employees.put(hrm.getObjectId(), hrm);
-        this.save();
         return hrm.getObjectId();
     }
 
@@ -190,8 +194,6 @@ public abstract class AVault extends ASaveable implements IVault
         String username = employee.getFirstName().charAt(0) + employee.getLastName();
         HRManager hrm = new HRManager(employee.getFirstName(), employee.getLastName(), username);
         hrm.setObjectId(id);
-        this.employees.put(hrm.getObjectId(), hrm);
-        this.save();
         return hrm.getObjectId();
     }
 
@@ -201,8 +203,6 @@ public abstract class AVault extends ASaveable implements IVault
         String username = p.getFirstName().charAt(0) + p.getLastName();
         Owner o = new Owner(p.getFirstName(), p.getLastName(), username);
         o.setObjectId(p.getObjectId());
-        this.employees.put(o.getObjectId(), o);
-        this.save();
         return o.getObjectId();
     }
 
@@ -212,8 +212,6 @@ public abstract class AVault extends ASaveable implements IVault
         String username = employee.getFirstName().charAt(0) + employee.getLastName();
         Owner o = new Owner(employee.getFirstName(), employee.getLastName(), username);
         o.setObjectId(id);
-        this.employees.put(o.getObjectId(), o);
-        this.save();
         return o.getObjectId();
     }
 
@@ -221,8 +219,6 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createCustomer(Person p) {
         Customer c = new Customer(p.getFirstName(), p.getLastName());
         c.setObjectId(p.getObjectId());
-        this.customers.put(p.getObjectId(), c);
-        this.save();
         return c.getObjectId();
     }
 
@@ -230,7 +226,6 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createBankAccount(Customer c) {
         BankAccount ba = new BankAccount();
         c.addAccount(ba.getObjectId());
-        this.save();
         return ba.getObjectId();
     }
 
@@ -238,14 +233,12 @@ public abstract class AVault extends ASaveable implements IVault
     public UUID createCreditAccount(Customer c) {
         CreditAccount ca = new CreditAccount();
         c.addAccount(ca.getObjectId());
-        this.save();
         return ca.getObjectId();
     }
 
     public UUID fireEmployee(UUID employee_id)
     {
-        employees.remove(employee_id);
-        this.save();
+        //TODO...
         return employee_id;
     }
 
@@ -281,8 +274,6 @@ public abstract class AVault extends ASaveable implements IVault
             default:
                 throw new IllegalStateException("Unexpected value: " + position);
         }
-
-        this.save();
         return employee_id;
     }
 }

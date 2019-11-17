@@ -6,4 +6,8 @@ public class AOwner extends AHRManager implements IOwner {
     public AOwner(String firstName, String lastName, String employeeUsername) {
         super(firstName, lastName, employeeUsername);
     }
+
+    public AOwner(){
+        super();
+    }
 }

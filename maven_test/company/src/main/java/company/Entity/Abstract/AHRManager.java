@@ -10,6 +10,10 @@ public abstract class AHRManager extends AManager implements IHRManager {
         super(firstName, lastName, employeeUsername);
     }
 
+    public AHRManager(){
+        super();
+    }
+
     public long Hire(IPerson p)
     {
         // TODO

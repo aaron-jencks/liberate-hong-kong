@@ -11,6 +11,5 @@ public class Main {
         Person p = new Person("a","b");
         v.createTeller(p);
         v.createHRManager(p);
-        v.save();
     }
 }

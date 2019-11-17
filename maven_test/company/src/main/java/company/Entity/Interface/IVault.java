@@ -2,14 +2,23 @@ package company.Entity.Interface;
 
 import java.util.UUID;
 
+import org.json.JSONArray;
+
 import company.Entity.Customer;
 import company.Entity.Person;
 
-public interface IVault extends ISaveable
+public interface IVault
 {
+    public JSONArray getEmployees();
+    public JSONArray getCustomers();
+    public JSONArray getAccounts();
+
+    public IAccount getAccount(UUID accountId);
+
     public IEmployee getEmployee(Person p);
     public IEmployee getEmployee(UUID employee_id);
     public IEmployee getEmployee(String username);
+
     public ICustomer getCustomer(Person p);
     public ICustomer getCustomer(UUID customerId);
 
