@@ -22,6 +22,17 @@ public class SQLCustomer extends SQLPerson{
         return this.accounts;
     }
 
+    public String getAccountsString(){
+        StringBuilder sb = new StringBuilder();
+        for (UUID uuid : accounts) {
+            sb.append(uuid.toString());
+            sb.append(',');
+        }
+        String ret = sb.toString();
+        ret = ret.substring(0, ret.length() - 1);
+        return ret;
+    }
+
     public void setAccounts(ArrayList<UUID> accounts) {
         this.accounts = accounts;
     }

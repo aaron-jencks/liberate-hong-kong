@@ -1,12 +1,13 @@
 package company.Controller;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import company.Entity.SQLCustomer;
-import company.Entity.SQLPerson;
 
 public class CustomerController extends SQLController {
 
@@ -34,13 +35,47 @@ public class CustomerController extends SQLController {
      * Find the person by the id
      */
     public SQLCustomer getCustomer(UUID id){
-        String sql = "SELECT * FROM " + CUST_TABLE_NAME +
-                    " WHERE " + CUST_ID_CONST + " = " + sqlPrepare(id.toString());
-        return createCustomer(execute(sql));
+        String sqlQuery = "SELECT * FROM " + CUST_TABLE_NAME +
+                    " WHERE " + CUST_ID_CONST + " = " + sqlPrepare(id);
+        SQLCustomer c = null;
+        if(SQLController.debug){
+            System.out.println("executeQuery : " + sqlQuery + "\n");
+        }
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getDataSource().getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                c = createCustomer(resultSet);
+            }
+        } catch (SQLException se) {
+            debugError(se);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(c == null){
+            throw new NullPointerException("Failed to create customer");
+        }
+        return c;
     }
 
     /**
-     * Create a person with the supplied names
+     * Create a customer with the supplied names
      * returns the newly created person
      */
     public SQLCustomer createCustomer(String firstName, String lastName){
@@ -52,7 +87,7 @@ public class CustomerController extends SQLController {
                     CUST_LASTNAME_CONST + " , " + 
                     CUST_ACCOUNTS_CONST + 
                     " ) VALUES ( " + 
-                    sqlPrepare(id.toString()) + " , " +
+                    sqlPrepare(id) + " , " +
                     sqlPrepare(firstName) + " , " +
                     sqlPrepare(lastName) + " , " +
                     " NULL " + 
@@ -61,17 +96,53 @@ public class CustomerController extends SQLController {
         return getCustomer(id);
     }
 
+    public void updateCustomer(SQLCustomer c){
+        String sql = "UPDATE " + CUST_TABLE_NAME + 
+                    " SET " + 
+                    CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()) + 
+                    CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()) + 
+                    CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()) + 
+                    " WHERE " +
+                    CUST_ID_CONST + " = " + sqlPrepare(c.getId());
+        executeUpdate(sql);
+    }
+
+    /**
+     * Create a customer from a result set
+     */
     private SQLCustomer createCustomer(ResultSet customerResult){
+        SQLCustomer c = null;
+        String first = null;
+        String last = null;
+        UUID id = null;
+        String accounts = null;
         try {
-            SQLCustomer p = new SQLCustomer();
-            p.setFirstName(customerResult.getString(CUST_FIRSTNAME_CONST));
-            p.setLastName(customerResult.getString(CUST_LASTNAME_CONST));
-            p.setId(UUID.fromString(customerResult.getString(CUST_ID_CONST)));
-            return p;
+            first = customerResult.getString(CUST_FIRSTNAME_CONST);
         } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            debugError(e);
         }
-        return null;
+        try {
+            last = customerResult.getString(CUST_LASTNAME_CONST);
+        } catch (SQLException e) {
+            debugError(e);
+        }
+        try {
+            id = UUID.fromString(customerResult.getString(CUST_ID_CONST));
+        } catch (SQLException e) {
+            debugError(e);
+        }
+        try {
+            accounts = customerResult.getString(CUST_ACCOUNTS_CONST);
+            String[] s = accounts.split(",");
+            ArrayList<UUID> ids = new ArrayList<>();
+            for (String string : s) {
+                ids.add(UUID.fromString(string));
+            }
+            c.setAccounts(ids);
+        } catch (SQLException e) {
+            debugError(e);
+        }
+        return c;
     }
 
     /**
@@ -80,15 +151,36 @@ public class CustomerController extends SQLController {
      */
     public ArrayList<SQLCustomer> getAll(){
         ArrayList<SQLCustomer> allPerson = new ArrayList<>();
-        String sql = "SELECT * " + CUST_TABLE_NAME;
-        ResultSet list = execute(sql);
+        String sqlQuery = "SELECT * FROM " + CUST_TABLE_NAME;
+        if(SQLController.debug){
+            System.out.println("executeQuery : " + sqlQuery + "\n");
+        }
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
         try {
-            while (list.next()){
-                SQLCustomer p = createCustomer(list);
-                allPerson.add(p);
+            connection = getDataSource().getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                allPerson.add(createCustomer(resultSet));
             }
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (SQLException se) {
+            debugError(se);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return allPerson;
     }
@@ -110,7 +202,7 @@ public class CustomerController extends SQLController {
     /**
      * Drop the table
      */
-    public void dropTable(){
+    public static void dropTable(){
         String sql = "DROP TABLE " + CUST_TABLE_NAME;
         executeUpdate(sql);
     }

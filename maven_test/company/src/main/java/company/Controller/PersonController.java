@@ -1,7 +1,9 @@
 package company.Controller;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -32,9 +34,41 @@ public class PersonController extends SQLController {
      * Find the person by the id
      */
     public SQLPerson getPerson(UUID id){
-        String sql = "SELECT * FROM " + PERSON_TABLE_NAME +
+        SQLPerson p = null;
+        String sqlQuery = "SELECT * FROM " + PERSON_TABLE_NAME +
                     " WHERE " + PERSON_ID_CONST + " = " + sqlPrepare(id.toString());
-        return createPerson(execute(sql));
+          
+        if (SQLController.debug) {
+            System.out.println("executeQuery : " + sqlQuery + "\n");
+        }
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getDataSource().getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                p = createPerson(resultSet);
+            }
+        } catch (SQLException se) {
+            debugError(se);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return p;
     }
 
     /**
@@ -53,15 +87,30 @@ public class PersonController extends SQLController {
         return getPerson(id);
     }
 
+    /**
+     * Create a person from a result set
+     * @param personResult
+     * @return
+     */
     private SQLPerson createPerson(ResultSet personResult){
+        SQLPerson p = new SQLPerson();
         try {
-            SQLPerson p = new SQLPerson();
             p.setFirstName(personResult.getString(PERSON_FIRSTNAME_CONST));
+            return p;
+        } catch (SQLException e) {
+            debugError(e);
+        }
+        try {
             p.setLastName(personResult.getString(PERSON_LASTNAME_CONST));
+            return p;
+        } catch (SQLException e) {
+            debugError(e);
+        }
+        try {
             p.setId(UUID.fromString(personResult.getString(PERSON_ID_CONST)));
             return p;
         } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            debugError(e);
         }
         return null;
     }
@@ -72,15 +121,37 @@ public class PersonController extends SQLController {
      */
     public ArrayList<SQLPerson> getAll(){
         ArrayList<SQLPerson> allPerson = new ArrayList<>();
-        String sql = "SELECT * " + PERSON_TABLE_NAME;
-        ResultSet list = execute(sql);
+        String sqlQuery = "SELECT * " + PERSON_TABLE_NAME;
+        if(SQLController.debug){
+            System.out.println("executeQuery : " + sqlQuery + "\n");
+        }
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
         try {
-            while (list.next()){
-                SQLPerson p = createPerson(list);
+            connection = getDataSource().getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()){
+                SQLPerson p = createPerson(resultSet);
                 allPerson.add(p);
             }
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (SQLException se) {
+            debugError(se);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+                if(resultSet != null){
+                    resultSet.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return allPerson;
     }

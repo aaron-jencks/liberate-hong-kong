@@ -14,25 +14,22 @@ import company.Controller.PersonController;
  */
 public class CustomerSQLTest 
 {
+
     /**
-     * Rigorous Test :-)
-     * Sanity check
+     * Can I create the table?
      */
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
-
-    @Test
     public void testTableCreate(){
-        CustomerController pc = CustomerController.getInstance();
+        CustomerController cc = CustomerController.getInstance();
     }
 
+    /**
+     * Can I create a customer?
+     */
     @Test
     public void testCreateCustomer(){
-        CustomerController pc = CustomerController.getInstance();
-        pc.createCustomer("joey", "james");
+        CustomerController cc = CustomerController.getInstance();
+        cc.createCustomer("joey", "james");
     }
 
 }

@@ -3,6 +3,8 @@ package company.Entity;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import company.Controller.AccountController;
+
 public class SQLAccount {
     private UUID id;
     private BigDecimal amount;
@@ -20,26 +22,14 @@ public class SQLAccount {
         return this.id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public BigDecimal getAmount() {
         return this.amount;
     }
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public SQLAccount id(UUID id) {
-        this.id = id;
-        return this;
-    }
-
-    public SQLAccount amount(BigDecimal amount) {
-        this.amount = amount;
-        return this;
+        AccountController ac = AccountController.getInstance();
+        ac.updateAccount(this);
     }
     
     @Override

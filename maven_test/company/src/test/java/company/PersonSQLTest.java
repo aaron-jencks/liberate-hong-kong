@@ -22,11 +22,17 @@ public class PersonSQLTest
         assertTrue( true );
     }
 
+    /**
+     * Can I create the table?
+     */
     @Test
     public void testTableCreate(){
         PersonController pc = PersonController.getInstance();
     }
 
+    /**
+     * Can I create a person?
+     */
     @Test
     public void testCreatePerson(){
         PersonController pc = PersonController.getInstance();
