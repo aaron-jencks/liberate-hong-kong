@@ -1,6 +1,7 @@
 package company.Controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -100,6 +101,7 @@ public class AccountController extends SQLController{
         UUID id = null;
         try {
             amt = personResult.getBigDecimal(ACCT_AMT_CONST);
+            amt = amt.setScale(2, RoundingMode.HALF_EVEN);
         } catch (SQLException e) {
             System.err.println("Failed to retrieve account.amount (AccountController.createAccount)");
             debugError(e);
@@ -201,8 +203,19 @@ public class AccountController extends SQLController{
     private static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS " + ACCT_TABLE_NAME + 
                     "(" + ACCT_ID_CONST + " VARCHAR(255) not NULL, " + 
-                    ACCT_AMT_CONST + " DECIMAL(15,2), " + 
+                    ACCT_AMT_CONST + " DECIMAL(13,4), " + 
                     " PRIMARY KEY ( " + ACCT_ID_CONST + " ))";
+        executeUpdate(sql);
+    }
+
+    /**
+     * Delete an account
+     * @param id
+     */
+    public void deleteAccount(UUID id){
+        String sql = "DELETE FROM " + ACCT_TABLE_NAME + 
+                    " WHERE " + ACCT_ID_CONST + 
+                    " = " + sqlPrepare(id);
         executeUpdate(sql);
     }
 

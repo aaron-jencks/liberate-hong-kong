@@ -122,9 +122,6 @@ public class EmployeeController extends SQLController {
                 er.printStackTrace();
             }
         }
-        if(e == null){
-            throw new NullPointerException("Failed to create employee");
-        }
         return e;
     }
 
@@ -212,6 +209,16 @@ public class EmployeeController extends SQLController {
         executeUpdate(sql);
     }
 
+    /**
+     * Delete an employee
+     * @param id
+     */
+    public void deleteEmployee(UUID id){
+        String sql = "DELETE FROM " + EMP_TABLE_NAME + 
+                    " WHERE " + EMP_ID_CONST +
+                    " = " + sqlPrepare(id);
+        executeUpdate(sql);
+    }
 
 
     /**
@@ -219,6 +226,14 @@ public class EmployeeController extends SQLController {
      */
     public static void dropTable(){
         String sql = "DROP TABLE " + EMP_TABLE_NAME;
+        executeUpdate(sql);
+    }
+
+    /**
+     * Truncate the table
+     */
+    public void truncateTable(){
+        String sql = "TRUNCATE TABLE " + EMP_TABLE_NAME;
         executeUpdate(sql);
     }
 

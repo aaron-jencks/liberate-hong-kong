@@ -3,6 +3,8 @@ package company;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.security.InvalidParameterException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,31 +42,71 @@ public class AccountSQLTest
     /**
      * Can I deposit?
      */
-    // @Test
+    @Test
     public void testAccountDeposit(){
         AccountController ac = AccountController.getInstance();
-        BigDecimal x = new BigDecimal(123.456);
-        BigDecimal y = new BigDecimal(1566);
-        SQLAccount b = ac.createAccount(x);
-        b = ac.deposit(b, y);
-        BigDecimal sum = x.add(y);
-        boolean same = sum.compareTo(b.getAmount()) == 0;
+        BigDecimal startAmount = new BigDecimal(123.456);
+        BigDecimal addedAmount = new BigDecimal(1566);
+        SQLAccount account = ac.createAccount(startAmount);
+        account = ac.deposit(account, addedAmount);
+        BigDecimal sum = startAmount.add(addedAmount);
+        //can't forget that it should be rounded
+        sum = sum.setScale(2, RoundingMode.HALF_EVEN);
+        boolean same = sum.compareTo(account.getAmount()) == 0;
         assertTrue(same);
     }
 
     /**
      * Can I withdraw?
      */
-    // @Test
+    @Test
     public void testAccountWithdrawl(){
         AccountController ac = AccountController.getInstance();
+        BigDecimal startAmount = new BigDecimal(123.456);
+        BigDecimal subAmount = new BigDecimal(1566);
+        SQLAccount account = ac.createAccount(startAmount);
+        account = ac.withdrawl(account, subAmount);
+        BigDecimal sum = startAmount.subtract(subAmount);
+        sum = sum.setScale(2, RoundingMode.HALF_EVEN);
+        boolean same = sum.compareTo(account.getAmount()) == 0;
+        assertTrue(same);
+    }
+
+    /**
+     * Can I withdraw a negative amount?
+     */
+    @Test(expected = InvalidParameterException.class)
+    public void withdrawErrorHandling(){
+        AccountController ac = AccountController.getInstance();
+        BigDecimal startAmount = new BigDecimal(123.456);
+        BigDecimal subAmount = new BigDecimal(-1566);
+        SQLAccount account = ac.createAccount(startAmount);
+        account = ac.withdrawl(account, subAmount);
+    }
+
+    /**
+     * Can I deposit a negative amount?
+     */
+    @Test(expected = InvalidParameterException.class)
+    public void depositErrorHandling(){
+        AccountController ac = AccountController.getInstance();
+        BigDecimal startAmount = new BigDecimal(123.456);
+        BigDecimal addedAmount = new BigDecimal(-1566);
+        SQLAccount account = ac.createAccount(startAmount);
+        account = ac.deposit(account, addedAmount);
+    }
+
+    /**
+     * Make sure BigDecimals behave the way I expect
+     */
+    @Test
+    public void bigDecimalTest(){
         BigDecimal x = new BigDecimal(123.456);
         BigDecimal y = new BigDecimal(1566);
-        SQLAccount a = ac.createAccount(y);
-        a = ac.withdrawl(a, x);
-        BigDecimal sum = y.subtract(x);
-        boolean same = sum.compareTo(a.getAmount()) == 0;
-        assertTrue(same);
+        BigDecimal t = x;
+        x = x.subtract(y);
+        boolean same = x.compareTo(t) == 0;
+        assertTrue(!same);
     }
 
 }

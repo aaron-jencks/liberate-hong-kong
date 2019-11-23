@@ -1,6 +1,7 @@
 package company.Entity;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 import company.Controller.AccountController;
@@ -27,7 +28,8 @@ public class SQLAccount {
     }
 
     public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+        BigDecimal rounded = amount.setScale(2, RoundingMode.HALF_EVEN);
+        this.amount = rounded;
         AccountController ac = AccountController.getInstance();
         ac.updateAccount(this);
     }

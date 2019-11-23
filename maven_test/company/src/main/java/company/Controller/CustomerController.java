@@ -96,6 +96,9 @@ public class CustomerController extends SQLController {
         return getCustomer(id);
     }
 
+    /**
+     * Update all customer attributes
+     */
     public void updateCustomer(SQLCustomer c){
         String sql = "UPDATE " + CUST_TABLE_NAME + 
                     " SET " + 
@@ -111,7 +114,7 @@ public class CustomerController extends SQLController {
      * Create a customer from a result set
      */
     private SQLCustomer createCustomer(ResultSet customerResult){
-        SQLCustomer c = null;
+        SQLCustomer c = new SQLCustomer();
         String first = null;
         String last = null;
         UUID id = null;
@@ -133,12 +136,14 @@ public class CustomerController extends SQLController {
         }
         try {
             accounts = customerResult.getString(CUST_ACCOUNTS_CONST);
-            String[] s = accounts.split(",");
+            if(accounts != null && !accounts.isBlank()){
+                String[] s = accounts.split(",");
             ArrayList<UUID> ids = new ArrayList<>();
             for (String string : s) {
                 ids.add(UUID.fromString(string));
             }
             c.setAccounts(ids);
+            }
         } catch (SQLException e) {
             debugError(e);
         }
@@ -196,6 +201,17 @@ public class CustomerController extends SQLController {
                     CUST_LASTNAME_CONST + " VARCHAR(255), " + 
                     CUST_ACCOUNTS_CONST + " VARCHAR(255), " + 
                     " PRIMARY KEY ( " + CUST_ID_CONST + " ))";
+        executeUpdate(sql);
+    }
+
+    /**
+     * Delete a customer
+     * @param id
+     */
+    public void deleteCustomer(UUID id){
+        String sql = "DELETE FROM " + CUST_TABLE_NAME + 
+                    " WHERE " + CUST_ID_CONST +
+                    " = " + sqlPrepare(id);
         executeUpdate(sql);
     }
 

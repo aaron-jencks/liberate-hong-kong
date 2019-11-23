@@ -1,6 +1,7 @@
 package company.Controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,7 +16,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class SQLController {
 
-    public static boolean debug = true;
+    public static boolean debug = false;
 
     /**
      * Execute SQL, can be used for INSERT, UPDATE, or DELETE. Will return the
@@ -67,7 +68,8 @@ public class SQLController {
     }
 
     public static String sqlPrepare(BigDecimal input) {
-        return sqlPrepare(input.toString());
+        BigDecimal rounded = input.setScale(2, RoundingMode.HALF_EVEN);
+        return sqlPrepare(rounded.toString());
     }
 
     public static String sqlPrepare(UUID input) {

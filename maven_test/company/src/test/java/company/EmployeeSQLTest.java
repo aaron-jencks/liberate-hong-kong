@@ -1,5 +1,6 @@
 package company;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -30,6 +31,16 @@ public class EmployeeSQLTest
         EmployeeController ec = EmployeeController.getInstance();
         SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson");
         assertTrue(e.getQuestion().equals("who are you?"));
+    }
+
+    @Test
+    public void canDelete(){
+        EmployeeController ec = EmployeeController.getInstance();
+        ec.truncateTable();
+        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson");
+        ec.deleteEmployee(e.getId());
+        SQLEmployee n = ec.getEmployee(e.getId());
+        assertNull(n);
     }
 
 }
