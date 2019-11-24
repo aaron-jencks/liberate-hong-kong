@@ -6,12 +6,12 @@ import UI.AMenu;
 import UI.AMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
+import company.Controller.AccountController;
 
 public class AccrueInterestItem extends AMenuItem {
 
     public AccrueInterestItem(ITermController parent) {
         super(parent);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -29,10 +29,9 @@ public class AccrueInterestItem extends AMenuItem {
             if(confirm.length() > 0)
             {
                 char temp_confirm = confirm.toUpperCase().charAt(0);
-                if(temp_confirm == 'Y')
-                {
-                    // TODO accrue the interest
-                }
+                //TODO fix
+                // if(temp_confirm == 'Y')
+                //     AccountController.getInstance().accrueInterest();
             }
         }
         catch(Exception e)

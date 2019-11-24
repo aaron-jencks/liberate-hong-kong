@@ -1,6 +1,5 @@
-package UI.menus.PayCreditAccountMenu;
+package UI.menus.EditInterestRateMenu;
 
-import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -11,15 +10,13 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
-import company.Entity.Interface.ICreditAccount;
 
-public class PayCreditAccountMenu extends AMenu {
+public class EditInterestRateMenu extends AMenu {
     private String accountNumber = new String();
-    private String depositAmount = new String();
+    private Double depositAmount = 0.0;
     private String accept = new String();
-    private String totalAmount = new String();
 
-    public PayCreditAccountMenu(ITermController parent) {
+    public EditInterestRateMenu(ITermController parent) {
         super(parent);
     }
 
@@ -37,9 +34,9 @@ public class PayCreditAccountMenu extends AMenu {
  
          String s = "";
          if (accountNumber.isEmpty()) {
-             s = "Please enter the account number you would like to pay on: ";
-         } else if (depositAmount.isEmpty()) {
-             s = "How much would you like to pay today: ";
+             s = "Please enter the account number you would like to adjust: ";
+         } else if (depositAmount.equals(0.0)) {
+             s = "Please enter a new percentage to use as the interest rate: ";
          }
  
          prompt = new_prompt + s;
@@ -78,11 +75,13 @@ public class PayCreditAccountMenu extends AMenu {
             return new ExitItem(this.parent);
         }
         Account account = AccountController.getInstance().getAccount(accountNumber);
-        BigDecimal startAmount = account.getAmount();
+        //TODO add interest rate
+        double startAmount = 0;
+        // double startAmount = ba.getInterestRate();
         get_display_string();
 
         try {
-            depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account balance: " + startAmount.toString() + ". \n Enter deposit amount: ", (String s) -> {
+            depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account rate: " + startAmount + ". \n Enter Interest Rate: ", (Double s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -91,30 +90,17 @@ public class PayCreditAccountMenu extends AMenu {
 
         get_display_string();
 
-        AccountController.getInstance().deposit(account, new BigDecimal(depositAmount));
-
-        totalAmount = account.getAmount().toString();
-
+        //TODO create method
+        // ba.setInterestRate(depositAmount);
+        
         try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Amount paid. Total amount on account = " + totalAmount
-                    + "\n Press any key to continue.", (String s) -> {
+            accept = UIUtil.get_input(sc, accept, prompt + " Interest rate changed."
+                    + "\n Press any key to return to the account menu.", (String s) -> {
                         return true;
                     });
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //TODO update deposit to return change
-        // if(change > 0)
-        // {
-        //     try {
-        //         accept = UIUtil.get_input(sc, accept, prompt + " Change due to customer: " + change
-        //                 + "\n Press any key to return to the account menu.", (String s) -> {
-        //                     return true;
-        //                 });
-        //     } catch (Exception e) {
-        //         e.printStackTrace();
-        //     }
-        // }
 
         return new ExitItem(this.parent);
     }

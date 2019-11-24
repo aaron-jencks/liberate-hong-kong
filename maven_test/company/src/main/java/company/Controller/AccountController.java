@@ -253,4 +253,12 @@ public class AccountController extends ASQLController{
     public void dropTable(){
         drop(TABLE_NAME);
     }
+
+    //TODO fix
+    // public void accrueInterest()
+    // {
+    //     for(IAccount acct : Vault.getInstance().getAccounts().values())
+    //         if(ICreditAccount.class.isAssignableFrom(acct.getClass()))
+    //             ((ICreditAccount)acct).accrueInterest();
+    // }
 }
