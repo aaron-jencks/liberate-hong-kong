@@ -11,7 +11,6 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
-import company.Entity.Interface.ICreditAccount;
 
 public class PayCreditAccountMenu extends AMenu {
     private String accountNumber = new String();

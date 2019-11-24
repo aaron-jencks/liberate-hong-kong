@@ -11,15 +11,25 @@ public class Account {
     private UUID id;
     private BigDecimal amount;
     private AccountType type;
+    private BigDecimal interestRate;
 
 
     public Account() {
+    }
+
+    public Account(UUID id, BigDecimal amount, AccountType type, BigDecimal rate){
+        this(id, amount, type);
+        this.interestRate = rate;
     }
 
     public Account(UUID id, BigDecimal amount, AccountType type) {
         this.id = id;
         this.amount = amount;
         this.type = type;
+    }
+
+    public void accrueInterest(){
+        //TODO
     }
 
     public UUID getId() {
@@ -45,12 +55,23 @@ public class Account {
         AccountController.getInstance().updateAccount(this);
     }
 
+    public BigDecimal getInterestRate() {
+        return this.interestRate;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
+        AccountController.getInstance().updateAccount(this);
+    }
+
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
             ", amount='" + getAmount() + "'" +
             ", type='" + getType() + "'" +
+            ", interestRate='" + getInterestRate() + "'" +
             "}";
     }
+
 }

@@ -25,8 +25,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
     public void accrueInterest() {
         ArrayList<Account> list = getAll();
         for (Account account : list) {
-            //TODO fix
-            // account.accrueInterest();
+            account.accrueInterest();
         }
     }
 
@@ -71,22 +70,40 @@ public abstract class AAccountController extends ASQLController implements IAcco
     }
 
     /**
-     * Create a person with the supplied names
-     * returns the newly created person
+     * Create an account
+     * @param amount
+     * @param type
+     * @return
      */
     public Account createAccount(BigDecimal amount, AccountType type){
+        return createAccount(amount, type, DEFAULT_INTEREST);
+    }
+
+    /**
+     * Create an account
+     * @param amount
+     * @param type
+     * @param interest
+     * @return
+     */
+    public Account createAccount(BigDecimal amount, AccountType type, BigDecimal interest){
         UUID id = UUID.randomUUID();
+        if(interest == null){
+            interest = DEFAULT_INTEREST;
+        }
         String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
                     implode(new String[]{
                         ACCT_AMT_CONST,
                         ACCT_TYPE,
+                        ACCT_INTEREST,
                     }) + 
                      " ) VALUES ( " + 
                      implode(new String[]{
                         sqlPrepare(id),
                         sqlPrepare(amount),
-                        sqlPrepare(type.toString())
+                        sqlPrepare(type.toString()),
+                        sqlPrepare(interest)
                      }) + " )";
         executeUpdate(sql);
         return getAccount(id);
@@ -99,6 +116,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
         BigDecimal amt = null;
         UUID id = null;
         AccountType type = null;
+        BigDecimal interest = null;
         try {
             type = AccountType.valueOf(personResult.getString(ACCT_TYPE).toUpperCase());
         } catch (SQLException e) {
@@ -117,7 +135,15 @@ public abstract class AAccountController extends ASQLController implements IAcco
             System.err.println("Failed to retrieve account.id (AccountController.createAccount)");
             debugError(e);
         }
-        return new Account(id, amt, type);
+        try {
+            interest = personResult.getBigDecimal(ACCT_INTEREST);
+            interest = interest.setScale(3, RoundingMode.HALF_EVEN);
+        } catch (SQLException e) {
+            System.err.println("Failed to retrieve account.id (AccountController.createAccount)");
+            debugError(e);
+        }
+
+        return new Account(id, amt, type, interest);
     }
     
 
@@ -169,6 +195,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
         String[] params = {
             ACCT_AMT_CONST + " DECIMAL(13,4) ",
             ACCT_TYPE + " VARCHAR(255) ",
+            ACCT_INTEREST + " DECIMAL(4,2)",
         };
         create(TABLE_NAME, params);
     }
@@ -241,7 +268,8 @@ public abstract class AAccountController extends ASQLController implements IAcco
      */
     public void updateAccount(Account account){
         String[] params = {
-            ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount())
+            ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount()),
+            ACCT_INTEREST + " = " + sqlPrepare(account.getInterestRate()),
         };
         update(TABLE_NAME, account.getId(), params);
     }

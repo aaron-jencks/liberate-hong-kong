@@ -14,6 +14,9 @@ public interface IAccountController{
 
     static String ACCT_AMT_CONST = "amount";
     static String ACCT_TYPE = "type";
+    static String ACCT_INTEREST = "interest";
+
+    static BigDecimal DEFAULT_INTEREST = new BigDecimal(0.05);
 
     /**
      * Create a new account
