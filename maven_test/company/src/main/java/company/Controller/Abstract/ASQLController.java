@@ -11,7 +11,9 @@ import javax.sql.DataSource;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-public abstract class ASQLController {
+import company.Controller.Interface.ISQLController;
+
+public abstract class ASQLController implements ISQLController{
     
     public static boolean debug = false;
 
