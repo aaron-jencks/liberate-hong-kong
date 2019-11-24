@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import company.Entity.Person;
 import company.Entity.SQLEmployee;
 import company.Entity.SQLPerson;
 import company.Entity.Enum.Position;
@@ -18,10 +17,11 @@ public class EmployeeController extends SQLController {
     private static EmployeeController controllerInstance = null;
     private static String TABLE_NAME = "EMPLOYEE";
     
-    protected static String EMP_QUESTION_CONST = "question";
-    protected static String EMP_ANSWER_CONST = "answer";
-    protected static String EMP_USERNAME_CONST = "username";
-    protected static String EMP_PASSWORD_CONST = "password";
+    protected static String EMP_QUESTION = "question";
+    protected static String EMP_ANSWER = "answer";
+    protected static String EMP_USERNAME = "username";
+    protected static String EMP_PASSWORD = "password";
+    protected static String EMP_POSITION = "position";
 
 
 
@@ -43,30 +43,35 @@ public class EmployeeController extends SQLController {
      * @return SQLEmployee
      */
     private SQLEmployee createEmployee(ResultSet employeeResult){
-        String username = null, password = null, question = null, answer = null;
+        String username = null, password = null, question = null, answer = null, position = null;
         UUID id = null;
         try {
-            username = employeeResult.getString(EMP_USERNAME_CONST);
+            username = employeeResult.getString(EMP_USERNAME);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.username (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
-            password = employeeResult.getString(EMP_PASSWORD_CONST);
+            password = employeeResult.getString(EMP_PASSWORD);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.password (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
-            question = employeeResult.getString(EMP_QUESTION_CONST);
+            question = employeeResult.getString(EMP_QUESTION);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.question (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
-            answer = employeeResult.getString(EMP_ANSWER_CONST);
+            answer = employeeResult.getString(EMP_ANSWER);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.answer (EmployeeController.createEmployee)");
+            debugError(er);
+        }
+        try {
+            position = employeeResult.getString(EMP_POSITION);
+        } catch (SQLException er) {
             debugError(er);
         }
         try {
@@ -76,7 +81,7 @@ public class EmployeeController extends SQLController {
             debugError(er);
         }
         SQLPerson p = PersonController.getInstance().getPerson(id);
-        return new SQLEmployee(id, Position.TELLER, username, password, question, answer, p);
+        return new SQLEmployee(id, Position.valueOf(position), username, password, question, answer, p);
     }
 
     /**
@@ -130,11 +135,11 @@ public class EmployeeController extends SQLController {
      * @param person
      * @return
      */
-    public SQLEmployee createEmployee(String question, String answer, String username, String password, SQLPerson person){
+    public SQLEmployee createEmployee(Position position, String question, String answer, String username, String password, SQLPerson person){
         if(person == null){
             throw new NullPointerException("Passed person was null : (EmployeeController.createEmployee)");
         }
-        return EmployeeController.getInstance().createEmployee(question, answer, username, password, person.getFirstName(), person.getLastName(), person.getId());
+        return EmployeeController.getInstance().createEmployee(position, question, answer, username, password, person.getFirstName(), person.getLastName(), person.getId());
     }
 
     /**
@@ -145,24 +150,29 @@ public class EmployeeController extends SQLController {
      * @param password
      * @return SQLEmployee
      */
-    public SQLEmployee createEmployee(String question, String answer, String username, String password, String first, String last, UUID id){
+    public SQLEmployee createEmployee(Position position, String question, String answer, String username, String password, String first, String last, UUID id){
         PersonController pc = PersonController.getInstance();
-        SQLPerson p = pc.createPerson(first, last);
+        pc.createPerson(first, last);
         String sql = "INSERT INTO " + TABLE_NAME + 
                     " ( ID , " + 
-                    EMP_QUESTION_CONST + " , " + 
-                    EMP_ANSWER_CONST + " , " + 
-                    EMP_USERNAME_CONST + " , " + 
-                    EMP_PASSWORD_CONST +
+                    implode(new String[]{
+                        EMP_QUESTION,
+                        EMP_ANSWER,
+                        EMP_USERNAME,
+                        EMP_PASSWORD,
+                        EMP_POSITION,
+                    }) + 
                     " ) VALUES ( " + 
-                    sqlPrepare(id) + " , " + 
-                    sqlPrepare(question) + " , " + 
-                    sqlPrepare(answer) + " , " + 
-                    sqlPrepare(username) + " , " + 
-                    sqlPrepare(password) +
-                    " ) ";
+                    implode(new String[]{
+                        sqlPrepare(id),
+                        sqlPrepare(question),
+                        sqlPrepare(answer),
+                        sqlPrepare(username),
+                        sqlPrepare(password),
+                        sqlPrepare(position.toString())
+                    }) + " ) ";
         executeUpdate(sql);
-        return new SQLEmployee(id, Position.TELLER, username, password, question, answer, first, last);
+        return new SQLEmployee(id, position, username, password, question, answer, first, last);
     }
 
     /**
@@ -210,10 +220,11 @@ public class EmployeeController extends SQLController {
      */
     private static void createTable(){
         String[] params = {
-            EMP_USERNAME_CONST + " VARCHAR(255)",
-            EMP_PASSWORD_CONST + " VARCHAR(255)",
-            EMP_QUESTION_CONST + " VARCHAR(255)",
-            EMP_ANSWER_CONST + " VARCHAR(255)",
+            EMP_USERNAME + " VARCHAR(255)",
+            EMP_PASSWORD + " VARCHAR(255)",
+            EMP_QUESTION + " VARCHAR(255)",
+            EMP_ANSWER + " VARCHAR(255)",
+            EMP_POSITION + " VARCHAR(255)"
         };
         create(TABLE_NAME, params);
     }
@@ -223,10 +234,11 @@ public class EmployeeController extends SQLController {
      */
     public void updateEmployee(SQLEmployee e){
         String[] params = {
-            EMP_USERNAME_CONST + " = " + sqlPrepare(e.getUsername()),
-            EMP_PASSWORD_CONST + " = " + sqlPrepare(e.getPassword()),
-            EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()),
-            EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion())
+            EMP_USERNAME + " = " + sqlPrepare(e.getUsername()),
+            EMP_PASSWORD + " = " + sqlPrepare(e.getPassword()),
+            EMP_ANSWER + " = " + sqlPrepare(e.getAnswer()),
+            EMP_QUESTION + " = " + sqlPrepare(e.getQuestion()),
+            EMP_POSITION + " = " + sqlPrepare(e.getPosition().toString()),
         };
         update(TABLE_NAME, e.getId(), params);
         PersonController.getInstance().updatePerson(e);

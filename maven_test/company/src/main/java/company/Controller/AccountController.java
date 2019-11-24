@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import company.Entity.SQLAccount;
+import company.Entity.Enum.AccountType;
 
 public class AccountController extends SQLController{
 
@@ -18,6 +19,7 @@ public class AccountController extends SQLController{
     private static String TABLE_NAME = "ACCOUNT";
 
     protected static String ACCT_AMT_CONST = "amount";
+    protected static String ACCT_TYPE = "type";
     
 
     /**
@@ -76,15 +78,20 @@ public class AccountController extends SQLController{
      * Create a person with the supplied names
      * returns the newly created person
      */
-    public SQLAccount createAccount(BigDecimal amount){
+    public SQLAccount createAccount(BigDecimal amount, AccountType type){
         UUID id = UUID.randomUUID();
         String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
-                    ACCT_AMT_CONST +
+                    implode(new String[]{
+                        ACCT_AMT_CONST,
+                        ACCT_TYPE,
+                    }) + 
                      " ) VALUES ( " + 
-                    sqlPrepare(id) + " , " +
-                    sqlPrepare(amount) + 
-                    " )";
+                     implode(new String[]{
+                        sqlPrepare(id),
+                        sqlPrepare(amount),
+                        sqlPrepare(type.toString())
+                     }) + " )";
         executeUpdate(sql);
         return getAccount(id);
     }
@@ -95,6 +102,12 @@ public class AccountController extends SQLController{
     private SQLAccount createAccount(ResultSet personResult) {
         BigDecimal amt = null;
         UUID id = null;
+        AccountType type = null;
+        try {
+            type = AccountType.valueOf(personResult.getString(ACCT_TYPE));
+        } catch (SQLException e) {
+            debugError(e);
+        }
         try {
             amt = personResult.getBigDecimal(ACCT_AMT_CONST);
             amt = amt.setScale(2, RoundingMode.HALF_EVEN);
@@ -108,7 +121,7 @@ public class AccountController extends SQLController{
             System.err.println("Failed to retrieve account.id (AccountController.createAccount)");
             debugError(e);
         }
-        return new SQLAccount(id, amt);
+        return new SQLAccount(id, amt, type);
     }
 
     /**
@@ -196,6 +209,7 @@ public class AccountController extends SQLController{
     private static void createTable(){
         String[] params = {
             ACCT_AMT_CONST + " DECIMAL(13,4) ",
+            ACCT_TYPE + " VARCHAR(255) ",
         };
         create(TABLE_NAME, params);
     }

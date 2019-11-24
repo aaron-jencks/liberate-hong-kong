@@ -1,5 +1,6 @@
 package company.Controller;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,8 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import company.Entity.SQLAccount;
 import company.Entity.SQLCustomer;
 import company.Entity.SQLPerson;
+import company.Entity.Enum.AccountType;
 
 public class CustomerController extends SQLController {
 
@@ -72,6 +75,18 @@ public class CustomerController extends SQLController {
     }
 
     /**
+     * Create a new account for the customer of type
+     * @param customer
+     * @param type
+     * @return
+     */
+    public SQLAccount addAccount(SQLCustomer customer, AccountType type){
+        SQLAccount a = AccountController.getInstance().createAccount(BigDecimal.ZERO, type);
+        customer.addAccount(a);
+        return a;
+    }
+
+    /**
      * Create a new customer from their name
      * @param first
      * @param last
@@ -114,19 +129,8 @@ public class CustomerController extends SQLController {
      * Create a customer from a result set
      */
     private SQLCustomer createCustomer(ResultSet customerResult){
-        String first = null, last = null;
         UUID id = null;
         ArrayList<UUID> accounts= new ArrayList<>();
-        try {
-            first = customerResult.getString(CUST_FIRSTNAME_CONST);
-        } catch (SQLException e) {
-            debugError(e);
-        }
-        try {
-            last = customerResult.getString(CUST_LASTNAME_CONST);
-        } catch (SQLException e) {
-            debugError(e);
-        }
         try {
             id = UUID.fromString(customerResult.getString("ID"));
         } catch (SQLException e) {

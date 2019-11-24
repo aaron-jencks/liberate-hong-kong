@@ -35,6 +35,14 @@ public class SQLCustomer extends SQLPerson{
         return this.accounts;
     }
 
+    public void addAccount(SQLAccount account){
+        this.addAccount(account.getId());
+    }
+
+    public void addAccount(UUID accountId){
+        this.accounts.add(accountId);
+    }
+
     public String getAccountsString(){
         if(accounts.isEmpty()){
             return null;

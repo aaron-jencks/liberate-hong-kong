@@ -42,7 +42,7 @@ public class EmployeeSQLTest
      */
     @Test
     public void testCreateEmployee(){
-        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson", p);
+        SQLEmployee e = ec.createEmployee(Position.TELLER, "who are you?", "me", "tom", "thompson", p);
         assertTrue(e.getQuestion().equals("who are you?"));
     }
 
@@ -60,7 +60,7 @@ public class EmployeeSQLTest
      */
     @Test
     public void testUpdate(){
-        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson", p);
+        SQLEmployee e = ec.createEmployee(Position.TELLER, "who are you?", "me", "tom", "thompson", p);
         e.setQuestion("what are you?");
         SQLEmployee eDB = ec.getEmployee(e.getId());
         boolean same = e.getQuestion().equals(eDB.getQuestion());
@@ -73,7 +73,7 @@ public class EmployeeSQLTest
     @Test
     public void canDelete(){
         ec.truncateTable();
-        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson", p);
+        SQLEmployee e = ec.createEmployee(Position.TELLER, "who are you?", "me", "tom", "thompson", p);
         ec.deleteEmployee(e);
         e = ec.getEmployee(e.getId());
         assertNull(e);
@@ -81,7 +81,7 @@ public class EmployeeSQLTest
 
     @Test
     public void createFromPerson(){
-        SQLEmployee e = ec.createEmployee("a", "b", "c", "d", p);
+        SQLEmployee e = ec.createEmployee(Position.TELLER, "a", "b", "c", "d", p);
         assertSame(e.getId(), p.getId());
         assertSame(e.getFirstName(), p.getFirstName());
     }
@@ -91,7 +91,7 @@ public class EmployeeSQLTest
      */
     @Test
     public void testUpdateName(){
-        SQLEmployee e = ec.createEmployee("a", "b", "c", "d", p);
+        SQLEmployee e = ec.createEmployee(Position.MANAGER,"a", "b", "c", "d", p);
         e.setFirstName("not");
         p = PersonController.getInstance().getPerson(e.getId());
         //should affect the other after load

@@ -16,6 +16,7 @@ import org.junit.Test;
 import company.Controller.AccountController;
 import company.Controller.PersonController;
 import company.Entity.SQLAccount;
+import company.Entity.Enum.AccountType;
 import jdk.jfr.Timestamp;
 
 
@@ -44,7 +45,7 @@ public class AccountSQLTest
     @Test
     public void testCreateAccount(){
         AccountController ac = AccountController.getInstance();
-        ac.createAccount(new BigDecimal(123456));
+        ac.createAccount(new BigDecimal(123456), AccountType.SAVINGS);
     }
 
     /**
@@ -63,7 +64,7 @@ public class AccountSQLTest
     @Test
     public void testDelete(){
         AccountController ac = AccountController.getInstance();
-        SQLAccount a = ac.createAccount(new BigDecimal(123456));
+        SQLAccount a = ac.createAccount(new BigDecimal(123456), AccountType.CHECKING);
         ac.deleteAccount(a);
         a = ac.getAccount(a.getId());
         assertNull(a);
@@ -77,7 +78,7 @@ public class AccountSQLTest
         AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal addedAmount = new BigDecimal(1566);
-        SQLAccount account = ac.createAccount(startAmount);
+        SQLAccount account = ac.createAccount(startAmount, AccountType.CHECKING);
         account = ac.deposit(account, addedAmount);
         BigDecimal sum = startAmount.add(addedAmount);
         //can't forget that it should be rounded
@@ -94,7 +95,7 @@ public class AccountSQLTest
         AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal subAmount = new BigDecimal(1566);
-        SQLAccount account = ac.createAccount(startAmount);
+        SQLAccount account = ac.createAccount(startAmount, AccountType.CHECKING);
         account = ac.withdrawl(account, subAmount);
         BigDecimal sum = startAmount.subtract(subAmount);
         sum = sum.setScale(2, RoundingMode.HALF_EVEN);
@@ -110,7 +111,7 @@ public class AccountSQLTest
         AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal subAmount = new BigDecimal(-1566);
-        SQLAccount account = ac.createAccount(startAmount);
+        SQLAccount account = ac.createAccount(startAmount, AccountType.CHECKING);
         account = ac.withdrawl(account, subAmount);
     }
 
@@ -122,7 +123,7 @@ public class AccountSQLTest
         AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal addedAmount = new BigDecimal(-1566);
-        SQLAccount account = ac.createAccount(startAmount);
+        SQLAccount account = ac.createAccount(startAmount, AccountType.CHECKING);
         account = ac.deposit(account, addedAmount);
     }
 

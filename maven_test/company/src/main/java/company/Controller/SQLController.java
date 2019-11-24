@@ -56,7 +56,7 @@ public class SQLController {
      * @param list
      * @return
      */
-    private static String implode(String[] list){
+    protected static String implode(String[] list){
         return implode(list, " , ");
     }
 
