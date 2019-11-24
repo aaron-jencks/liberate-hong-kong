@@ -7,8 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
-
+import company.Entity.Person;
 import company.Entity.SQLEmployee;
 import company.Entity.SQLPerson;
 import company.Entity.Enum.Position;
@@ -19,11 +18,11 @@ public class EmployeeController extends SQLController {
     private static EmployeeController controllerInstance = null;
     private static String TABLE_NAME = "EMPLOYEE";
     
-    public static String EMP_QUESTION_CONST = "question";
-    public static String EMP_ANSWER_CONST = "answer";
-    public static String EMP_USERNAME_CONST = "username";
-    public static String EMP_PASSWORD_CONST = "password";
-    public static String EMP_TO_PERSON = "person_id";
+    protected static String EMP_QUESTION_CONST = "question";
+    protected static String EMP_ANSWER_CONST = "answer";
+    protected static String EMP_USERNAME_CONST = "username";
+    protected static String EMP_PASSWORD_CONST = "password";
+
 
 
     /**
@@ -135,7 +134,7 @@ public class EmployeeController extends SQLController {
         if(person == null){
             throw new NullPointerException("Passed person was null : (EmployeeController.createEmployee)");
         }
-        return EmployeeController.getInstance().createEmployee(question, answer, username, password, person.getFirstName(), person.getLastName());
+        return EmployeeController.getInstance().createEmployee(question, answer, username, password, person.getFirstName(), person.getLastName(), person.getId());
     }
 
     /**
@@ -146,10 +145,9 @@ public class EmployeeController extends SQLController {
      * @param password
      * @return SQLEmployee
      */
-    public SQLEmployee createEmployee(String question, String answer, String username, String password, String first, String last){
+    public SQLEmployee createEmployee(String question, String answer, String username, String password, String first, String last, UUID id){
         PersonController pc = PersonController.getInstance();
         SQLPerson p = pc.createPerson(first, last);
-        UUID id = p.getId();
         String sql = "INSERT INTO " + TABLE_NAME + 
                     " ( ID , " + 
                     EMP_QUESTION_CONST + " , " + 
@@ -216,7 +214,6 @@ public class EmployeeController extends SQLController {
             EMP_PASSWORD_CONST + " VARCHAR(255)",
             EMP_QUESTION_CONST + " VARCHAR(255)",
             EMP_ANSWER_CONST + " VARCHAR(255)",
-            EMP_TO_PERSON + " VARCHAR(255)",
         };
         create(TABLE_NAME, params);
     }
@@ -232,6 +229,7 @@ public class EmployeeController extends SQLController {
             EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion())
         };
         update(TABLE_NAME, e.getId(), params);
+        PersonController.getInstance().updatePerson(e);
     }
 
     /**

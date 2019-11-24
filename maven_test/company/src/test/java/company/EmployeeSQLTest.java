@@ -79,4 +79,24 @@ public class EmployeeSQLTest
         assertNull(e);
     }
 
+    @Test
+    public void createFromPerson(){
+        SQLEmployee e = ec.createEmployee("a", "b", "c", "d", p);
+        assertSame(e.getId(), p.getId());
+        assertSame(e.getFirstName(), p.getFirstName());
+    }
+
+    /**
+     * Can I change the name and not break everything?
+     */
+    @Test
+    public void testUpdateName(){
+        SQLEmployee e = ec.createEmployee("a", "b", "c", "d", p);
+        e.setFirstName("not");
+        p = PersonController.getInstance().getPerson(e.getId());
+        //should affect the other after load
+        boolean same = e.getFirstName().equals(p.getFirstName());
+        assertTrue(same);
+    }
+
 }

@@ -17,7 +17,7 @@ public class AccountController extends SQLController{
     private static AccountController controllerInstance = null;
     private static String TABLE_NAME = "ACCOUNT";
 
-    public static String ACCT_AMT_CONST = "amount";
+    protected static String ACCT_AMT_CONST = "amount";
     
 
     /**

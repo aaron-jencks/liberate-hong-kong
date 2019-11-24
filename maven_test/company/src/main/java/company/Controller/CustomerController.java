@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import company.Entity.SQLCustomer;
+import company.Entity.SQLPerson;
 
 public class CustomerController extends SQLController {
 
     private static CustomerController controllerInstance = null;
     private static String TABLE_NAME = "CUSTOMER";
 
-    public static String CUST_FIRSTNAME_CONST = "first";
-    public static String CUST_LASTNAME_CONST = "last";
-    public static String CUST_ACCOUNTS_CONST = "accounts";
+    protected static String CUST_FIRSTNAME_CONST = "first";
+    protected static String CUST_LASTNAME_CONST = "last";
+    protected static String CUST_ACCOUNTS_CONST = "accounts";
 
     /**
      * Make this controller a singleton
@@ -71,24 +72,31 @@ public class CustomerController extends SQLController {
     }
 
     /**
-     * Create a customer with the supplied names
-     * returns the newly created person
+     * Create a new customer from their name
+     * @param first
+     * @param last
+     * @return
      */
-    public SQLCustomer createCustomer(String firstName, String lastName){
-        UUID id = UUID.randomUUID();
+    public SQLCustomer createCustomer(String first, String last){
+        SQLPerson p = PersonController.getInstance().createPerson(first, last);
+        return createCustomer(p);
+    }
+
+    /**
+     * Create a customer with the supplied names
+     * returns the newly created customer
+     */
+    public SQLCustomer createCustomer(SQLPerson p){
+        UUID id = p.getId();
         String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
-                    CUST_FIRSTNAME_CONST + ", " + 
-                    CUST_LASTNAME_CONST + " , " + 
                     CUST_ACCOUNTS_CONST + 
                     " ) VALUES ( " + 
                     sqlPrepare(id) + " , " +
-                    sqlPrepare(firstName) + " , " +
-                    sqlPrepare(lastName) + " , " +
                     " NULL " + 
                     " )";
         executeUpdate(sql);
-        return getCustomer(id);
+        return new SQLCustomer(id, p.getFirstName(), p.getLastName());
     }
 
     /**
@@ -96,23 +104,19 @@ public class CustomerController extends SQLController {
      */
     public void updateCustomer(SQLCustomer c){
         String[] params = {
-            CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()),
-            CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()),
             CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()),
         };
         update(TABLE_NAME, c.getId(), params);
+        PersonController.getInstance().updatePerson(c);
     }
 
     /**
      * Create a customer from a result set
      */
     private SQLCustomer createCustomer(ResultSet customerResult){
-        SQLCustomer c = new SQLCustomer();
-        String first = null;
-        String last = null;
+        String first = null, last = null;
         UUID id = null;
-        ArrayList<UUID> ids= new ArrayList<>();
-        String accounts = null;
+        ArrayList<UUID> accounts= new ArrayList<>();
         try {
             first = customerResult.getString(CUST_FIRSTNAME_CONST);
         } catch (SQLException e) {
@@ -129,18 +133,18 @@ public class CustomerController extends SQLController {
             debugError(e);
         }
         try {
-            accounts = customerResult.getString(CUST_ACCOUNTS_CONST);
-            if(accounts != null && !accounts.isBlank()){
-                String[] s = accounts.split(",");
+            String accountString = customerResult.getString(CUST_ACCOUNTS_CONST);
+            if(accountString != null && !accountString.isBlank()){
+                String[] s = accountString.split(",");
             for (String string : s) {
-                ids.add(UUID.fromString(string));
+                accounts.add(UUID.fromString(string));
             }
-            c.setAccounts(ids);
             }
         } catch (SQLException e) {
             debugError(e);
         }
-        return new SQLCustomer(id, first, last, ids);
+        SQLPerson person = PersonController.getInstance().getPerson(id);
+        return new SQLCustomer(id, accounts, person);
     }
 
     /**

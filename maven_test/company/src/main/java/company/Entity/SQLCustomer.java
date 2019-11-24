@@ -17,6 +17,11 @@ public class SQLCustomer extends SQLPerson{
         this.accounts = accounts;
     }
 
+    public SQLCustomer(UUID id, ArrayList<UUID> accounts, SQLPerson person){
+        super(id, person.getFirstName(), person.getLastName());
+        this.accounts = accounts;
+    }
+
     public SQLCustomer(UUID id, String firstName, String lastName){
         super(id, firstName, lastName);
         accounts = new ArrayList<>();

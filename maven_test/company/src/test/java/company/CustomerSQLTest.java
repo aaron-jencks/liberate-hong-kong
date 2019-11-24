@@ -1,6 +1,7 @@
 package company;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
@@ -8,11 +9,13 @@ import java.util.UUID;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import company.Controller.CustomerController;
 import company.Controller.PersonController;
 import company.Entity.SQLCustomer;
+import company.Entity.SQLPerson;
 
 
 /**
@@ -21,17 +24,18 @@ import company.Entity.SQLCustomer;
 public class CustomerSQLTest 
 {
 
+    private static CustomerController cc;
+    private static SQLPerson p;
+
     @AfterClass
     public static void truncate(){
         CustomerController.getInstance().truncateTable();
     }
 
-    /**
-     * Can I create the table?
-     */
-    @Test
-    public void testTableCreate(){
-        CustomerController cc = CustomerController.getInstance();
+    @Before
+    public void setup(){
+        cc = CustomerController.getInstance();
+        p = PersonController.getInstance().createPerson("first", "something");
     }
 
     /**
@@ -39,7 +43,6 @@ public class CustomerSQLTest
      */
     @Test
     public void testCreateCustomer(){
-        CustomerController cc = CustomerController.getInstance();
         cc.createCustomer("joey", "james");
     }
 
@@ -48,7 +51,6 @@ public class CustomerSQLTest
      */
     @Test
     public void testGetNonExist(){
-        CustomerController cc = CustomerController.getInstance();
         SQLCustomer c = cc.getCustomer(UUID.randomUUID());
         assertNull(c);
     }
@@ -58,7 +60,6 @@ public class CustomerSQLTest
      */
     @Test
     public void testDelete(){
-        CustomerController cc = CustomerController.getInstance();
         SQLCustomer c = cc.createCustomer("joey", "james");
         cc.deleteCustomer(c);
         c = cc.getCustomer(c.getId());
@@ -70,11 +71,26 @@ public class CustomerSQLTest
      */
     @Test
     public void testUpdate(){
-        CustomerController cc = CustomerController.getInstance();
         SQLCustomer c = cc.createCustomer("joey", "james");
         c.setFirstName("new first name");
         SQLCustomer cDB = cc.getCustomer(c.getId());
         boolean same = c.getFirstName().equals(cDB.getFirstName());
+        assertTrue(same);
+    }
+
+    @Test
+    public void testCreateFromPerson(){
+        SQLCustomer c = cc.createCustomer(p);
+        assertSame(c.getId(), p.getId());
+        assertSame(c.getFirstName(), p.getFirstName());
+    }
+
+    @Test
+    public void testUpdateName(){
+        SQLCustomer c = cc.createCustomer(p);
+        c.setFirstName("nothing");
+        p = PersonController.getInstance().getPerson(c.getId());
+        boolean same = c.getFirstName().equals(p.getFirstName());
         assertTrue(same);
     }
 

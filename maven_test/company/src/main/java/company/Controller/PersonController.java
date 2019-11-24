@@ -13,9 +13,9 @@ public class PersonController extends SQLController {
 
     private static PersonController controllerInstance = null;
 
-    private static String PERSON_FIRSTNAME_CONST = "first";
-    private static String PERSON_LASTNAME_CONST = "last";
-    private static String TABLE_NAME = "PERSON";
+    protected static String PERSON_FIRSTNAME_CONST = "first";
+    protected static String PERSON_LASTNAME_CONST = "last";
+    protected static String TABLE_NAME = "PERSON";
 
     /**
      * Make this controller a singleton
@@ -71,6 +71,18 @@ public class PersonController extends SQLController {
     }
 
     /**
+     * Update a person
+     * @param p
+     */
+    public void updatePerson(SQLPerson p){
+        String[] params = {
+            PERSON_FIRSTNAME_CONST + " = " + sqlPrepare(p.getFirstName()),
+            PERSON_LASTNAME_CONST + " = " + sqlPrepare(p.getLastName()),
+        };
+        update(TABLE_NAME, p.getId(), params);
+    }
+
+    /**
      * Create a person with the supplied names
      * returns the newly created person
      */
@@ -92,26 +104,25 @@ public class PersonController extends SQLController {
      * @return
      */
     private SQLPerson createPerson(ResultSet personResult){
-        SQLPerson p = new SQLPerson();
+        String first = null;
+        String last = null;
+        UUID id = null;
         try {
-            p.setFirstName(personResult.getString(PERSON_FIRSTNAME_CONST));
-            return p;
+            first = personResult.getString(PERSON_FIRSTNAME_CONST);
         } catch (SQLException e) {
             debugError(e);
         }
         try {
-            p.setLastName(personResult.getString(PERSON_LASTNAME_CONST));
-            return p;
+            last = personResult.getString(PERSON_LASTNAME_CONST);
         } catch (SQLException e) {
             debugError(e);
         }
         try {
-            p.setId(UUID.fromString(personResult.getString("ID")));
-            return p;
+            id = UUID.fromString(personResult.getString("ID"));
         } catch (SQLException e) {
             debugError(e);
         }
-        return null;
+        return new SQLPerson(id, first, last);
     }
 
     /**

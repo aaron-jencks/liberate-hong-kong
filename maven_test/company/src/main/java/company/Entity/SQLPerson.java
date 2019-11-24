@@ -2,6 +2,8 @@ package company.Entity;
 
 import java.util.UUID;
 
+import company.Controller.PersonController;
+
 public class SQLPerson {
     private UUID id;
     private String firstName;
@@ -32,16 +34,13 @@ public class SQLPerson {
         return this.id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return this.firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+        PersonController.getInstance().updatePerson(this);
     }
 
     public String getLastName() {
@@ -50,6 +49,7 @@ public class SQLPerson {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+        PersonController.getInstance().updatePerson(this);
     }
 
     @Override
