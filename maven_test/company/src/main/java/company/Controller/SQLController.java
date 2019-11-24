@@ -64,6 +64,9 @@ public class SQLController {
     }
 
     public static String sqlPrepare(String input) {
+        if(input == null){
+            return "NULL";
+        }
         return "'" + input + "'";
     }
 

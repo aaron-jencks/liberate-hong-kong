@@ -68,9 +68,6 @@ public class CustomerController extends SQLController {
                 e.printStackTrace();
             }
         }
-        if(c == null){
-            throw new NullPointerException("Failed to create customer");
-        }
         return c;
     }
 
@@ -102,8 +99,8 @@ public class CustomerController extends SQLController {
     public void updateCustomer(SQLCustomer c){
         String sql = "UPDATE " + CUST_TABLE_NAME + 
                     " SET " + 
-                    CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()) + 
-                    CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()) + 
+                    CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()) +  " , " + 
+                    CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()) +  " , " + 
                     CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()) + 
                     " WHERE " +
                     CUST_ID_CONST + " = " + sqlPrepare(c.getId());
@@ -118,6 +115,7 @@ public class CustomerController extends SQLController {
         String first = null;
         String last = null;
         UUID id = null;
+        ArrayList<UUID> ids= new ArrayList<>();
         String accounts = null;
         try {
             first = customerResult.getString(CUST_FIRSTNAME_CONST);
@@ -138,7 +136,6 @@ public class CustomerController extends SQLController {
             accounts = customerResult.getString(CUST_ACCOUNTS_CONST);
             if(accounts != null && !accounts.isBlank()){
                 String[] s = accounts.split(",");
-            ArrayList<UUID> ids = new ArrayList<>();
             for (String string : s) {
                 ids.add(UUID.fromString(string));
             }
@@ -147,7 +144,7 @@ public class CustomerController extends SQLController {
         } catch (SQLException e) {
             debugError(e);
         }
-        return c;
+        return new SQLCustomer(id, first, last, ids);
     }
 
     /**
@@ -212,6 +209,25 @@ public class CustomerController extends SQLController {
         String sql = "DELETE FROM " + CUST_TABLE_NAME + 
                     " WHERE " + CUST_ID_CONST +
                     " = " + sqlPrepare(id);
+        executeUpdate(sql);
+    }
+
+    /**
+     * Delete a customer
+     * @param customer
+     */
+    public void deleteCustomer(SQLCustomer customer){
+        if(customer == null){
+            return;
+        }
+        deleteCustomer(customer.getId());
+    }
+
+    /**
+     * Truncate the table
+     */
+    public void truncateTable(){
+        String sql = "TRUNCATE TABLE " + CUST_TABLE_NAME;
         executeUpdate(sql);
     }
 

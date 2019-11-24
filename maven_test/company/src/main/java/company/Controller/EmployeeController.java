@@ -7,9 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.mysql.cj.protocol.Resultset;
-
 import company.Entity.SQLEmployee;
+import company.Entity.Enum.Position;
 
 
 public class EmployeeController extends SQLController {
@@ -42,45 +41,39 @@ public class EmployeeController extends SQLController {
      * @return SQLEmployee
      */
     private SQLEmployee createEmployee(ResultSet employeeResult){
-        String username, password, question, answer = null;
+        String username = null, password = null, question = null, answer = null;
         UUID id = null;
-        SQLEmployee e = new SQLEmployee();
         try {
             username = employeeResult.getString(EMP_USERNAME_CONST);
-            e.setUsername(username);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.username (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
             password = employeeResult.getString(EMP_PASSWORD_CONST);
-            e.setPassword(password);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.password (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
             question = employeeResult.getString(EMP_QUESTION_CONST);
-            e.setQuestion(question);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.question (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
             answer = employeeResult.getString(EMP_ANSWER_CONST);
-            e.setAnswer(answer);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee.answer (EmployeeController.createEmployee)");
             debugError(er);
         }
         try {
             id = UUID.fromString(employeeResult.getString(EMP_ID_CONST));
-            e.setId(id);
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee. (EmployeeController.createEmployee)");
             debugError(er);
         }
-        return e;
+        return new SQLEmployee(id, Position.TELLER, username, password, question, answer);
     }
 
     /**
@@ -150,7 +143,7 @@ public class EmployeeController extends SQLController {
                     sqlPrepare(password) +
                     " ) ";
         executeUpdate(sql);
-        return getEmployee(id);
+        return new SQLEmployee(id, Position.TELLER, username, password, question, answer);
     }
 
     /**
@@ -193,8 +186,6 @@ public class EmployeeController extends SQLController {
         return allEmployees;
     }
 
-
-
     /**
      * Create the employee table
      */
@@ -210,6 +201,21 @@ public class EmployeeController extends SQLController {
     }
 
     /**
+     * Update all employee attributes
+     */
+    public void updateEmployee(SQLEmployee e){
+        String sql = "UPDATE " + EMP_TABLE_NAME + 
+                    " SET " + 
+                    EMP_USERNAME_CONST + " = " + sqlPrepare(e.getUsername()) + " , " + 
+                    EMP_PASSWORD_CONST + " = " + sqlPrepare(e.getPassword()) + " , " + 
+                    EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion()) + " , " + 
+                    EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()) + 
+                    " WHERE " +
+                    EMP_ID_CONST + " = " + sqlPrepare(e.getId());
+        executeUpdate(sql);
+    }
+
+    /**
      * Delete an employee
      * @param id
      */
@@ -220,11 +226,21 @@ public class EmployeeController extends SQLController {
         executeUpdate(sql);
     }
 
+    /**
+     * Delete an employee
+     * @param employee
+     */
+    public void deleteEmployee(SQLEmployee employee){
+        if(employee == null){
+            return;
+        }
+        deleteEmployee(employee.getId());
+    }
 
     /**
      * Drop the table
      */
-    public static void dropTable(){
+    public void dropTable(){
         String sql = "DROP TABLE " + EMP_TABLE_NAME;
         executeUpdate(sql);
     }

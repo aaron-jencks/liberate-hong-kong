@@ -69,9 +69,6 @@ public class AccountController extends SQLController{
                 e.printStackTrace();
             }
         }
-        if(a == null){
-            throw new NullPointerException("Failed to create account");
-        }
         return a;
     }
 
@@ -216,6 +213,25 @@ public class AccountController extends SQLController{
         String sql = "DELETE FROM " + ACCT_TABLE_NAME + 
                     " WHERE " + ACCT_ID_CONST + 
                     " = " + sqlPrepare(id);
+        executeUpdate(sql);
+    }
+
+    /**
+     * Delete an account
+     * @param account
+     */
+    public void deleteAccount(SQLAccount account){
+        if(account == null){
+            return;
+        }
+        deleteAccount(account.getId());
+    }
+
+    /**
+     * Truncate the table
+     */
+    public void truncateTable(){
+        String sql = "TRUNCATE TABLE " + ACCT_TABLE_NAME;
         executeUpdate(sql);
     }
 

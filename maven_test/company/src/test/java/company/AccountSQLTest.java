@@ -1,12 +1,15 @@
 package company;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.InvalidParameterException;
+import java.util.UUID;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +24,11 @@ import jdk.jfr.Timestamp;
  */
 public class AccountSQLTest 
 {
+
+    @AfterClass
+    public static void truncate(){
+        AccountController.getInstance().truncateTable();
+    }
 
     /**
      * Can I create the table?
@@ -37,6 +45,28 @@ public class AccountSQLTest
     public void testCreateAccount(){
         AccountController ac = AccountController.getInstance();
         ac.createAccount(new BigDecimal(123456));
+    }
+
+    /**
+     * What if I try to get a non-existing account
+     */
+    @Test
+    public void testGetAccountError(){
+        AccountController ac = AccountController.getInstance();
+        SQLAccount a = ac.getAccount(UUID.randomUUID());
+        assertNull(a);
+    }
+
+    /**
+     * Can I delete one?
+     */
+    @Test
+    public void testDelete(){
+        AccountController ac = AccountController.getInstance();
+        SQLAccount a = ac.createAccount(new BigDecimal(123456));
+        ac.deleteAccount(a);
+        a = ac.getAccount(a.getId());
+        assertNull(a);
     }
 
     /**

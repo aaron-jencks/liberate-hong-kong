@@ -2,6 +2,8 @@ package company.Entity;
 
 import java.util.UUID;
 
+import company.Controller.EmployeeController;
+
 public class SQLEmployee {
     
     
@@ -10,11 +12,6 @@ public class SQLEmployee {
     private String password;
     private String question;
     private String answer;
-
-    public SQLEmployee(){
-
-    }
-
 
     public SQLEmployee(UUID id, Enum position, String username, String password, String question, String answer) {
         this.id = id;
@@ -28,16 +25,13 @@ public class SQLEmployee {
         return this.id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getUsername() {
         return this.username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+        EmployeeController.getInstance().updateEmployee(this);
     }
 
     public String getPassword() {
@@ -46,6 +40,7 @@ public class SQLEmployee {
 
     public void setPassword(String password) {
         this.password = password;
+        EmployeeController.getInstance().updateEmployee(this);
     }
 
     public String getQuestion() {
@@ -54,6 +49,7 @@ public class SQLEmployee {
 
     public void setQuestion(String question) {
         this.question = question;
+        EmployeeController.getInstance().updateEmployee(this);
     }
 
     public String getAnswer() {
@@ -62,16 +58,7 @@ public class SQLEmployee {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public SQLEmployee id(UUID id) {
-        this.id = id;
-        return this;
-    }
-
-    public SQLEmployee username(String username) {
-        this.username = username;
-        return this;
+        EmployeeController.getInstance().updateEmployee(this);
     }
 
     @Override
