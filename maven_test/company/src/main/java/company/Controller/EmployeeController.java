@@ -97,7 +97,6 @@ public class EmployeeController extends SQLController {
         ArrayList<Employee> returnedEmployees = new ArrayList<>();
         String sqlQuery = "SELECT * FROM " + TABLE_NAME + 
                     " WHERE " + key +  " = " + sqlPrepare(value);
-        Employee e = null;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -132,7 +131,11 @@ public class EmployeeController extends SQLController {
     }
 
     public Employee findByUsername(String username){
-        return selectWhere(EMP_USERNAME, username).get(0);
+        ArrayList<Employee> list = selectWhere(EMP_USERNAME, username);
+        if(list.size() > 0 ){
+            return list.get(0);
+        }
+        return null;
     }
 
     /**
@@ -150,7 +153,11 @@ public class EmployeeController extends SQLController {
      * @return Employee
      */
     public Employee getEmployee(UUID id){
-        return selectWhere("ID", id.toString()).get(0);
+        ArrayList<Employee> list =  selectWhere("ID", id.toString());
+        if(list.size() > 0 ){
+            return list.get(0);
+        }
+        return null;
     }
 
     public Employee createEmployee(Position position, String firstname, String lastname){
