@@ -15,7 +15,7 @@ public class PersonController extends SQLController {
 
     private static String PERSON_FIRSTNAME_CONST = "first";
     private static String PERSON_LASTNAME_CONST = "last";
-    private static String PERSON_TABLE_NAME = "PERSON";
+    private static String TABLE_NAME = "PERSON";
 
     /**
      * Make this controller a singleton
@@ -34,7 +34,7 @@ public class PersonController extends SQLController {
      */
     public SQLPerson getPerson(UUID id){
         SQLPerson p = null;
-        String sqlQuery = "SELECT * FROM " + PERSON_TABLE_NAME +
+        String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id.toString());
           
         if (SQLController.debug) {
@@ -76,7 +76,7 @@ public class PersonController extends SQLController {
      */
     public SQLPerson createPerson(String firstName, String lastName){
         UUID id = UUID.randomUUID();
-        String sql = "INSERT INTO " + PERSON_TABLE_NAME +
+        String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + PERSON_FIRSTNAME_CONST + ", " + PERSON_LASTNAME_CONST + " )" +
                     " VALUES ( " + 
                     sqlPrepare(id.toString()) + " , " +
@@ -120,7 +120,7 @@ public class PersonController extends SQLController {
      */
     public ArrayList<SQLPerson> getAll(){
         ArrayList<SQLPerson> allPerson = new ArrayList<>();
-        String sqlQuery = "SELECT * " + PERSON_TABLE_NAME;
+        String sqlQuery = "SELECT * " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -163,45 +163,31 @@ public class PersonController extends SQLController {
         if(person == null){
             return;
         }
-        deletePerson(person.getId());
+        delete(TABLE_NAME, person.getId().toString());   
     }
-
-    /**
-     * Delete a person
-     * @param id
-     */
-    public void deletePerson(UUID id){
-        String sql = "DELETE FROM " + PERSON_TABLE_NAME + 
-                    " WHERE ID = " + sqlPrepare(id);
-        executeUpdate(sql);
-    }
-
     /**
      * Create the table in sql
      * Will only create if it doesn't exist
      */
     private static void createTable(){
-        String sql = "CREATE TABLE IF NOT EXISTS " + PERSON_TABLE_NAME + 
-                    "(ID VARCHAR(255) not NULL, " + 
-                    PERSON_FIRSTNAME_CONST + " VARCHAR(255), " + 
-                    PERSON_LASTNAME_CONST + " VARCHAR(255), " + 
-                    " PRIMARY KEY ( ID ))";
-        executeUpdate(sql);
+        String[] params = {
+            PERSON_FIRSTNAME_CONST + " VARCHAR(255)",
+            PERSON_LASTNAME_CONST + " VARCHAR(255)",
+        };
+        create(TABLE_NAME, params);
     }
 
     /**
      * Truncate the table
      */
     public void truncateTable(){
-        String sql = "TRUNCATE TABLE " + PERSON_TABLE_NAME;
-        executeUpdate(sql);
+        truncate(TABLE_NAME);
     }
 
     /**
      * Drop the table
      */
     public void dropTable(){
-        String sql = "DROP TABLE " + PERSON_TABLE_NAME;
-        executeUpdate(sql);
+        drop(TABLE_NAME);
     }
 }

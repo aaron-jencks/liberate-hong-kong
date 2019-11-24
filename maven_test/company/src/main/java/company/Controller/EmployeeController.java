@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
+
 import company.Entity.SQLEmployee;
 import company.Entity.SQLPerson;
 import company.Entity.Enum.Position;
@@ -15,8 +17,8 @@ import company.Entity.Enum.Position;
 public class EmployeeController extends SQLController {
 
     private static EmployeeController controllerInstance = null;
-
-    public static String EMP_TABLE_NAME = "EMPLOYEE";
+    private static String TABLE_NAME = "EMPLOYEE";
+    
     public static String EMP_QUESTION_CONST = "question";
     public static String EMP_ANSWER_CONST = "answer";
     public static String EMP_USERNAME_CONST = "username";
@@ -84,7 +86,7 @@ public class EmployeeController extends SQLController {
      * @return SQLEmployee
      */
     public SQLEmployee getEmployee(UUID id){
-        String sqlQuery = "SELECT * FROM " + EMP_TABLE_NAME + 
+        String sqlQuery = "SELECT * FROM " + TABLE_NAME + 
                     " WHERE ID = " + sqlPrepare(id);
         SQLEmployee e = null;
         if(SQLController.debug){
@@ -148,7 +150,7 @@ public class EmployeeController extends SQLController {
         PersonController pc = PersonController.getInstance();
         SQLPerson p = pc.createPerson(first, last);
         UUID id = p.getId();
-        String sql = "INSERT INTO " + EMP_TABLE_NAME + 
+        String sql = "INSERT INTO " + TABLE_NAME + 
                     " ( ID , " + 
                     EMP_QUESTION_CONST + " , " + 
                     EMP_ANSWER_CONST + " , " + 
@@ -171,7 +173,7 @@ public class EmployeeController extends SQLController {
      */
     public ArrayList<SQLEmployee> getAll(){
         ArrayList<SQLEmployee> allEmployees = new ArrayList<>();
-        String sqlQuery = " SELECT * FROM " + EMP_TABLE_NAME;
+        String sqlQuery = " SELECT * FROM " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -209,29 +211,27 @@ public class EmployeeController extends SQLController {
      * Create the employee table
      */
     private static void createTable(){
-        String sql = "CREATE TABLE IF NOT EXISTS " + EMP_TABLE_NAME + 
-                    " ( ID VARCHAR(255) not NULL, " + 
-                    EMP_USERNAME_CONST + " VARCHAR(255), " +
-                    EMP_PASSWORD_CONST + " VARCHAR(255), " + 
-                    EMP_QUESTION_CONST + " VARCHAR(255), " + 
-                    EMP_ANSWER_CONST + " VARCHAR(255), " + 
-                    EMP_TO_PERSON + " VARCHAR(255), " + 
-                    " PRIMARY KEY ( ID ))";
-        executeUpdate(sql);
+        String[] params = {
+            EMP_USERNAME_CONST + " VARCHAR(255)",
+            EMP_PASSWORD_CONST + " VARCHAR(255)",
+            EMP_QUESTION_CONST + " VARCHAR(255)",
+            EMP_ANSWER_CONST + " VARCHAR(255)",
+            EMP_TO_PERSON + " VARCHAR(255)",
+        };
+        create(TABLE_NAME, params);
     }
 
     /**
      * Update all employee attributes
      */
     public void updateEmployee(SQLEmployee e){
-        String sql = "UPDATE " + EMP_TABLE_NAME + 
-                    " SET " + 
-                    EMP_USERNAME_CONST + " = " + sqlPrepare(e.getUsername()) + " , " + 
-                    EMP_PASSWORD_CONST + " = " + sqlPrepare(e.getPassword()) + " , " + 
-                    EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion()) + " , " + 
-                    EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()) +
-                    " WHERE ID = " + sqlPrepare(e.getId());
-        executeUpdate(sql);
+        String[] params = {
+            EMP_USERNAME_CONST + " = " + sqlPrepare(e.getUsername()),
+            EMP_PASSWORD_CONST + " = " + sqlPrepare(e.getPassword()),
+            EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()),
+            EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion())
+        };
+        update(TABLE_NAME, e.getId(), params);
     }
 
     /**
@@ -239,9 +239,7 @@ public class EmployeeController extends SQLController {
      * @param id
      */
     public void deleteEmployee(UUID id){
-        String sql = "DELETE FROM " + EMP_TABLE_NAME + 
-                    " WHERE ID = " + sqlPrepare(id);
-        executeUpdate(sql);
+        delete(TABLE_NAME, id);
     }
 
     /**
@@ -259,16 +257,14 @@ public class EmployeeController extends SQLController {
      * Drop the table
      */
     public void dropTable(){
-        String sql = "DROP TABLE " + EMP_TABLE_NAME;
-        executeUpdate(sql);
+        drop(TABLE_NAME);
     }
 
     /**
      * Truncate the table
      */
     public void truncateTable(){
-        String sql = "TRUNCATE TABLE " + EMP_TABLE_NAME;
-        executeUpdate(sql);
+        truncate(TABLE_NAME);
     }
 
 

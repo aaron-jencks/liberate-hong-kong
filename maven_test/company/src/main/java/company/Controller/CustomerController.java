@@ -12,10 +12,10 @@ import company.Entity.SQLCustomer;
 public class CustomerController extends SQLController {
 
     private static CustomerController controllerInstance = null;
+    private static String TABLE_NAME = "CUSTOMER";
 
     public static String CUST_FIRSTNAME_CONST = "first";
     public static String CUST_LASTNAME_CONST = "last";
-    public static String CUST_TABLE_NAME = "CUSTOMER";
     public static String CUST_ACCOUNTS_CONST = "accounts";
 
     /**
@@ -34,7 +34,7 @@ public class CustomerController extends SQLController {
      * Find the person by the id
      */
     public SQLCustomer getCustomer(UUID id){
-        String sqlQuery = "SELECT * FROM " + CUST_TABLE_NAME +
+        String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
         SQLCustomer c = null;
         if(SQLController.debug){
@@ -76,7 +76,7 @@ public class CustomerController extends SQLController {
      */
     public SQLCustomer createCustomer(String firstName, String lastName){
         UUID id = UUID.randomUUID();
-        String sql = "INSERT INTO " + CUST_TABLE_NAME +
+        String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
                     CUST_FIRSTNAME_CONST + ", " + 
                     CUST_LASTNAME_CONST + " , " + 
@@ -95,13 +95,12 @@ public class CustomerController extends SQLController {
      * Update all customer attributes
      */
     public void updateCustomer(SQLCustomer c){
-        String sql = "UPDATE " + CUST_TABLE_NAME + 
-                    " SET " + 
-                    CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()) +  " , " + 
-                    CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()) +  " , " + 
-                    CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()) + 
-                    " WHERE ID = " + sqlPrepare(c.getId());
-        executeUpdate(sql);
+        String[] params = {
+            CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()),
+            CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()),
+            CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()),
+        };
+        update(TABLE_NAME, c.getId(), params);
     }
 
     /**
@@ -150,7 +149,7 @@ public class CustomerController extends SQLController {
      */
     public ArrayList<SQLCustomer> getAll(){
         ArrayList<SQLCustomer> allPerson = new ArrayList<>();
-        String sqlQuery = "SELECT * FROM " + CUST_TABLE_NAME;
+        String sqlQuery = "SELECT * FROM " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -189,23 +188,12 @@ public class CustomerController extends SQLController {
      * Will only create if it doesn't exist
      */
     private static void createTable(){
-        String sql = "CREATE TABLE IF NOT EXISTS " + CUST_TABLE_NAME + 
-                    "(ID VARCHAR(255) not NULL, " + 
-                    CUST_FIRSTNAME_CONST + " VARCHAR(255), " + 
-                    CUST_LASTNAME_CONST + " VARCHAR(255), " + 
-                    CUST_ACCOUNTS_CONST + " VARCHAR(255), " + 
-                    " PRIMARY KEY ( ID ))";
-        executeUpdate(sql);
-    }
-
-    /**
-     * Delete a customer
-     * @param id
-     */
-    public void deleteCustomer(UUID id){
-        String sql = "DELETE FROM " + CUST_TABLE_NAME + 
-                    " WHERE ID = " + sqlPrepare(id);
-        executeUpdate(sql);
+        String[] params = {
+            CUST_FIRSTNAME_CONST + " VARCHAR(255)",
+            CUST_LASTNAME_CONST + " VARCHAR(255)",
+            CUST_ACCOUNTS_CONST + " VARCHAR(255)",
+        };
+        create(TABLE_NAME, params);
     }
 
     /**
@@ -216,22 +204,20 @@ public class CustomerController extends SQLController {
         if(customer == null){
             return;
         }
-        deleteCustomer(customer.getId());
+        delete(TABLE_NAME, customer.getId().toString());
     }
 
     /**
      * Truncate the table
      */
     public void truncateTable(){
-        String sql = "TRUNCATE TABLE " + CUST_TABLE_NAME;
-        executeUpdate(sql);
+        truncate(TABLE_NAME);
     }
 
     /**
      * Drop the table
      */
     public static void dropTable(){
-        String sql = "DROP TABLE " + CUST_TABLE_NAME;
-        executeUpdate(sql);
+        drop(TABLE_NAME);
     }
 }

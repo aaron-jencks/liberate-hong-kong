@@ -15,9 +15,10 @@ import company.Entity.SQLAccount;
 public class AccountController extends SQLController{
 
     private static AccountController controllerInstance = null;
+    private static String TABLE_NAME = "ACCOUNT";
 
     public static String ACCT_AMT_CONST = "amount";
-    public static String ACCT_TABLE_NAME = "ACCOUNT";
+    
 
     /**
      * Make this controller a singleton
@@ -35,7 +36,7 @@ public class AccountController extends SQLController{
      * Find the person by the id
      */
     public SQLAccount getAccount(UUID id){
-        String sqlQuery = "SELECT * FROM " + ACCT_TABLE_NAME +
+        String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
         SQLAccount a = null;
         if(SQLController.debug){
@@ -77,7 +78,7 @@ public class AccountController extends SQLController{
      */
     public SQLAccount createAccount(BigDecimal amount){
         UUID id = UUID.randomUUID();
-        String sql = "INSERT INTO " + ACCT_TABLE_NAME +
+        String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
                     ACCT_AMT_CONST +
                      " ) VALUES ( " + 
@@ -141,13 +142,11 @@ public class AccountController extends SQLController{
     /**
      * Make an update to an account
      */
-    public SQLAccount updateAccount(SQLAccount account){
-        String sql = "UPDATE " + ACCT_TABLE_NAME + 
-            " SET " + 
-            ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount()) + 
-            " WHERE ID = " + sqlPrepare(account.getId());
-        executeUpdate(sql);
-        return getAccount(account.getId());
+    public void updateAccount(SQLAccount account){
+        String[] params = {
+            ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount())
+        };
+        update(TABLE_NAME, account.getId(), params);
     }
 
     /**
@@ -156,7 +155,7 @@ public class AccountController extends SQLController{
      */
     public ArrayList<SQLAccount> getAll(){
         ArrayList<SQLAccount> allAccount = new ArrayList<>();
-        String sqlQuery = "SELECT * " + ACCT_TABLE_NAME;
+        String sqlQuery = "SELECT * " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -195,11 +194,10 @@ public class AccountController extends SQLController{
      * Will only create if it doesn't exist
      */
     private static void createTable(){
-        String sql = "CREATE TABLE IF NOT EXISTS " + ACCT_TABLE_NAME + 
-                    "(ID VARCHAR(255) not NULL, " + 
-                    ACCT_AMT_CONST + " DECIMAL(13,4), " + 
-                    " PRIMARY KEY ( ID ))";
-        executeUpdate(sql);
+        String[] params = {
+            ACCT_AMT_CONST + " DECIMAL(13,4) ",
+        };
+        create(TABLE_NAME, params);
     }
 
     /**
@@ -207,9 +205,7 @@ public class AccountController extends SQLController{
      * @param id
      */
     public void deleteAccount(UUID id){
-        String sql = "DELETE FROM " + ACCT_TABLE_NAME + 
-                    " WHERE ID = " + sqlPrepare(id);
-        executeUpdate(sql);
+        delete(TABLE_NAME, id);
     }
 
     /**
@@ -227,15 +223,13 @@ public class AccountController extends SQLController{
      * Truncate the table
      */
     public void truncateTable(){
-        String sql = "TRUNCATE TABLE " + ACCT_TABLE_NAME;
-        executeUpdate(sql);
+        truncate(TABLE_NAME);
     }
 
     /**
      * Drop the table
      */
     public void dropTable(){
-        String sql = "DROP TABLE " + ACCT_TABLE_NAME;
-        executeUpdate(sql);
+        drop(TABLE_NAME);
     }
 }
