@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLPermission;
 import java.util.UUID;
 
 import org.junit.AfterClass;
@@ -11,7 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import company.Controller.EmployeeController;
+import company.Controller.PersonController;
 import company.Entity.SQLEmployee;
+import company.Entity.SQLPerson;
+import company.Entity.Enum.Position;
 
 /**
  * Unit test for simple App.
@@ -19,17 +23,18 @@ import company.Entity.SQLEmployee;
 public class EmployeeSQLTest 
 {
 
+    public static SQLPerson p;
+    public static EmployeeController ec;
+
     @AfterClass
     public static void truncate(){
         EmployeeController.getInstance().truncateTable();
     }
 
-    /**
-     * Can I create the table?
-     */
-    @Test
-    public void testTableCreate(){
-        EmployeeController ec = EmployeeController.getInstance();
+    @Before
+    public void setup(){
+        p = PersonController.getInstance().createPerson("firsty", "lasty");
+        ec = EmployeeController.getInstance();
     }
 
     /**
@@ -37,8 +42,7 @@ public class EmployeeSQLTest
      */
     @Test
     public void testCreateEmployee(){
-        EmployeeController ec = EmployeeController.getInstance();
-        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson");
+        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson", p);
         assertTrue(e.getQuestion().equals("who are you?"));
     }
 
@@ -47,7 +51,6 @@ public class EmployeeSQLTest
      */
     @Test
     public void testGetNonExist(){
-        EmployeeController ec = EmployeeController.getInstance();
         SQLEmployee e = ec.getEmployee(UUID.randomUUID());
         assertNull(e);
     }
@@ -57,8 +60,7 @@ public class EmployeeSQLTest
      */
     @Test
     public void testUpdate(){
-        EmployeeController ec = EmployeeController.getInstance();
-        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson");
+        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson", p);
         e.setQuestion("what are you?");
         SQLEmployee eDB = ec.getEmployee(e.getId());
         boolean same = e.getQuestion().equals(eDB.getQuestion());
@@ -70,9 +72,8 @@ public class EmployeeSQLTest
      */
     @Test
     public void canDelete(){
-        EmployeeController ec = EmployeeController.getInstance();
         ec.truncateTable();
-        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson");
+        SQLEmployee e = ec.createEmployee("who are you?", "me", "tom", "thompson", p);
         ec.deleteEmployee(e);
         e = ec.getEmployee(e.getId());
         assertNull(e);

@@ -3,26 +3,32 @@ package company.Entity;
 import java.util.UUID;
 
 import company.Controller.EmployeeController;
+import company.Entity.Enum.Position;
 
-public class SQLEmployee {
+public class SQLEmployee extends SQLPerson{
     
-    
-    private UUID id;
     private String username;
     private String password;
     private String question;
     private String answer;
+    private Position position;
 
-    public SQLEmployee(UUID id, Enum position, String username, String password, String question, String answer) {
-        this.id = id;
+    public SQLEmployee(UUID id, Position position, String username, String password, String question, String answer, String first, String last){
+        super(id, first, last);
         this.username = username;
         this.password = password;
         this.question = question;
         this.answer = answer;
+        this.position = position;
     }
 
-    public UUID getId() {
-        return this.id;
+    public SQLEmployee(UUID id, Position position, String username, String password, String question, String answer, SQLPerson person){
+        super(id, person.getFirstName(), person.getLastName());
+        this.username = username;
+        this.password = password;
+        this.question = question;
+        this.answer = answer;
+        this.position = position;
     }
 
     public String getUsername() {
@@ -61,16 +67,23 @@ public class SQLEmployee {
         EmployeeController.getInstance().updateEmployee(this);
     }
 
+    public Position getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", username='" + getUsername() + "'" +
-            ", password='" + getPassword() + "'" +
-            ", question='" + getQuestion() + "'" +
-            ", answer='" + getAnswer() + "'" +
+            " username='" + username + "'" +
+            ", password='" + password + "'" +
+            ", question='" + question + "'" +
+            ", answer='" + answer + "'" +
+            ", position='" + position + "'" +
             "}";
     }
-
 
 }

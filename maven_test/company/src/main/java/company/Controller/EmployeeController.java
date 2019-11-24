@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import company.Entity.SQLEmployee;
+import company.Entity.SQLPerson;
 import company.Entity.Enum.Position;
 
 
@@ -21,6 +22,7 @@ public class EmployeeController extends SQLController {
     public static String EMP_ANSWER_CONST = "answer";
     public static String EMP_USERNAME_CONST = "username";
     public static String EMP_PASSWORD_CONST = "password";
+    public static String EMP_TO_PERSON = "person_id";
 
 
     /**
@@ -73,7 +75,8 @@ public class EmployeeController extends SQLController {
             System.err.println("Failed to retrieve employee. (EmployeeController.createEmployee)");
             debugError(er);
         }
-        return new SQLEmployee(id, Position.TELLER, username, password, question, answer);
+        SQLPerson p = PersonController.getInstance().getPerson(id);
+        return new SQLEmployee(id, Position.TELLER, username, password, question, answer, p);
     }
 
     /**
@@ -119,6 +122,22 @@ public class EmployeeController extends SQLController {
     }
 
     /**
+     * Create an employee
+     * @param question
+     * @param answer
+     * @param username
+     * @param password
+     * @param person
+     * @return
+     */
+    public SQLEmployee createEmployee(String question, String answer, String username, String password, SQLPerson person){
+        if(person == null){
+            throw new NullPointerException("Passed person was null : (EmployeeController.createEmployee)");
+        }
+        return EmployeeController.getInstance().createEmployee(question, answer, username, password, person.getFirstName(), person.getLastName());
+    }
+
+    /**
      * Create an employee based on the passed parameters
      * @param question
      * @param answer
@@ -126,8 +145,10 @@ public class EmployeeController extends SQLController {
      * @param password
      * @return SQLEmployee
      */
-    public SQLEmployee createEmployee(String question, String answer, String username, String password){
-        UUID id = UUID.randomUUID();
+    public SQLEmployee createEmployee(String question, String answer, String username, String password, String first, String last){
+        PersonController pc = PersonController.getInstance();
+        SQLPerson p = pc.createPerson(first, last);
+        UUID id = p.getId();
         String sql = "INSERT INTO " + EMP_TABLE_NAME + 
                     " ( " + 
                     EMP_ID_CONST + " , " + 
@@ -143,7 +164,7 @@ public class EmployeeController extends SQLController {
                     sqlPrepare(password) +
                     " ) ";
         executeUpdate(sql);
-        return new SQLEmployee(id, Position.TELLER, username, password, question, answer);
+        return new SQLEmployee(id, Position.TELLER, username, password, question, answer, first, last);
     }
 
     /**
@@ -196,6 +217,7 @@ public class EmployeeController extends SQLController {
                     EMP_PASSWORD_CONST + " VARCHAR(255), " + 
                     EMP_QUESTION_CONST + " VARCHAR(255), " + 
                     EMP_ANSWER_CONST + " VARCHAR(255), " + 
+                    EMP_TO_PERSON + " VARCHAR(255), " + 
                     " PRIMARY KEY ( " + EMP_ID_CONST + " ))";
         executeUpdate(sql);
     }
@@ -209,7 +231,7 @@ public class EmployeeController extends SQLController {
                     EMP_USERNAME_CONST + " = " + sqlPrepare(e.getUsername()) + " , " + 
                     EMP_PASSWORD_CONST + " = " + sqlPrepare(e.getPassword()) + " , " + 
                     EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion()) + " , " + 
-                    EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()) + 
+                    EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()) +
                     " WHERE " +
                     EMP_ID_CONST + " = " + sqlPrepare(e.getId());
         executeUpdate(sql);

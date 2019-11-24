@@ -84,7 +84,7 @@ public class PersonController extends SQLController {
                     sqlPrepare(firstName) + " , " +
                     sqlPrepare(lastName) + " )";
         executeUpdate(sql);
-        return getPerson(id);
+        return new SQLPerson(id, firstName, lastName);
     }
 
     /**
@@ -157,6 +157,28 @@ public class PersonController extends SQLController {
     }
 
     /**
+     * Delete a person
+     * @param person
+     */
+    public void deletePerson(SQLPerson person){
+        if(person == null){
+            return;
+        }
+        deletePerson(person.getId());
+    }
+
+    /**
+     * Delete a person
+     * @param id
+     */
+    public void deletePerson(UUID id){
+        String sql = "DELETE FROM " + PERSON_TABLE_NAME + 
+                    " WHERE " + PERSON_ID_CONST +
+                    " = " + sqlPrepare(id);
+        executeUpdate(sql);
+    }
+
+    /**
      * Create the table in sql
      * Will only create if it doesn't exist
      */
@@ -166,6 +188,14 @@ public class PersonController extends SQLController {
                     PERSON_FIRSTNAME_CONST + " VARCHAR(255), " + 
                     PERSON_LASTNAME_CONST + " VARCHAR(255), " + 
                     " PRIMARY KEY ( " + PERSON_ID_CONST + " ))";
+        executeUpdate(sql);
+    }
+
+    /**
+     * Truncate the table
+     */
+    public void truncateTable(){
+        String sql = "TRUNCATE TABLE " + PERSON_TABLE_NAME;
         executeUpdate(sql);
     }
 
