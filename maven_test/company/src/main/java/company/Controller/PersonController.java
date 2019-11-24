@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import company.Entity.SQLPerson;
+import company.Entity.Person;
 
 public class PersonController extends SQLController {
 
@@ -32,8 +32,8 @@ public class PersonController extends SQLController {
     /**
      * Find the person by the id
      */
-    public SQLPerson getPerson(UUID id){
-        SQLPerson p = null;
+    public Person getPerson(UUID id){
+        Person p = null;
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id.toString());
           
@@ -74,7 +74,7 @@ public class PersonController extends SQLController {
      * Update a person
      * @param p
      */
-    public void updatePerson(SQLPerson p){
+    public void updatePerson(Person p){
         String[] params = {
             PERSON_FIRSTNAME_CONST + " = " + sqlPrepare(p.getFirstName()),
             PERSON_LASTNAME_CONST + " = " + sqlPrepare(p.getLastName()),
@@ -86,7 +86,7 @@ public class PersonController extends SQLController {
      * Create a person with the supplied names
      * returns the newly created person
      */
-    public SQLPerson createPerson(String firstName, String lastName){
+    public Person createPerson(String firstName, String lastName){
         UUID id = UUID.randomUUID();
         String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + PERSON_FIRSTNAME_CONST + ", " + PERSON_LASTNAME_CONST + " )" +
@@ -95,7 +95,7 @@ public class PersonController extends SQLController {
                     sqlPrepare(firstName) + " , " +
                     sqlPrepare(lastName) + " )";
         executeUpdate(sql);
-        return new SQLPerson(id, firstName, lastName);
+        return new Person(id, firstName, lastName);
     }
 
     /**
@@ -103,7 +103,7 @@ public class PersonController extends SQLController {
      * @param personResult
      * @return
      */
-    private SQLPerson createPerson(ResultSet personResult){
+    private Person createPerson(ResultSet personResult){
         String first = null;
         String last = null;
         UUID id = null;
@@ -122,15 +122,15 @@ public class PersonController extends SQLController {
         } catch (SQLException e) {
             debugError(e);
         }
-        return new SQLPerson(id, first, last);
+        return new Person(id, first, last);
     }
 
     /**
      * Get all the people in the db
      * @return
      */
-    public ArrayList<SQLPerson> getAll(){
-        ArrayList<SQLPerson> allPerson = new ArrayList<>();
+    public ArrayList<Person> getAll(){
+        ArrayList<Person> allPerson = new ArrayList<>();
         String sqlQuery = "SELECT * " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -143,7 +143,7 @@ public class PersonController extends SQLController {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlQuery);
             while (resultSet.next()){
-                SQLPerson p = createPerson(resultSet);
+                Person p = createPerson(resultSet);
                 allPerson.add(p);
             }
         } catch (SQLException se) {
@@ -170,7 +170,7 @@ public class PersonController extends SQLController {
      * Delete a person
      * @param person
      */
-    public void deletePerson(SQLPerson person){
+    public void deletePerson(Person person){
         if(person == null){
             return;
         }

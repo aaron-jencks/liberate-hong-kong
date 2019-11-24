@@ -7,16 +7,16 @@ import java.util.UUID;
 import company.Controller.AccountController;
 import company.Entity.Enum.AccountType;
 
-public class SQLAccount {
+public class Account {
     private UUID id;
     private BigDecimal amount;
     private AccountType type;
 
 
-    public SQLAccount() {
+    public Account() {
     }
 
-    public SQLAccount(UUID id, BigDecimal amount, AccountType type) {
+    public Account(UUID id, BigDecimal amount, AccountType type) {
         this.id = id;
         this.amount = amount;
         this.type = type;

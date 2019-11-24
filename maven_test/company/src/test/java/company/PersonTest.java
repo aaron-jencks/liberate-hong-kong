@@ -11,12 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import company.Controller.PersonController;
-import company.Entity.SQLPerson;
+import company.Entity.Person;
 
 /**
  * Unit test for simple App.
  */
-public class PersonSQLTest {
+public class PersonTest {
     public static PersonController pc;
 
     @AfterClass
@@ -34,7 +34,7 @@ public class PersonSQLTest {
      */
     @Test
     public void testCreatePerson() {
-        SQLPerson p = pc.createPerson("billy", "bob");
+        Person p = pc.createPerson("billy", "bob");
         assertTrue(p.getFirstName().equals("billy"));
     }
 
@@ -43,7 +43,7 @@ public class PersonSQLTest {
      */
     @Test
     public void testGetNonExist() {
-        SQLPerson p = pc.getPerson(UUID.randomUUID());
+        Person p = pc.getPerson(UUID.randomUUID());
         assertNull(p);
     }
 
@@ -52,7 +52,7 @@ public class PersonSQLTest {
      */
     @Test
     public void testUpdate() {
-        SQLPerson p = pc.createPerson("tom", "joe");
+        Person p = pc.createPerson("tom", "joe");
         p.setFirstName("not billy");
         assertNotEquals(p.getFirstName(), "tom");
     }
@@ -62,7 +62,7 @@ public class PersonSQLTest {
      */
     @Test
     public void testDelete(){
-        SQLPerson p = pc.createPerson("a", "b");
+        Person p = pc.createPerson("a", "b");
         pc.deletePerson(p);
         
     }

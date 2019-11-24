@@ -9,6 +9,8 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
+import company.Entity.Employee;
+import company.Entity.Enum.Position;
 
 public class HireMenu extends AMenu {
     private EmployeeController controller;
@@ -72,8 +74,8 @@ public class HireMenu extends AMenu {
             }
 
             try {
-                UUID id = controller.createEmployee(first_name, last_name, position);
-                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been created. Press enter to continue.", (String s) -> {
+                Employee e = EmployeeController.getInstance().createEmployee(Position.valueOf(position), first_name, last_name);
+                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + e.getId().toString() + " has been created. Press enter to continue.", (String s) -> {
                     return true;
                 });
                 return new ExitItem(parent);

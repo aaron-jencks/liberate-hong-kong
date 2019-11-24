@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import company.Entity.SQLAccount;
+import company.Entity.Account;
 import company.Entity.Enum.AccountType;
 
 public class AccountController extends SQLController{
@@ -34,13 +34,17 @@ public class AccountController extends SQLController{
         return controllerInstance;
     }
 
+    public Account getAccount(String id){
+        return getAccount(UUID.fromString(id));
+    }
+
     /**
      * Find the person by the id
      */
-    public SQLAccount getAccount(UUID id){
+    public Account getAccount(UUID id){
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
-        SQLAccount a = null;
+        Account a = null;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -78,7 +82,7 @@ public class AccountController extends SQLController{
      * Create a person with the supplied names
      * returns the newly created person
      */
-    public SQLAccount createAccount(BigDecimal amount, AccountType type){
+    public Account createAccount(BigDecimal amount, AccountType type){
         UUID id = UUID.randomUUID();
         String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
@@ -99,7 +103,7 @@ public class AccountController extends SQLController{
     /**
      * Internal function to instantiate an account object from a ResultSet
      */
-    private SQLAccount createAccount(ResultSet personResult) {
+    private Account createAccount(ResultSet personResult) {
         BigDecimal amt = null;
         UUID id = null;
         AccountType type = null;
@@ -121,16 +125,16 @@ public class AccountController extends SQLController{
             System.err.println("Failed to retrieve account.id (AccountController.createAccount)");
             debugError(e);
         }
-        return new SQLAccount(id, amt, type);
+        return new Account(id, amt, type);
     }
 
     /**
      * Deposit amount into account
      * @param account
      * @param amount
-     * @return SQLAccount
+     * @return Account
      */
-    public SQLAccount deposit(SQLAccount account, BigDecimal amount){
+    public Account deposit(Account account, BigDecimal amount){
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidParameterException("Deposit amount can not be <= 0");
         }
@@ -142,9 +146,9 @@ public class AccountController extends SQLController{
      * Withdraw amount from account
      * @param account
      * @param amount
-     * @return SQLAccount
+     * @return Account
      */
-    public SQLAccount withdrawl(SQLAccount account, BigDecimal amount){
+    public Account withdrawl(Account account, BigDecimal amount){
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidParameterException("Withdrawl amount can not be <= 0");
         }
@@ -155,7 +159,7 @@ public class AccountController extends SQLController{
     /**
      * Make an update to an account
      */
-    public void updateAccount(SQLAccount account){
+    public void updateAccount(Account account){
         String[] params = {
             ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount())
         };
@@ -166,8 +170,8 @@ public class AccountController extends SQLController{
      * Get all the people in the db
      * @return
      */
-    public ArrayList<SQLAccount> getAll(){
-        ArrayList<SQLAccount> allAccount = new ArrayList<>();
+    public ArrayList<Account> getAll(){
+        ArrayList<Account> allAccount = new ArrayList<>();
         String sqlQuery = "SELECT * " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -218,19 +222,21 @@ public class AccountController extends SQLController{
      * Delete an account
      * @param id
      */
-    public void deleteAccount(UUID id){
+    public BigDecimal deleteAccount(UUID id){
+        BigDecimal d = AccountController.getInstance().getAccount(id).getAmount();
         delete(TABLE_NAME, id);
+        return d;
     }
 
     /**
      * Delete an account
      * @param account
      */
-    public void deleteAccount(SQLAccount account){
+    public BigDecimal deleteAccount(Account account){
         if(account == null){
-            return;
+            return BigDecimal.ZERO;
         }
-        deleteAccount(account.getId());
+        return deleteAccount(account.getId());
     }
 
     /**

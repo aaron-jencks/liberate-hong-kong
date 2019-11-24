@@ -9,6 +9,7 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
+import company.Entity.Employee;
 
 public class FireMenu extends AMenu {
     private EmployeeController controller;
@@ -66,8 +67,9 @@ public class FireMenu extends AMenu {
             }
 
             try {
-                UUID id = controller.fireEmployee(UUID.fromString(employee_id));
-                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + id + " has been fired. Press enter to continue.", (String s) -> {
+                Employee e = EmployeeController.getInstance().getEmployee(employee_id);
+                EmployeeController.getInstance().deleteEmployee(e);
+                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + e.getId() + " has been fired. Press enter to continue.", (String s) -> {
                     return true;
                 });
                 return new ExitItem(parent);

@@ -5,11 +5,11 @@ import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.CreditAccount;
+import company.Controller.CustomerController;
+import company.Entity.Account;
 import company.Entity.Customer;
-import company.Entity.Interface.ICustomer;
 import company.Entity.Person;
-import company.Entity.Vault;
+import company.Entity.Enum.AccountType;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -80,18 +80,12 @@ public class CreateCreditAccountMenu extends AMenu {
         }
 
         get_display_string();
-        Vault vault = Vault.getInstance();
-
-        ICustomer c = vault.getCustomer(firstName, lastName);
-        if (c == null) {
-            UUID new_customer = vault.createCustomer(new Person(firstName, lastName));
-            c = vault.getCustomer(new_customer);
-        }
-
-        UUID accountNumber = vault.createCreditAccount((Customer)c);
+        //TODO, fix to first search for customer before creating a new one
+        Customer c = CustomerController.getInstance().createCustomer(firstName, lastName);
+        Account a = CustomerController.getInstance().addAccount(c, AccountType.CREDIT);
 
         try {
-            UIUtil.get_input(sc, confirm, "\n" + prompt + "Account created.\n" + prompt + "Account id = " + accountNumber
+            UIUtil.get_input(sc, confirm, "\n" + prompt + "Account created.\n" + prompt + "Account id = " + a.getId().toString()
                     + "\n" + prompt + "Press any key to return to the account menu.", (String s) -> true);
         } catch (Exception e) {
             e.printStackTrace();

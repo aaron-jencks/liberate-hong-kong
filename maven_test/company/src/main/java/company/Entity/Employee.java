@@ -5,7 +5,7 @@ import java.util.UUID;
 import company.Controller.EmployeeController;
 import company.Entity.Enum.Position;
 
-public class SQLEmployee extends SQLPerson{
+public class Employee extends Person {
     
     private String username;
     private String password;
@@ -13,7 +13,7 @@ public class SQLEmployee extends SQLPerson{
     private String answer;
     private Position position;
 
-    public SQLEmployee(UUID id, Position position, String username, String password, String question, String answer, String first, String last){
+    public Employee(UUID id, Position position, String username, String password, String question, String answer, String first, String last){
         super(id, first, last);
         this.username = username;
         this.password = password;
@@ -22,7 +22,7 @@ public class SQLEmployee extends SQLPerson{
         this.position = position;
     }
 
-    public SQLEmployee(UUID id, Position position, String username, String password, String question, String answer, SQLPerson person){
+    public Employee(UUID id, Position position, String username, String password, String question, String answer, Person person){
         super(id, person.getFirstName(), person.getLastName());
         this.username = username;
         this.password = password;

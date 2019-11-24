@@ -10,7 +10,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.LoginMenu;
 import company.Controller.EmployeeController;
-import company.Entity.Interface.IEmployee;
+import company.Entity.Employee;
 import company.exceptions.EmployeeNotFoundException;
 
 public class ForgotPasswordMenu extends LoginMenu {
@@ -20,9 +20,9 @@ public class ForgotPasswordMenu extends LoginMenu {
     protected String confirm_password = new String();
     protected int iteration = 0;
 
-    public ForgotPasswordMenu(ITermController parent, EmployeeController employeeController)
+    public ForgotPasswordMenu(ITermController parent)
     {
-        super(parent, employeeController);
+        super(parent);
     }
 
     @Override
@@ -61,17 +61,16 @@ public class ForgotPasswordMenu extends LoginMenu {
             padding += " ";
 
         try { 
+            EmployeeController employeeController = EmployeeController.getInstance();
             username = UIUtil.get_input(ForgotPasswordMenu.inputScanner, username, padding + "Username: ", (String s) -> { return true; }); 
-            user_id = employeeController.findEmployee(username);
+            Employee employee = employeeController.findByUsername(username);
 
-            IEmployee employee = employeeController.findEmployee(user_id);
-
-            security_question = employee.getEmployeeSecurityQuestion() + '\n' + padding + "Answer? "; // Shouldn't be null, so no need to check
+            security_question = employee.getQuestion() + '\n' + padding + "Answer? "; // Shouldn't be null, so no need to check
             try { security_answer = UIUtil.get_input(ForgotPasswordMenu.inputScanner, security_answer, 
                                                     padding + "SecurityQuestion: " + security_question, (String s) -> { return true; }); }
             catch(Exception e) { e.printStackTrace(); }
 
-            if(!employee.getEmployeeSecurityAnswer().equals(security_answer))
+            if(!employee.getAnswer().equals(security_answer))
             {
                 System.out.println(UIUtil.pad_string("Account has been locked down due to suspicious activity, please contact your system administrator.", 
                                                     parent.get_term_width(), AlignmentType.center));
@@ -96,7 +95,7 @@ public class ForgotPasswordMenu extends LoginMenu {
 
             } while(!password.equals(confirm_password));
 
-            this.employeeController.modifyEmployeePassword(user_id, password);
+            employeeController.getEmployee(user_id).setPassword(password);
 
             System.out.println(UIUtil.pad_string("Account password changed successfully.", 
                                                     parent.get_term_width(), AlignmentType.center));

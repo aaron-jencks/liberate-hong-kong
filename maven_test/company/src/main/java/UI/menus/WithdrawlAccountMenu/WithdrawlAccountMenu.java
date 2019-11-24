@@ -1,5 +1,7 @@
 package UI.menus.WithdrawlAccountMenu;
 
+import java.math.BigDecimal;
+import java.security.InvalidParameterException;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -8,8 +10,8 @@ import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.BankAccount;
-import company.Entity.Abstract.ABankAccount;
+import company.Controller.AccountController;
+import company.Entity.Account;
 
 public class WithdrawlAccountMenu extends AMenu {
     private String accountNumber = new String();
@@ -73,12 +75,12 @@ public class WithdrawlAccountMenu extends AMenu {
             }
             return new ExitItem(this.parent);
         }
-        BankAccount ba = ABankAccount.load(UUID.fromString(accountNumber));
-        long startAmount = ba.getAmount();
+        Account a = AccountController.getInstance().getAccount(accountNumber);
+        BigDecimal startAmount = a.getAmount();
         get_display_string();
 
         try {
-            withdrawlAmount = UIUtil.get_input(sc, withdrawlAmount, prompt + " Current account balance: " + Long.toString(startAmount) + ". \n Enter withdraw amount: ", (String s) -> {
+            withdrawlAmount = UIUtil.get_input(sc, withdrawlAmount, prompt + " Current account balance: " + startAmount.toString() + ". \n Enter withdraw amount: ", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -87,21 +89,22 @@ public class WithdrawlAccountMenu extends AMenu {
 
         get_display_string();
 
-        if(Math.subtractExact(startAmount, Long.parseLong(withdrawlAmount)) < 0){
+        try {
+            AccountController.getInstance().withdrawl(a, new BigDecimal(withdrawlAmount));
+        } catch (InvalidParameterException e) {
             try {
                 accept = UIUtil.get_input(sc, accept, prompt + " Insufficent funds "
                         + "\n Press any key to return to the account menu.", (String s) -> {
                             return true;
                         });
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception er) {
+                er.printStackTrace();
             }
     
             return new ExitItem(this.parent);
         }
 
-        ba.withdrawl(Long.parseLong(withdrawlAmount));
-        totalAmount = Long.toString(ba.getAmount());
+        totalAmount = a.getAmount().toString();
 
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Amount withdrawn. Total amount on account = " + totalAmount

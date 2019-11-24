@@ -8,13 +8,12 @@ import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.BankAccount;
+import company.Controller.CustomerController;
+import company.Controller.PersonController;
+import company.Entity.Account;
 import company.Entity.Customer;
 import company.Entity.Person;
-import company.Entity.Vault;
-import company.Entity.Abstract.ABankAccount;
-import company.Entity.Abstract.ACustomer;
-import company.Entity.Abstract.AVault;
+import company.Entity.Enum.AccountType;
 
 public class CreateAccountMenu extends AMenu {
 
@@ -82,13 +81,11 @@ public class CreateAccountMenu extends AMenu {
         }
 
         get_display_string();
-
-        Vault v = Vault.getInstance();
-        UUID cId = v.createCustomer(new Person(firstName, lastName));
-        Customer c = ACustomer.load(cId);
-        UUID bId = v.createBankAccount(c);
-        BankAccount b = ABankAccount.load(bId);
-        String accountNumber = b.getObjectId().toString();
+        //TODO, add functionality to search for customer before creating a new one
+        Person p = PersonController.getInstance().createPerson(firstName, lastName);
+        Customer c = CustomerController.getInstance().createCustomer(p);
+        Account a = CustomerController.getInstance().addAccount(c, AccountType.SAVINGS);
+        String accountNumber = a.getId().toString();
 
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber

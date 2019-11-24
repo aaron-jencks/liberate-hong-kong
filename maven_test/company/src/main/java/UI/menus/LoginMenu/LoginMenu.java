@@ -11,16 +11,17 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.items.MainMenuItem;
 import company.Controller.EmployeeController;
+import company.Entity.Employee;
 import company.exceptions.EmployeeNotFoundException;
 
 public class LoginMenu extends AMenu {
-    protected UUID user_id;
+    protected Employee employee;
     protected String username = new String();
     protected String password = new String();
 
-    public LoginMenu(ITermController parent, EmployeeController employeeController)
+    public LoginMenu(ITermController parent)
     {
-        super(parent, employeeController);
+        super(parent);
     }
 
     @Override
@@ -58,14 +59,18 @@ public class LoginMenu extends AMenu {
 
         try { 
             username = UIUtil.get_input(LoginMenu.inputScanner, username, prompt, (String s) -> { return true; }); 
-            user_id = employeeController.findEmployee(username);
+            employee = EmployeeController.getInstance().findByUsername(username);
+
+            if(employee == null){
+                //no employee found with that username
+            }
 
             get_display_string();
 
             try { password = UIUtil.get_input(LoginMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
             catch(Exception e) { e.printStackTrace(); }
 
-            boolean validUP = employeeController.findEmployee(user_id).getEmployeePassword().equals(password);
+            boolean validUP = employee.getPassword().equals(password);
             if(validUP){
                 return new MainMenuItem(parent, this.employeeController);
             }

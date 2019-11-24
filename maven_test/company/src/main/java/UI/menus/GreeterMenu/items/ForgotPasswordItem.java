@@ -4,21 +4,18 @@ import UI.AMenu;
 import UI.AMenuItem;
 import UI.controller.ITermController;
 import UI.menus.ForgotPasswordMenu.ForgotPasswordMenu;
-import company.Controller.EmployeeController;
 
 public class ForgotPasswordItem extends AMenuItem {
-    protected EmployeeController employeeController;
 
-    public ForgotPasswordItem(ITermController parent, EmployeeController employeeController)
+    public ForgotPasswordItem(ITermController parent)
     {
         super(parent);
-        this.employeeController = employeeController;
     }
 
     @Override
     public AMenu activate()
     {
-        return new ForgotPasswordMenu(parent, this.employeeController);
+        return new ForgotPasswordMenu(parent);
     }
 
     @Override

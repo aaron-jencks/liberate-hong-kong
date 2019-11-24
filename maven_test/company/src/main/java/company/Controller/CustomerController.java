@@ -8,9 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import company.Entity.SQLAccount;
-import company.Entity.SQLCustomer;
-import company.Entity.SQLPerson;
+import company.Entity.Account;
+import company.Entity.Customer;
+import company.Entity.Person;
 import company.Entity.Enum.AccountType;
 
 public class CustomerController extends SQLController {
@@ -37,10 +37,10 @@ public class CustomerController extends SQLController {
     /**
      * Find the person by the id
      */
-    public SQLCustomer getCustomer(UUID id){
+    public Customer getCustomer(UUID id){
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
-        SQLCustomer c = null;
+        Customer c = null;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
@@ -80,8 +80,8 @@ public class CustomerController extends SQLController {
      * @param type
      * @return
      */
-    public SQLAccount addAccount(SQLCustomer customer, AccountType type){
-        SQLAccount a = AccountController.getInstance().createAccount(BigDecimal.ZERO, type);
+    public Account addAccount(Customer customer, AccountType type){
+        Account a = AccountController.getInstance().createAccount(BigDecimal.ZERO, type);
         customer.addAccount(a);
         return a;
     }
@@ -92,8 +92,8 @@ public class CustomerController extends SQLController {
      * @param last
      * @return
      */
-    public SQLCustomer createCustomer(String first, String last){
-        SQLPerson p = PersonController.getInstance().createPerson(first, last);
+    public Customer createCustomer(String first, String last){
+        Person p = PersonController.getInstance().createPerson(first, last);
         return createCustomer(p);
     }
 
@@ -101,7 +101,7 @@ public class CustomerController extends SQLController {
      * Create a customer with the supplied names
      * returns the newly created customer
      */
-    public SQLCustomer createCustomer(SQLPerson p){
+    public Customer createCustomer(Person p){
         UUID id = p.getId();
         String sql = "INSERT INTO " + TABLE_NAME +
                     " ( ID, " + 
@@ -111,13 +111,13 @@ public class CustomerController extends SQLController {
                     " NULL " + 
                     " )";
         executeUpdate(sql);
-        return new SQLCustomer(id, p.getFirstName(), p.getLastName());
+        return new Customer(id, p.getFirstName(), p.getLastName());
     }
 
     /**
      * Update all customer attributes
      */
-    public void updateCustomer(SQLCustomer c){
+    public void updateCustomer(Customer c){
         String[] params = {
             CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()),
         };
@@ -128,7 +128,7 @@ public class CustomerController extends SQLController {
     /**
      * Create a customer from a result set
      */
-    private SQLCustomer createCustomer(ResultSet customerResult){
+    private Customer createCustomer(ResultSet customerResult){
         UUID id = null;
         ArrayList<UUID> accounts= new ArrayList<>();
         try {
@@ -147,16 +147,16 @@ public class CustomerController extends SQLController {
         } catch (SQLException e) {
             debugError(e);
         }
-        SQLPerson person = PersonController.getInstance().getPerson(id);
-        return new SQLCustomer(id, accounts, person);
+        Person person = PersonController.getInstance().getPerson(id);
+        return new Customer(id, accounts, person);
     }
 
     /**
      * Get all the people in the db
      * @return
      */
-    public ArrayList<SQLCustomer> getAll(){
-        ArrayList<SQLCustomer> allPerson = new ArrayList<>();
+    public ArrayList<Customer> getAll(){
+        ArrayList<Customer> allPerson = new ArrayList<>();
         String sqlQuery = "SELECT * FROM " + TABLE_NAME;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -208,7 +208,7 @@ public class CustomerController extends SQLController {
      * Delete a customer
      * @param customer
      */
-    public void deleteCustomer(SQLCustomer customer){
+    public void deleteCustomer(Customer customer){
         if(customer == null){
             return;
         }

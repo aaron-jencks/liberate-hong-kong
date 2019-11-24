@@ -6,26 +6,24 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import company.Controller.CustomerController;
 import company.Controller.PersonController;
-import company.Entity.SQLCustomer;
-import company.Entity.SQLPerson;
+import company.Entity.Customer;
+import company.Entity.Person;
 
 
 /**
  * Unit test for simple App.
  */
-public class CustomerSQLTest 
+public class CustomerTest
 {
 
     private static CustomerController cc;
-    private static SQLPerson p;
+    private static Person p;
 
     @AfterClass
     public static void truncate(){
@@ -51,7 +49,7 @@ public class CustomerSQLTest
      */
     @Test
     public void testGetNonExist(){
-        SQLCustomer c = cc.getCustomer(UUID.randomUUID());
+        Customer c = cc.getCustomer(UUID.randomUUID());
         assertNull(c);
     }
 
@@ -60,7 +58,7 @@ public class CustomerSQLTest
      */
     @Test
     public void testDelete(){
-        SQLCustomer c = cc.createCustomer("joey", "james");
+        Customer c = cc.createCustomer("joey", "james");
         cc.deleteCustomer(c);
         c = cc.getCustomer(c.getId());
         assertNull(c);
@@ -71,23 +69,23 @@ public class CustomerSQLTest
      */
     @Test
     public void testUpdate(){
-        SQLCustomer c = cc.createCustomer("joey", "james");
+        Customer c = cc.createCustomer("joey", "james");
         c.setFirstName("new first name");
-        SQLCustomer cDB = cc.getCustomer(c.getId());
+        Customer cDB = cc.getCustomer(c.getId());
         boolean same = c.getFirstName().equals(cDB.getFirstName());
         assertTrue(same);
     }
 
     @Test
     public void testCreateFromPerson(){
-        SQLCustomer c = cc.createCustomer(p);
+        Customer c = cc.createCustomer(p);
         assertSame(c.getId(), p.getId());
         assertSame(c.getFirstName(), p.getFirstName());
     }
 
     @Test
     public void testUpdateName(){
-        SQLCustomer c = cc.createCustomer(p);
+        Customer c = cc.createCustomer(p);
         c.setFirstName("nothing");
         p = PersonController.getInstance().getPerson(c.getId());
         boolean same = c.getFirstName().equals(p.getFirstName());

@@ -1,5 +1,6 @@
 package UI.menus.DepositAccountMenu;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -8,8 +9,8 @@ import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
-import company.Entity.BankAccount;
-import company.Entity.Abstract.ABankAccount;
+import company.Controller.AccountController;
+import company.Entity.Account;
 
 public class DepositAccountMenu extends AMenu {
     private String accountNumber = new String();
@@ -75,12 +76,12 @@ public class DepositAccountMenu extends AMenu {
             }
             return new ExitItem(this.parent);
         }
-        BankAccount ba = ABankAccount.load(UUID.fromString(accountNumber));
-        long startAmount = ba.getAmount();
+        Account a = AccountController.getInstance().getAccount(accountNumber);
+        BigDecimal startAmount = a.getAmount();
         get_display_string();
 
         try {
-            depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account balance: " + Long.toString(startAmount) + ". \n Enter deposit amount: ", (String s) -> {
+            depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account balance: " + startAmount.toString() + ". \n Enter deposit amount: ", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -88,9 +89,8 @@ public class DepositAccountMenu extends AMenu {
         }
 
         get_display_string();
-
-        ba.deposit(Long.parseLong(depositAmount));
-        totalAmount = Long.toString(ba.getAmount());
+        AccountController.getInstance().deposit(a, new BigDecimal(depositAmount));
+        totalAmount = a.getAmount().toString();
 
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Amount deposited. Total amount on account = " + totalAmount
