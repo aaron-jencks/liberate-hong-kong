@@ -7,9 +7,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import company.Controller.Abstract.ASQLController;
 import company.Entity.Person;
 
-public class PersonController extends SQLController {
+public class PersonController extends ASQLController {
 
     private static PersonController controllerInstance = null;
 
@@ -37,7 +38,7 @@ public class PersonController extends SQLController {
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id.toString());
           
-        if (SQLController.debug) {
+        if (ASQLController.debug) {
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;
@@ -132,7 +133,7 @@ public class PersonController extends SQLController {
     public ArrayList<Person> getAll(){
         ArrayList<Person> allPerson = new ArrayList<>();
         String sqlQuery = "SELECT * " + TABLE_NAME;
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;

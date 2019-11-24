@@ -10,10 +10,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import company.Controller.Abstract.ASQLController;
 import company.Entity.Account;
 import company.Entity.Enum.AccountType;
 
-public class AccountController extends SQLController{
+public class AccountController extends ASQLController{
 
     private static AccountController controllerInstance = null;
     private static String TABLE_NAME = "ACCOUNT";
@@ -45,7 +46,7 @@ public class AccountController extends SQLController{
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
         Account a = null;
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;
@@ -173,7 +174,7 @@ public class AccountController extends SQLController{
     public ArrayList<Account> getAll(){
         ArrayList<Account> allAccount = new ArrayList<>();
         String sqlQuery = "SELECT * " + TABLE_NAME;
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;

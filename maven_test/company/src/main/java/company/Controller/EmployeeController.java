@@ -7,12 +7,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import company.Controller.Abstract.ASQLController;
 import company.Entity.Employee;
 import company.Entity.Person;
 import company.Entity.Enum.Position;
 
 
-public class EmployeeController extends SQLController {
+public class EmployeeController extends ASQLController {
 
     private static EmployeeController controllerInstance = null;
     private static String TABLE_NAME = "EMPLOYEE";
@@ -97,7 +98,7 @@ public class EmployeeController extends SQLController {
         ArrayList<Employee> returnedEmployees = new ArrayList<>();
         String sqlQuery = "SELECT * FROM " + TABLE_NAME + 
                     " WHERE " + key +  " = " + sqlPrepare(value);
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;
@@ -161,9 +162,9 @@ public class EmployeeController extends SQLController {
     }
 
     public Employee createEmployee(Position position, String firstname, String lastname){
-        Person p = new Person(firstname, lastname);
+        Person p = PersonController.getInstance().createPerson(firstname, lastname);
         return createEmployee(position, null, null, null, null, p);
-    }
+    }    
 
     /**
      * Create an employee
@@ -179,6 +180,11 @@ public class EmployeeController extends SQLController {
             throw new NullPointerException("Passed person was null : (EmployeeController.createEmployee)");
         }
         return EmployeeController.getInstance().createEmployee(position, question, answer, username, password, person.getFirstName(), person.getLastName(), person.getId());
+    }
+
+    public Employee createEmployee(Position position, String question, String answer, String username, String password, String first, String last){
+        Person p = PersonController.getInstance().createPerson(first, last);
+        return createEmployee(position, question, answer, username, password, p);
     }
 
     /**
@@ -221,7 +227,7 @@ public class EmployeeController extends SQLController {
     public ArrayList<Employee> getAll(){
         ArrayList<Employee> allEmployees = new ArrayList<>();
         String sqlQuery = " SELECT * FROM " + TABLE_NAME;
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;

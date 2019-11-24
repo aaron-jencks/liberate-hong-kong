@@ -1,4 +1,4 @@
-package company.Controller;
+package company.Controller.Abstract;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,8 +11,8 @@ import javax.sql.DataSource;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-public class SQLController {
-
+public abstract class ASQLController {
+    
     public static boolean debug = false;
 
     /**
@@ -119,7 +119,7 @@ public class SQLController {
      * @return
      */
     public static int executeUpdate(String sqlQuery) {
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeUpdate : " + sqlQuery + "\n");
         }
         Connection connection = null;

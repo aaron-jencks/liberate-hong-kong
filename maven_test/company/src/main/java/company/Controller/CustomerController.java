@@ -8,12 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import company.Controller.Abstract.ASQLController;
 import company.Entity.Account;
 import company.Entity.Customer;
 import company.Entity.Person;
 import company.Entity.Enum.AccountType;
 
-public class CustomerController extends SQLController {
+public class CustomerController extends ASQLController {
 
     private static CustomerController controllerInstance = null;
     private static String TABLE_NAME = "CUSTOMER";
@@ -41,7 +42,7 @@ public class CustomerController extends SQLController {
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
         Customer c = null;
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;
@@ -158,7 +159,7 @@ public class CustomerController extends SQLController {
     public ArrayList<Customer> getAll(){
         ArrayList<Customer> allPerson = new ArrayList<>();
         String sqlQuery = "SELECT * FROM " + TABLE_NAME;
-        if(SQLController.debug){
+        if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }
         Connection connection = null;

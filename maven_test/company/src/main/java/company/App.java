@@ -1,7 +1,6 @@
 package company;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -9,8 +8,8 @@ import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
 import company.Controller.EmployeeController;
+import company.Controller.PersonController;
 import company.Entity.Employee;
-import company.Entity.Person;
 import company.Entity.Enum.Position;
 
 /**
@@ -22,12 +21,11 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         TermController term = new TermController();
+
+        PersonController.getInstance().createPerson("test", "test");
         
-        Employee e = EmployeeController.getInstance().createEmployee(Position.TELLER, "John", "Smith");
-        e.setPassword("p");
-        e.setUsername("u");
-        e.setQuestion("Hello?");
-        e.setAnswer("World!");
+        EmployeeController e = EmployeeController.getInstance();
+        e.createEmployee(Position.TELLER, "Hello?", "World!", "u", "p", "John", "Smith");
 
         GreeterMenu splash = new GreeterMenu(term);
         term.set_main_window(splash);
