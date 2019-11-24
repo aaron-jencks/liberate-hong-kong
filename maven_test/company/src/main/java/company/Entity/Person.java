@@ -3,12 +3,10 @@ package company.Entity;
 import java.util.UUID;
 
 import company.Controller.PersonController;
+import company.Entity.Abstract.APerson;
 
-public class Person {
-    private UUID id;
-    private String firstName;
-    private String lastName;
-
+public class Person extends APerson{
+    
     /**
      * Empty Constructor
      */

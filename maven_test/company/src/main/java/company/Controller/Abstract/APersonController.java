@@ -2,7 +2,6 @@ package company.Controller.Abstract;
 
 import company.Controller.Interface.IPersonController;
 
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,9 +1,8 @@
 package company.Entity.Interface;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
-public interface ICustomer extends IPerson {
+public interface ICustomer {
 
     /**
      * Adds a an account to this person's accounts list
@@ -19,6 +18,5 @@ public interface ICustomer extends IPerson {
      */
     public UUID removeAccount(UUID accountId);
 
-    public UUID setAccountIds(ArrayList<UUID> accountIds);
-    public ArrayList<UUID> getAccountIds();
+    
 }

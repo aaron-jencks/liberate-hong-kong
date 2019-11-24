@@ -9,6 +9,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
 import company.Entity.Employee;
+import company.Entity.Enum.Position;
 
 public class FireMenu extends AMenu {
     private static String employeeId = new String();
@@ -53,6 +54,10 @@ public class FireMenu extends AMenu {
 
     @Override
     public IMenuItem prompt() {
+        if(EmployeeController.getInstance().auth().getPosition() != Position.HR){
+            //only HR can hire
+            return new ExitItem(this.parent);
+        }
         Scanner sc = new Scanner(System.in);
 
         if (!is_valid)

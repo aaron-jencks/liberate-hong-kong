@@ -1,5 +1,8 @@
 package company.Entity.Enum;
 
 public enum Position{
-    TELLER, MANAGER,
+    TELLER, 
+    MANAGER,
+    HR,
+    LOAN_OFFICER
 }

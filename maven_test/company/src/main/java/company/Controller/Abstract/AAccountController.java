@@ -21,6 +21,15 @@ public abstract class AAccountController extends ASQLController implements IAcco
         return getAccount(UUID.fromString(id));
     }
 
+    @Override
+    public void accrueInterest() {
+        ArrayList<Account> list = getAll();
+        for (Account account : list) {
+            //TODO fix
+            // account.accrueInterest();
+        }
+    }
+
     /**
      * Find the person by the id
      */

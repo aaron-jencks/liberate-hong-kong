@@ -19,7 +19,15 @@ import company.Entity.Enum.Position;
 
 public abstract class AEmployeeController extends ASQLController implements IEmployeeController{
 
-    
+
+    public void fire(Employee employee) {
+        if(EmployeeController.getInstance().auth().getPosition() != Position.HR){
+            //TODO throw error?
+            return;
+        }
+        deleteEmployee(employee);
+    }
+
     /**
      * Create an employee from a result set
      * @param employeeResult

@@ -71,6 +71,7 @@ public class LoginMenu extends AMenu {
 
             boolean validUP = employee.getPassword().equals(password);
             if(validUP){
+                EmployeeController.getInstance().setAuth(employee);
                 return new MainMenuItem(parent);
             }
         }
