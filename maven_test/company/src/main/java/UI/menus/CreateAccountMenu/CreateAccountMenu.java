@@ -1,7 +1,6 @@
 package UI.menus.CreateAccountMenu;
 
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -23,11 +22,6 @@ public class CreateAccountMenu extends AMenu {
 
     public CreateAccountMenu(ITermController parent) {
         super(parent);
-    }
-
-    @Override
-    public int get_y_coord() {
-        return (parent.get_term_height() - 2) >> 1;
     }
 
     @Override

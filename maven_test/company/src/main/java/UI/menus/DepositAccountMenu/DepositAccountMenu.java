@@ -1,8 +1,8 @@
 package UI.menus.DepositAccountMenu;
 
 import java.math.BigDecimal;
+import java.security.InvalidParameterException;
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -60,23 +60,22 @@ public class DepositAccountMenu extends AMenu {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            UUID id = UUID.fromString(accountNumber);
-        } catch (IllegalArgumentException e) {
-            // accountNumber = new String();
-            // invalidate();
-            // return null;
+
+        //try to get the account
+        Account a = AccountController.getInstance().getAccount(accountNumber);
+        //make sure it exists
+        if(a == null){
             try {
                 accept = UIUtil.get_input(sc, accept, prompt + " Invalid account number. "
                         + "\n Press any key to return to the account menu.", (String s) -> {
                             return true;
                         });
             } catch (Exception q) {
-                e.printStackTrace();
+                q.printStackTrace();
             }
             return new ExitItem(this.parent);
         }
-        Account a = AccountController.getInstance().getAccount(accountNumber);
+
         BigDecimal startAmount = a.getAmount();
         get_display_string();
 
@@ -89,19 +88,37 @@ public class DepositAccountMenu extends AMenu {
         }
 
         get_display_string();
-        AccountController.getInstance().deposit(a, new BigDecimal(depositAmount));
-        totalAmount = a.getAmount().toString();
 
         try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Amount deposited. Total amount on account = " + totalAmount
-                    + "\n Press any key to return to the account menu.", (String s) -> {
-                        return true;
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
+            //try to deposit
+            AccountController.getInstance().deposit(a, new BigDecimal(depositAmount));
+            totalAmount = a.getAmount().toString();
+
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + 
+                    " Amount deposited. Total amount on account = " + totalAmount + 
+                    "\n Press any key to return to the account menu.", 
+                    (String s) -> {
+                            return true;
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return new ExitItem(this.parent);
+        } catch (InvalidParameterException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + 
+                    "Failed to deposit amount. ", 
+                    (String s) -> {
+                            return true;
+                        });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
         }
 
-        return new ExitItem(this.parent);
     }
 
 }

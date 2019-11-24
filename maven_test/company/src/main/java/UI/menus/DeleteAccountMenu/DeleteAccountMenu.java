@@ -2,7 +2,6 @@ package UI.menus.DeleteAccountMenu;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -19,7 +18,6 @@ public class DeleteAccountMenu extends AMenu {
 
     public DeleteAccountMenu(ITermController parent) {
         super(parent);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

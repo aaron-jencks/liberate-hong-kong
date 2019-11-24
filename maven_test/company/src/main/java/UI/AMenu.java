@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import UI.controller.ITermController;
-import company.Controller.EmployeeController;
 
 public abstract class AMenu implements IMenu {
 
@@ -18,14 +17,6 @@ public abstract class AMenu implements IMenu {
     private boolean is_availabled = false;
     public boolean is_valid = false;
     public boolean is_centered = true;
-    protected EmployeeController employeeController;
-
-    public AMenu(ITermController parent, EmployeeController employeeController)
-    {
-        super();
-        this.parent = parent;
-        this.employeeController = employeeController;
-    }
 
     public AMenu(ITermController parent)
     {

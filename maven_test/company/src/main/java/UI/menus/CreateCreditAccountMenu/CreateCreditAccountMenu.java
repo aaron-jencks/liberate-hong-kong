@@ -8,11 +8,9 @@ import UI.global_menu_items.ExitItem;
 import company.Controller.CustomerController;
 import company.Entity.Account;
 import company.Entity.Customer;
-import company.Entity.Person;
 import company.Entity.Enum.AccountType;
 
 import java.util.Scanner;
-import java.util.UUID;
 
 public class CreateCreditAccountMenu extends AMenu {
 

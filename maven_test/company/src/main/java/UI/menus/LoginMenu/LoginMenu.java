@@ -1,7 +1,6 @@
 package UI.menus.LoginMenu;
 
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.AlignmentType;
@@ -72,7 +71,7 @@ public class LoginMenu extends AMenu {
 
             boolean validUP = employee.getPassword().equals(password);
             if(validUP){
-                return new MainMenuItem(parent, this.employeeController);
+                return new MainMenuItem(parent);
             }
         }
         catch(EmployeeNotFoundException e) {

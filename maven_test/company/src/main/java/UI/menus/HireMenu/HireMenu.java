@@ -1,7 +1,6 @@
 package UI.menus.HireMenu;
 
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -13,80 +12,90 @@ import company.Entity.Employee;
 import company.Entity.Enum.Position;
 
 public class HireMenu extends AMenu {
-    private EmployeeController controller;
+    private String firstName = new String();
+    private String lastName = new String();
+    private String position = new String();
+    private String confirm = new String();
+    private String done = new String();
 
-    public HireMenu(ITermController parent, EmployeeController controller)
+    public HireMenu(ITermController parent)
     {
-        super(parent, controller);
-        this.controller = controller;
+        super(parent);
     }
 
     @Override
     public String get_display_string()
     {
-        String result = "";
+        String result = new String();
 
         // Add vertical padding
         int v_pad = get_y_coord(), h_pad = get_x_coord();
         for(int i = 0; i < v_pad; i++)
             result += "\n";
 
-        String new_prompt = "";
+        String new_prompt = new String();
         for(int i = 0; i < h_pad; i++)
             new_prompt += " ";
 
-        return new_prompt;
+        String s = "";
+        if(firstName.isBlank()){
+            s = "First Name: ";
+        } else if(lastName.isBlank()){
+            s = "Last Name: ";
+        }else if(position.isBlank()){
+            s = "Position: ";
+        }else if(confirm.isBlank()){
+            s = "Confirm hiring?";
+        }
+
+        prompt = new_prompt + s;
+
+        return result;
     }
 
     @Override
-    public IMenuItem prompt()
-    {
+    public IMenuItem prompt() {
         Scanner sc = new Scanner(System.in);
-        String confirm = "";
 
-        if(!is_valid)
+        if (!is_valid)
             display();
 
-        String first_name = "";
-        String last_name = "";
-        String position = "";
-
-        while(true) {
-            String padding = get_display_string();
-
-            while (confirm.toUpperCase().indexOf('Y') < 0) {
-                try {
-                    first_name = UIUtil.get_input(sc, first_name, padding + "First Name: ", (String s) -> {
-                        return true;
-                    });
-                    last_name = UIUtil.get_input(sc, last_name, padding + "Last Name: ", (String s) -> {
-                        return true;
-                    });
-                    position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> {
-                        return true;
-                    });
-                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm hiring this person? ", (String s) -> {
-                        return true;
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
+        while (confirm.toUpperCase().indexOf('Y') < 0) {
             try {
-                Employee e = EmployeeController.getInstance().createEmployee(Position.valueOf(position), first_name, last_name);
-                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + e.getId().toString() + " has been created. Press enter to continue.", (String s) -> {
+                get_display_string();
+                firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> {
                     return true;
                 });
-                return new ExitItem(parent);
-            }
-            catch (Exception e) {
+                get_display_string();
+                lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> {
+                    return true;
+                });
+                get_display_string();
+                position = UIUtil.get_input(sc, position, prompt, (String s) -> {
+                    //TODO need to validate
+                    return true;
+                });
+                get_display_string();
+                confirm = UIUtil.get_input(sc, confirm, prompt, (String s) -> {
+                    return true;
+                });
+            } catch (Exception e) {
                 e.printStackTrace();
-                return new ExitItem(parent);
             }
         }
+        get_display_string();
 
+        Employee e = EmployeeController.getInstance()
+            .createEmployee(Position.valueOf(position.toUpperCase()), firstName, lastName);
 
-
+        try {
+            done = UIUtil.get_input(sc, done, prompt + " Employee Hired. Employee id = " + e.getId().toString()
+                    + "\n Press any key to return to the account menu.", (String s) -> {
+                        return true;
+                    });
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+        return new ExitItem(this.parent);
     }
 }

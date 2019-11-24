@@ -9,7 +9,6 @@ import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
 import company.Controller.EmployeeController;
 import company.Controller.PersonController;
-import company.Entity.Employee;
 import company.Entity.Enum.Position;
 
 /**

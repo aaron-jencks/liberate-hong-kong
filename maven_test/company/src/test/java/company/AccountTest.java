@@ -9,6 +9,7 @@ import java.security.InvalidParameterException;
 import java.util.UUID;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import company.Controller.AccountController;
@@ -22,17 +23,16 @@ import company.Entity.Enum.AccountType;
 public class AccountTest
 {
 
+    private static AccountController ac;
+
     @AfterClass
     public static void truncate(){
         AccountController.getInstance().truncateTable();
     }
 
-    /**
-     * Can I create the table?
-     */
-    @Test
-    public void testTableCreate(){
-        AccountController ac = AccountController.getInstance();
+    @Before
+    public void setup(){
+        ac = AccountController.getInstance();
     }
 
     /**
@@ -40,7 +40,6 @@ public class AccountTest
      */
     @Test
     public void testCreateAccount(){
-        AccountController ac = AccountController.getInstance();
         ac.createAccount(new BigDecimal(123456), AccountType.SAVINGS);
     }
 
@@ -49,7 +48,6 @@ public class AccountTest
      */
     @Test
     public void testGetAccountError(){
-        AccountController ac = AccountController.getInstance();
         Account a = ac.getAccount(UUID.randomUUID());
         assertNull(a);
     }
@@ -59,7 +57,6 @@ public class AccountTest
      */
     @Test
     public void testDelete(){
-        AccountController ac = AccountController.getInstance();
         Account a = ac.createAccount(new BigDecimal(123456), AccountType.CHECKING);
         ac.deleteAccount(a);
         a = ac.getAccount(a.getId());
@@ -71,7 +68,6 @@ public class AccountTest
      */
     @Test
     public void testAccountDeposit(){
-        AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal addedAmount = new BigDecimal(1566);
         Account account = ac.createAccount(startAmount, AccountType.CHECKING);
@@ -88,7 +84,6 @@ public class AccountTest
      */
     @Test
     public void testAccountWithdrawl(){
-        AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal subAmount = new BigDecimal(1566);
         Account account = ac.createAccount(startAmount, AccountType.CHECKING);
@@ -104,7 +99,6 @@ public class AccountTest
      */
     @Test(expected = InvalidParameterException.class)
     public void withdrawErrorHandling(){
-        AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal subAmount = new BigDecimal(-1566);
         Account account = ac.createAccount(startAmount, AccountType.CHECKING);
@@ -116,7 +110,6 @@ public class AccountTest
      */
     @Test(expected = InvalidParameterException.class)
     public void depositErrorHandling(){
-        AccountController ac = AccountController.getInstance();
         BigDecimal startAmount = new BigDecimal(123.456);
         BigDecimal addedAmount = new BigDecimal(-1566);
         Account account = ac.createAccount(startAmount, AccountType.CHECKING);

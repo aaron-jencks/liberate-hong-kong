@@ -1,7 +1,6 @@
 package UI.menus.FireMenu;
 
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -12,12 +11,15 @@ import company.Controller.EmployeeController;
 import company.Entity.Employee;
 
 public class FireMenu extends AMenu {
-    private EmployeeController controller;
+    private static String employeeId = new String();
+    private static String confirm = new String();
+    private static String done = new String();
+    private static String employeeError = new String();
+    private Employee employee;
 
-    public FireMenu(ITermController parent, EmployeeController controller)
+    public FireMenu(ITermController parent)
     {
-        super(parent, controller);
-        this.controller = controller;
+        super(parent);
     }
 
     @Override
@@ -34,64 +36,70 @@ public class FireMenu extends AMenu {
         for(int i = 0; i < h_pad; i++)
             new_prompt += " ";
 
-        return new_prompt;
+        String s = "";
+        if(employeeId.isBlank()){
+            s = "Please enter the ID of the employee to be fired: ";
+        } else if(confirm.isBlank()){
+            s = "Are you sure you want to fire " + employee.getFirstName() + " ?";
+        }else if(! employeeError.isEmpty()){
+            employeeError = new String();
+            employeeId = new String();
+        }
+
+        prompt = new_prompt + s;
+
+        return result;
     }
 
     @Override
-    public IMenuItem prompt()
-    {
+    public IMenuItem prompt() {
         Scanner sc = new Scanner(System.in);
-        String confirm = "";
 
-        if(!is_valid)
+        if (!is_valid)
             display();
 
-        String employee_id = "";
-
-        while(true) {
-            String padding = get_display_string();
-
-            while (confirm.toUpperCase().indexOf('Y') < 0) {
-                try {
-                    employee_id = UIUtil.get_input(sc, employee_id, padding + "Employee ID: ", (String x) -> {
-                        return true;
-                    });
-                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm firing this person? ", (String s) -> {
-                        return true;
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
+        while (confirm.toUpperCase().indexOf('Y') < 0) {
             try {
-                Employee e = EmployeeController.getInstance().getEmployee(employee_id);
-                EmployeeController.getInstance().deleteEmployee(e);
-                confirm = UIUtil.get_input(sc, confirm, padding + "Employee " + e.getId() + " has been fired. Press enter to continue.", (String s) -> {
+                get_display_string();
+                employeeId = UIUtil.get_input(sc, employeeId, prompt, (String x) -> {
                     return true;
                 });
-                return new ExitItem(parent);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            catch (Exception e) {
-                if (e.getMessage().equals("Employee not found")) {
-                    try {
-                        confirm = UIUtil.get_input(sc, confirm, padding + "Employee not found. Please try again. Press enter to continue.", (String s) -> {
-                            return true;
-                        });
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+            employee = EmployeeController.getInstance().getEmployee(employeeId);
+            if (employee == null) {
+                get_display_string();
+                try {
+                    employeeId = new String();
+                    employeeError = UIUtil.get_input(sc, employeeError, prompt + 
+                    "Employee not found. Try again", (String s) -> {
+                                return true;
+                            });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                else {
-                    e.printStackTrace();
-                    return new ExitItem(parent);
-                }
+            }
+            get_display_string();
+            try {
+                confirm = UIUtil.get_input(sc, confirm, confirm, (String s) -> {
+                    return true;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-
-
+        try {
+            EmployeeController.getInstance().deleteEmployee(employee);
+            done = UIUtil.get_input(sc, done,
+                    prompt + "Employee  has been fired. Press enter to continue.", (String s) -> {
+                        return true;
+                    });
+            return new ExitItem(parent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ExitItem(this.parent);
     }
 }

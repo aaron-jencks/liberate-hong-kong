@@ -6,18 +6,16 @@ import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
-import company.exceptions.EmployeeNotFoundException;
+import company.Entity.Employee;
+import company.Entity.Enum.Position;
 
 import java.util.Scanner;
-import java.util.UUID;
 
 public class PromoteMenu extends AMenu {
-    private EmployeeController controller;
 
-    public PromoteMenu(ITermController parent, EmployeeController controller)
+    public PromoteMenu(ITermController parent)
     {
-        super(parent, controller);
-        this.controller = controller;
+        super(parent);
     }
 
     @Override
@@ -49,70 +47,46 @@ public class PromoteMenu extends AMenu {
 
         String employee_id_str = "";
         String position = "";
-//TODO PUT ALL THIS BACK
-//         while(true) {
-//             String padding = get_display_string();
+        while(true) {
+            String padding = get_display_string();
 
-//             while (confirm.toUpperCase().indexOf('Y') < 0) {
-//                 try {
-//                     employee_id_str = UIUtil.get_input(sc, employee_id_str, padding + "Employee ID: ", (String s) -> true);
-//                     position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> { return true;});
+            while (confirm.toUpperCase().indexOf('Y') < 0) {
+                try {
+                    employee_id_str = UIUtil.get_input(sc, employee_id_str, padding + "Employee ID: ", (String s) -> true);
+                    position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> { return true;});
 
-//                     confirm = UIUtil.get_input(sc, confirm, padding + "Confirm changing this employee's position? ", (String s) -> { return true;});
-//                 } catch (Exception e) {
-//                     e.printStackTrace();
-//                 }
-//             }
+                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm changing this employee's position? ", (String s) -> { return true;});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-//             UUID employee_id;
-//             try {
-//                 employee_id = UUID.fromString(employee_id_str);
-//             }
-//             catch(IllegalArgumentException e) {
-//                 try {
-//                     UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
-//                 }
-//                 catch (Exception e1) { e1.printStackTrace(); }
+            //try to get the employee
+            Employee employee = EmployeeController.getInstance().getEmployee(employee_id_str);
+            if(employee == null){
+                try {
+                    UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
 
-//                 invalidate();
-//                 return null;
-//             }
+                invalidate();
+                return new ExitItem(parent);
+            }
+            //check if it's a valid position
+            if(Position.valueOf(position.toUpperCase()) == null){
+                try {
+                    UIUtil.get_input(sc, confirm, padding + "No position found of type " + position + " Press enter to continue.", (String s) -> true);
+                }
+                catch (Exception e1) { e1.printStackTrace(); }
 
-//             UUID tmp_id;
-//             try {
-//                 //TODO fix
-//                 // tmp_id = controller.promoteEmployee(employee_id, position);
-//             }
-//             catch(EmployeeNotFoundException e) {
-//                 try {
-//                     UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
-//                 }
-//                 catch (Exception e1) { e1.printStackTrace(); }
-
-//                 invalidate();
-// //                return null;
-//                 return new ExitItem(parent);
-//             }
-//             catch(Exception e) {
-//                 try {
-//                     UIUtil.get_input(sc, confirm, padding + e.getMessage() + " Press enter to continue.", (String s) -> true);
-//                 }
-//                 catch (Exception e1) { e1.printStackTrace(); }
-
-//                 invalidate();
-// //                return null;
-//                 return new ExitItem(parent);
-//             }
-
-//             try {
-//                 UIUtil.get_input(sc, confirm, padding + "Employee " + tmp_id + " has been promoted. Press enter to continue.", (String s) -> true);
-//             }
-//             catch (Exception e) { e.printStackTrace(); }
+                invalidate();
+                return new ExitItem(parent);
+            }
+            //update their position
+            employee.setPosition(Position.valueOf(position.toUpperCase()));
 
             return new ExitItem(parent);
-        // }
-
-
+        }
 
     }
 }

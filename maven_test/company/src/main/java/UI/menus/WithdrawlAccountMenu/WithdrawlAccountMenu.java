@@ -3,7 +3,6 @@ package UI.menus.WithdrawlAccountMenu;
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 import java.util.Scanner;
-import java.util.UUID;
 
 import UI.AMenu;
 import UI.IMenuItem;
@@ -61,10 +60,10 @@ public class WithdrawlAccountMenu extends AMenu {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //try to get the account
+        Account a = AccountController.getInstance().getAccount(accountNumber);
 
-        try {
-            UUID id = UUID.fromString(accountNumber);
-        } catch (Exception e) {
+        if(a == null){
             try {
                 accept = UIUtil.get_input(sc, accept, prompt + " Account not found. " + totalAmount
                         + "\n Press any key to return to the account menu.", (String s) -> {
@@ -75,7 +74,7 @@ public class WithdrawlAccountMenu extends AMenu {
             }
             return new ExitItem(this.parent);
         }
-        Account a = AccountController.getInstance().getAccount(accountNumber);
+
         BigDecimal startAmount = a.getAmount();
         get_display_string();
 

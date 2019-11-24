@@ -135,7 +135,7 @@ public class AccountController extends ASQLController{
      * @param amount
      * @return Account
      */
-    public Account deposit(Account account, BigDecimal amount){
+    public Account deposit(Account account, BigDecimal amount) throws InvalidParameterException{
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidParameterException("Deposit amount can not be <= 0");
         }
@@ -149,7 +149,7 @@ public class AccountController extends ASQLController{
      * @param amount
      * @return Account
      */
-    public Account withdrawl(Account account, BigDecimal amount){
+    public Account withdrawl(Account account, BigDecimal amount) throws InvalidParameterException{
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidParameterException("Withdrawl amount can not be <= 0");
         }
