@@ -16,7 +16,6 @@ public class AccountController extends SQLController{
 
     private static AccountController controllerInstance = null;
 
-    public static String ACCT_ID_CONST = "ID";
     public static String ACCT_AMT_CONST = "amount";
     public static String ACCT_TABLE_NAME = "ACCOUNT";
 
@@ -37,7 +36,7 @@ public class AccountController extends SQLController{
      */
     public SQLAccount getAccount(UUID id){
         String sqlQuery = "SELECT * FROM " + ACCT_TABLE_NAME +
-                    " WHERE " + ACCT_ID_CONST + " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         SQLAccount a = null;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -79,8 +78,7 @@ public class AccountController extends SQLController{
     public SQLAccount createAccount(BigDecimal amount){
         UUID id = UUID.randomUUID();
         String sql = "INSERT INTO " + ACCT_TABLE_NAME +
-                    " ( " + 
-                    ACCT_ID_CONST + ", " + 
+                    " ( ID, " + 
                     ACCT_AMT_CONST +
                      " ) VALUES ( " + 
                     sqlPrepare(id) + " , " +
@@ -104,7 +102,7 @@ public class AccountController extends SQLController{
             debugError(e);
         }
         try {
-            id = UUID.fromString(personResult.getString(ACCT_ID_CONST));
+            id = UUID.fromString(personResult.getString("ID"));
         } catch (SQLException e) {
             System.err.println("Failed to retrieve account.id (AccountController.createAccount)");
             debugError(e);
@@ -147,8 +145,7 @@ public class AccountController extends SQLController{
         String sql = "UPDATE " + ACCT_TABLE_NAME + 
             " SET " + 
             ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount()) + 
-            " WHERE " + 
-            ACCT_ID_CONST + " = " + sqlPrepare(account.getId());
+            " WHERE ID = " + sqlPrepare(account.getId());
         executeUpdate(sql);
         return getAccount(account.getId());
     }
@@ -199,9 +196,9 @@ public class AccountController extends SQLController{
      */
     private static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS " + ACCT_TABLE_NAME + 
-                    "(" + ACCT_ID_CONST + " VARCHAR(255) not NULL, " + 
+                    "(ID VARCHAR(255) not NULL, " + 
                     ACCT_AMT_CONST + " DECIMAL(13,4), " + 
-                    " PRIMARY KEY ( " + ACCT_ID_CONST + " ))";
+                    " PRIMARY KEY ( ID ))";
         executeUpdate(sql);
     }
 
@@ -211,8 +208,7 @@ public class AccountController extends SQLController{
      */
     public void deleteAccount(UUID id){
         String sql = "DELETE FROM " + ACCT_TABLE_NAME + 
-                    " WHERE " + ACCT_ID_CONST + 
-                    " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         executeUpdate(sql);
     }
 

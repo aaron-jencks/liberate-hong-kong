@@ -13,7 +13,6 @@ public class PersonController extends SQLController {
 
     private static PersonController controllerInstance = null;
 
-    private static String PERSON_ID_CONST = "ID";
     private static String PERSON_FIRSTNAME_CONST = "first";
     private static String PERSON_LASTNAME_CONST = "last";
     private static String PERSON_TABLE_NAME = "PERSON";
@@ -36,7 +35,7 @@ public class PersonController extends SQLController {
     public SQLPerson getPerson(UUID id){
         SQLPerson p = null;
         String sqlQuery = "SELECT * FROM " + PERSON_TABLE_NAME +
-                    " WHERE " + PERSON_ID_CONST + " = " + sqlPrepare(id.toString());
+                    " WHERE ID = " + sqlPrepare(id.toString());
           
         if (SQLController.debug) {
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -78,7 +77,7 @@ public class PersonController extends SQLController {
     public SQLPerson createPerson(String firstName, String lastName){
         UUID id = UUID.randomUUID();
         String sql = "INSERT INTO " + PERSON_TABLE_NAME +
-                    " ( " + PERSON_ID_CONST + ", " + PERSON_FIRSTNAME_CONST + ", " + PERSON_LASTNAME_CONST + " )" +
+                    " ( ID, " + PERSON_FIRSTNAME_CONST + ", " + PERSON_LASTNAME_CONST + " )" +
                     " VALUES ( " + 
                     sqlPrepare(id.toString()) + " , " +
                     sqlPrepare(firstName) + " , " +
@@ -107,7 +106,7 @@ public class PersonController extends SQLController {
             debugError(e);
         }
         try {
-            p.setId(UUID.fromString(personResult.getString(PERSON_ID_CONST)));
+            p.setId(UUID.fromString(personResult.getString("ID")));
             return p;
         } catch (SQLException e) {
             debugError(e);
@@ -173,8 +172,7 @@ public class PersonController extends SQLController {
      */
     public void deletePerson(UUID id){
         String sql = "DELETE FROM " + PERSON_TABLE_NAME + 
-                    " WHERE " + PERSON_ID_CONST +
-                    " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         executeUpdate(sql);
     }
 
@@ -184,10 +182,10 @@ public class PersonController extends SQLController {
      */
     private static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS " + PERSON_TABLE_NAME + 
-                    "(" + PERSON_ID_CONST + " VARCHAR(255) not NULL, " + 
+                    "(ID VARCHAR(255) not NULL, " + 
                     PERSON_FIRSTNAME_CONST + " VARCHAR(255), " + 
                     PERSON_LASTNAME_CONST + " VARCHAR(255), " + 
-                    " PRIMARY KEY ( " + PERSON_ID_CONST + " ))";
+                    " PRIMARY KEY ( ID ))";
         executeUpdate(sql);
     }
 

@@ -16,7 +16,6 @@ public class EmployeeController extends SQLController {
 
     private static EmployeeController controllerInstance = null;
 
-    public static String EMP_ID_CONST = "ID";
     public static String EMP_TABLE_NAME = "EMPLOYEE";
     public static String EMP_QUESTION_CONST = "question";
     public static String EMP_ANSWER_CONST = "answer";
@@ -70,7 +69,7 @@ public class EmployeeController extends SQLController {
             debugError(er);
         }
         try {
-            id = UUID.fromString(employeeResult.getString(EMP_ID_CONST));
+            id = UUID.fromString(employeeResult.getString("ID"));
         } catch (SQLException er) {
             System.err.println("Failed to retrieve employee. (EmployeeController.createEmployee)");
             debugError(er);
@@ -86,7 +85,7 @@ public class EmployeeController extends SQLController {
      */
     public SQLEmployee getEmployee(UUID id){
         String sqlQuery = "SELECT * FROM " + EMP_TABLE_NAME + 
-                    " WHERE " + EMP_ID_CONST + " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         SQLEmployee e = null;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -150,8 +149,7 @@ public class EmployeeController extends SQLController {
         SQLPerson p = pc.createPerson(first, last);
         UUID id = p.getId();
         String sql = "INSERT INTO " + EMP_TABLE_NAME + 
-                    " ( " + 
-                    EMP_ID_CONST + " , " + 
+                    " ( ID , " + 
                     EMP_QUESTION_CONST + " , " + 
                     EMP_ANSWER_CONST + " , " + 
                     EMP_USERNAME_CONST + " , " + 
@@ -212,13 +210,13 @@ public class EmployeeController extends SQLController {
      */
     private static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS " + EMP_TABLE_NAME + 
-                    " ( " + EMP_ID_CONST + " VARCHAR(255) not NULL, " + 
+                    " ( ID VARCHAR(255) not NULL, " + 
                     EMP_USERNAME_CONST + " VARCHAR(255), " +
                     EMP_PASSWORD_CONST + " VARCHAR(255), " + 
                     EMP_QUESTION_CONST + " VARCHAR(255), " + 
                     EMP_ANSWER_CONST + " VARCHAR(255), " + 
                     EMP_TO_PERSON + " VARCHAR(255), " + 
-                    " PRIMARY KEY ( " + EMP_ID_CONST + " ))";
+                    " PRIMARY KEY ( ID ))";
         executeUpdate(sql);
     }
 
@@ -232,8 +230,7 @@ public class EmployeeController extends SQLController {
                     EMP_PASSWORD_CONST + " = " + sqlPrepare(e.getPassword()) + " , " + 
                     EMP_QUESTION_CONST + " = " + sqlPrepare(e.getQuestion()) + " , " + 
                     EMP_ANSWER_CONST + " = " + sqlPrepare(e.getAnswer()) +
-                    " WHERE " +
-                    EMP_ID_CONST + " = " + sqlPrepare(e.getId());
+                    " WHERE ID = " + sqlPrepare(e.getId());
         executeUpdate(sql);
     }
 
@@ -243,8 +240,7 @@ public class EmployeeController extends SQLController {
      */
     public void deleteEmployee(UUID id){
         String sql = "DELETE FROM " + EMP_TABLE_NAME + 
-                    " WHERE " + EMP_ID_CONST +
-                    " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         executeUpdate(sql);
     }
 

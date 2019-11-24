@@ -13,7 +13,6 @@ public class CustomerController extends SQLController {
 
     private static CustomerController controllerInstance = null;
 
-    public static String CUST_ID_CONST = "ID";
     public static String CUST_FIRSTNAME_CONST = "first";
     public static String CUST_LASTNAME_CONST = "last";
     public static String CUST_TABLE_NAME = "CUSTOMER";
@@ -36,7 +35,7 @@ public class CustomerController extends SQLController {
      */
     public SQLCustomer getCustomer(UUID id){
         String sqlQuery = "SELECT * FROM " + CUST_TABLE_NAME +
-                    " WHERE " + CUST_ID_CONST + " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         SQLCustomer c = null;
         if(SQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
@@ -78,8 +77,7 @@ public class CustomerController extends SQLController {
     public SQLCustomer createCustomer(String firstName, String lastName){
         UUID id = UUID.randomUUID();
         String sql = "INSERT INTO " + CUST_TABLE_NAME +
-                    " ( " + 
-                    CUST_ID_CONST + ", " + 
+                    " ( ID, " + 
                     CUST_FIRSTNAME_CONST + ", " + 
                     CUST_LASTNAME_CONST + " , " + 
                     CUST_ACCOUNTS_CONST + 
@@ -102,8 +100,7 @@ public class CustomerController extends SQLController {
                     CUST_FIRSTNAME_CONST + " = " + sqlPrepare(c.getFirstName()) +  " , " + 
                     CUST_LASTNAME_CONST + " = " + sqlPrepare(c.getLastName()) +  " , " + 
                     CUST_ACCOUNTS_CONST + " = " + sqlPrepare(c.getAccountsString()) + 
-                    " WHERE " +
-                    CUST_ID_CONST + " = " + sqlPrepare(c.getId());
+                    " WHERE ID = " + sqlPrepare(c.getId());
         executeUpdate(sql);
     }
 
@@ -128,7 +125,7 @@ public class CustomerController extends SQLController {
             debugError(e);
         }
         try {
-            id = UUID.fromString(customerResult.getString(CUST_ID_CONST));
+            id = UUID.fromString(customerResult.getString("ID"));
         } catch (SQLException e) {
             debugError(e);
         }
@@ -193,11 +190,11 @@ public class CustomerController extends SQLController {
      */
     private static void createTable(){
         String sql = "CREATE TABLE IF NOT EXISTS " + CUST_TABLE_NAME + 
-                    "(" + CUST_ID_CONST + " VARCHAR(255) not NULL, " + 
+                    "(ID VARCHAR(255) not NULL, " + 
                     CUST_FIRSTNAME_CONST + " VARCHAR(255), " + 
                     CUST_LASTNAME_CONST + " VARCHAR(255), " + 
                     CUST_ACCOUNTS_CONST + " VARCHAR(255), " + 
-                    " PRIMARY KEY ( " + CUST_ID_CONST + " ))";
+                    " PRIMARY KEY ( ID ))";
         executeUpdate(sql);
     }
 
@@ -207,8 +204,7 @@ public class CustomerController extends SQLController {
      */
     public void deleteCustomer(UUID id){
         String sql = "DELETE FROM " + CUST_TABLE_NAME + 
-                    " WHERE " + CUST_ID_CONST +
-                    " = " + sqlPrepare(id);
+                    " WHERE ID = " + sqlPrepare(id);
         executeUpdate(sql);
     }
 
