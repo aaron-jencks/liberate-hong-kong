@@ -9,6 +9,7 @@ import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.GreeterMenu;
 import company.Controller.EmployeeController;
 import company.Controller.PersonController;
+import company.Entity.Employee;
 import company.Entity.Enum.Position;
 
 /**
@@ -24,7 +25,18 @@ public class App
         PersonController.getInstance().createPerson("test", "test");
         
         EmployeeController e = EmployeeController.getInstance();
-        e.createEmployee(Position.TELLER, "Hello?", "World!", "u", "p", "John", "Smith");
+        Employee teller = e.findByUsername("u");
+        if(teller == null){
+            e.createEmployee(Position.TELLER, "Hello?", "World!", "u", "p", "John", "Smith");
+        }
+        Employee loanOff = e.findByUsername("ul");
+        if(loanOff == null){
+            e.createEmployee(Position.LOAN_OFFICER, "Hello?", "World!", "ul", "p", "JohnLoan", "Smith");
+        }
+        Employee hr = e.findByUsername("uhr");
+        if(hr == null){
+            e.createEmployee(Position.HR, "Hello?", "World!", "uhr", "p", "JohnHR", "Smith");
+        }
 
         GreeterMenu splash = new GreeterMenu(term);
         term.set_main_window(splash);
