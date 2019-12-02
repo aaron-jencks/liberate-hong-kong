@@ -1,5 +1,6 @@
 package UI.menus.EditInterestRateMenu;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -75,9 +76,7 @@ public class EditInterestRateMenu extends AMenu {
             return new ExitItem(this.parent);
         }
         Account account = AccountController.getInstance().getAccount(accountNumber);
-        //TODO add interest rate
-        double startAmount = 0;
-        // double startAmount = ba.getInterestRate();
+        BigDecimal startAmount = account.getInterestRate();
         get_display_string();
 
         try {
@@ -90,8 +89,7 @@ public class EditInterestRateMenu extends AMenu {
 
         get_display_string();
 
-        //TODO create method
-        // ba.setInterestRate(depositAmount);
+        account.setInterestRate(new BigDecimal(depositAmount));
         
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Interest rate changed."
