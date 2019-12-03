@@ -29,7 +29,8 @@ public class Account {
     }
 
     public void accrueInterest(){
-        //TODO
+        this.amount = this.amount.multiply(this.interestRate);
+        AccountController.getInstance().updateAccount(this);
     }
 
     public UUID getId() {
