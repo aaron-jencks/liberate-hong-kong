@@ -14,15 +14,20 @@ import company.Controller.AccountController;
 import company.Controller.Interface.IAccountController;
 import company.Entity.Account;
 import company.Entity.Enum.AccountType;
+import company.Entity.BankLock;
+import company.exceptions.BankLockedException;
 
 public abstract class AAccountController extends ASQLController implements IAccountController{
     
-    public Account getAccount(String id){
+    public Account getAccount(String id) throws BankLockedException {
         return getAccount(UUID.fromString(id));
     }
 
     @Override
-    public void accrueInterest() {
+    public void accrueInterest() throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         ArrayList<Account> list = getAll();
         for (Account account : list) {
             account.accrueInterest();
@@ -32,7 +37,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
     /**
      * Find the person by the id
      */
-    public Account getAccount(UUID id){
+    public Account getAccount(UUID id) throws BankLockedException {
         String sqlQuery = "SELECT * FROM " + TABLE_NAME +
                     " WHERE ID = " + sqlPrepare(id);
         Account a = null;
@@ -75,7 +80,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * @param type
      * @return
      */
-    public Account createAccount(BigDecimal amount, AccountType type){
+    public Account createAccount(BigDecimal amount, AccountType type) throws BankLockedException {
         return createAccount(amount, type, DEFAULT_INTEREST);
     }
 
@@ -86,7 +91,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * @param interest
      * @return
      */
-    public Account createAccount(BigDecimal amount, AccountType type, BigDecimal interest){
+    public Account createAccount(BigDecimal amount, AccountType type, BigDecimal interest) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         UUID id = UUID.randomUUID();
         if(interest == null){
             interest = DEFAULT_INTEREST;
@@ -112,7 +120,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
     /**
      * Internal function to instantiate an account object from a ResultSet
      */
-    private Account createAccount(ResultSet personResult) {
+    private Account createAccount(ResultSet personResult) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         BigDecimal amt = null;
         UUID id = null;
         AccountType type = null;
@@ -151,7 +162,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * Get all the people in the db
      * @return
      */
-    public ArrayList<Account> getAll(){
+    public ArrayList<Account> getAll() throws BankLockedException {
         ArrayList<Account> allAccount = new ArrayList<>();
         String sqlQuery = "SELECT * " + TABLE_NAME;
         if(ASQLController.debug){
@@ -218,7 +229,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * Delete an account
      * @param account
      */
-    public BigDecimal deleteAccount(Account account){
+    public BigDecimal deleteAccount(Account account) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         if(account == null){
             return BigDecimal.ZERO;
         }
@@ -229,7 +243,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * Delete an account
      * @param id
      */
-    public BigDecimal deleteAccount(UUID id){
+    public BigDecimal deleteAccount(UUID id) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         BigDecimal d = AccountController.getInstance().getAccount(id).getAmount();
         delete(TABLE_NAME, id);
         return d;
@@ -241,7 +258,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * @param amount
      * @return Account
      */
-    public Account deposit(Account account, BigDecimal amount) throws InvalidParameterException{
+    public Account deposit(Account account, BigDecimal amount) throws InvalidParameterException, BankLockedException{
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidParameterException("Deposit amount can not be <= 0");
         }
@@ -255,7 +275,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
      * @param amount
      * @return Account
      */
-    public Account withdrawl(Account account, BigDecimal amount) throws InvalidParameterException{
+    public Account withdrawl(Account account, BigDecimal amount) throws InvalidParameterException, BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         if(amount.compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidParameterException("Withdrawl amount can not be <= 0");
         }
@@ -266,7 +289,10 @@ public abstract class AAccountController extends ASQLController implements IAcco
     /**
      * Make an update to an account
      */
-    public void updateAccount(Account account){
+    public void updateAccount(Account account) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         String[] params = {
             ACCT_AMT_CONST + " = " + sqlPrepare(account.getAmount()),
             ACCT_INTEREST + " = " + sqlPrepare(account.getInterestRate()),

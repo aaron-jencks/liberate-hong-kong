@@ -11,6 +11,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
+import company.exceptions.BankLockedException;
 
 public class EditInterestRateMenu extends AMenu {
     private String accountNumber = new String();
@@ -75,7 +76,21 @@ public class EditInterestRateMenu extends AMenu {
             }
             return new ExitItem(this.parent);
         }
-        Account account = AccountController.getInstance().getAccount(accountNumber);
+
+        Account account;
+
+        try {
+            account = AccountController.getInstance().getAccount(accountNumber);
+        }
+        catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot edit the interest rate because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
+
         BigDecimal startAmount = account.getInterestRate();
         get_display_string();
 
@@ -89,8 +104,18 @@ public class EditInterestRateMenu extends AMenu {
 
         get_display_string();
 
-        account.setInterestRate(new BigDecimal(depositAmount));
-        
+        try {
+            account.setInterestRate(new BigDecimal(depositAmount));
+        }
+        catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot edit the interest rate because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
+
         try {
             accept = UIUtil.get_input(sc, accept, prompt + " Interest rate changed."
                     + "\n Press any key to return to the account menu.", (String s) -> {

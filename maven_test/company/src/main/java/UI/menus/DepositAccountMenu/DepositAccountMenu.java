@@ -11,6 +11,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
+import company.exceptions.BankLockedException;
 
 public class DepositAccountMenu extends AMenu {
     private String accountNumber = new String();
@@ -61,8 +62,20 @@ public class DepositAccountMenu extends AMenu {
             e.printStackTrace();
         }
 
+        Account a;
         //try to get the account
-        Account a = AccountController.getInstance().getAccount(accountNumber);
+        try {
+            a = AccountController.getInstance().getAccount(accountNumber);
+        }
+        catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot get the bank account because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
+
         //make sure it exists
         if(a == null){
             try {
@@ -113,6 +126,13 @@ public class DepositAccountMenu extends AMenu {
                     (String s) -> {
                             return true;
                         });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        } catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot deposit money because bank is locked", (String s) -> { return true; });
             } catch (Exception er) {
                 er.printStackTrace();
             }

@@ -7,6 +7,7 @@ import company.Entity.Account;
 import company.Entity.Customer;
 import company.Entity.Person;
 import company.Entity.Enum.AccountType;
+import company.exceptions.BankLockedException;
 
 public interface ICustomerController{
 
@@ -29,7 +30,7 @@ public interface ICustomerController{
      * @param type
      * @return
      */
-    public Account addAccount(Customer customer, AccountType type);
+    public Account addAccount(Customer customer, AccountType type) throws BankLockedException;
 
     /**
      * Create a new customer based on their name
