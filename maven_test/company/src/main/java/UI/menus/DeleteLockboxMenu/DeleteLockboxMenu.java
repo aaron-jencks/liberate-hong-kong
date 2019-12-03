@@ -58,7 +58,7 @@ public class DeleteLockboxMenu extends AMenu {
                 id = UIUtil.get_input(sc, id, prompt, (String s) -> true);
 
                 get_display_string();
-                confirm = UIUtil.get_input(sc, confirm, prompt + "Confirm create lockbox? y/n", (String s) -> true);
+                confirm = UIUtil.get_input(sc, confirm, prompt + "Confirm create lockbox? y/n ", (String s) -> true);
 
             } catch (Exception e) {
                 e.printStackTrace();

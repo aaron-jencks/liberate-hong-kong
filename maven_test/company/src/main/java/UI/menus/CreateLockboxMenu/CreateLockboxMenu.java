@@ -37,7 +37,7 @@ public class CreateLockboxMenu extends AMenu {
 
         String s = "";
         if(description.isEmpty()){
-            s = "What is being put in the lock box?";
+            s = "What is being put in the lock box? ";
         }else if(password.isEmpty()){
             s = "Lockbox passcode: ";
         }
@@ -65,7 +65,7 @@ public class CreateLockboxMenu extends AMenu {
                 password = UIUtil.get_input(sc, password, prompt, (String s) -> true);
 
                 get_display_string();
-                confirm = UIUtil.get_input(sc, confirm, prompt + "Confirm create lockbox? y/n", (String s) -> true);
+                confirm = UIUtil.get_input(sc, confirm, prompt + "Confirm create lockbox? y/n ", (String s) -> true);
 
             } catch (Exception e) {
                 e.printStackTrace();
