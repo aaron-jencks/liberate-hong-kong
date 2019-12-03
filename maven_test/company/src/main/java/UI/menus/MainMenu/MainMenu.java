@@ -5,6 +5,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.MainMenu.items.AccountMenuItem;
 import UI.menus.MainMenu.items.EmployeeManagementMenuItem;
+import UI.menus.MainMenu.items.LockboxMenuItem;
 import company.Controller.EmployeeController;
 import company.Entity.Enum.Position;
 
@@ -13,7 +14,7 @@ public class MainMenu extends AMenu {
         super(parent);
         title = "Hong Kong Liberation Banking System";
         items.add(new AccountMenuItem(this.parent));
-
+        items.add(new LockboxMenuItem(parent));
         if(EmployeeController.getInstance().auth().getPosition() == Position.HR){
             items.add(new EmployeeManagementMenuItem(this.parent));
         }
