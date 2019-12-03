@@ -170,6 +170,9 @@ public abstract class ASQLController{
         if(input == null){
             return "NULL";
         }
+        if(input.contains("'")){
+            input = input.replace("'", "\\'");
+        }
         return "'" + input + "'";
     }
 

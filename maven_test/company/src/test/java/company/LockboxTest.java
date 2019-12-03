@@ -1,6 +1,8 @@
 package company;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import java.util.UUID;
 
@@ -41,5 +43,13 @@ public class LockboxTest{
         bc.deleteLockbox(b);
         b = bc.getLockbox(b.getId());
         assertNull(b);
+    }
+
+    @Test
+    public void testAttributes(){
+        String d = "this is a description, it can be very long bc its a text field, let's see how long it can get before something blows up, I wonder how it will break, idk, udk, maybe it wont, maybe it will, I need to make something fancy for the UI to make inputting all this description easy";
+        String p = "pass";
+        Lockbox b = bc.createLockbox(d,p);
+        assertEquals(b.getDescription(), d);
     }
 }
