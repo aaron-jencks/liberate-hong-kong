@@ -13,7 +13,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public abstract class ASQLController{
     
-    public static boolean debug = false;
+    public static boolean debug = true;
 
     /**
      * Create a table with the params

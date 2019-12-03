@@ -74,6 +74,7 @@ public abstract class ALockboxController extends ASQLController implements ILock
                     }) + 
                     " ) VALUES ( " +
                     implode(new String[]{
+                        sqlPrepare(id),
                         sqlPrepare(description),
                         sqlPrepare(password)
                     }) + " ) ";
@@ -151,7 +152,7 @@ public abstract class ALockboxController extends ASQLController implements ILock
      */
     protected static void createTable(){
         String[] params = {
-            BOX_DESC + " VARCHAR(MAX) ",
+            BOX_DESC + " TEXT ",
             BOX_PASSWORD + " VARCHAR(255) ",
         };
         create(TABLE_NAME, params);
