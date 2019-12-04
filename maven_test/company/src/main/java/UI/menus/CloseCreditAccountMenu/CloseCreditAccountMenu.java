@@ -14,8 +14,7 @@ import java.util.Scanner;
 
 public class CloseCreditAccountMenu extends AMenu {
 
-    private String firstName = "";
-    private String lastName = "";
+    private String acctNum;
 
     public CloseCreditAccountMenu(ITermController parent) {
         super(parent);
@@ -39,14 +38,7 @@ public class CloseCreditAccountMenu extends AMenu {
         for (int i = 0; i < h_pad; i++)
             new_prompt += " ";
 
-        String s = "";
-        if (firstName.isEmpty()) {
-            s = "First Name: ";
-        } else if (lastName.isEmpty()) {
-            s = "Last Name: ";
-        }
-
-        prompt = new_prompt + s;
+        prompt = new_prompt + "Account Number: ";
 
         return result;
     }
@@ -59,32 +51,31 @@ public class CloseCreditAccountMenu extends AMenu {
             display();
         String confirm = "";
 
+        int h_pad = get_x_coord();
+        String h_space = new String();
+        for (int i = 0; i < h_pad; i++)
+            h_space += " ";
+
         while (confirm.toUpperCase().indexOf('Y') < 0) {
-            firstName = "";
-            lastName = "";
 
             try {
                 get_display_string();
-                firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> true);
+                acctNum = UIUtil.get_input(sc, acctNum, prompt, (String s) -> true);
+
+                // TODO Display the current balance
 
                 get_display_string();
-                lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> true);
-
-                get_display_string();
-                confirm = UIUtil.get_input(sc, confirm, prompt + "Confirm creating this credit account? (y/N) ", (String s) -> true);
+                confirm = UIUtil.get_input(sc, confirm, h_space + "Confirm closing this credit account? (y/N) ", (String s) -> true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        get_display_string();
-        //TODO, fix to first search for customer before creating a new one
-        Customer c = CustomerController.getInstance().createCustomer(firstName, lastName);
-        Account a = CustomerController.getInstance().addAccount(c, AccountType.CREDIT);
+        // TODO verify that the account exists
 
         try {
-            UIUtil.get_input(sc, confirm, "\n" + prompt + "Account created.\n" + prompt + "Account id = " + a.getId().toString()
-                    + "\n" + prompt + "Press any key to return to the account menu.", (String s) -> true);
+            UIUtil.get_input(sc, confirm, "\n" + h_space + "Account closed.\n" + 
+                             h_space + "Press any key to return to the account menu.", (String s) -> true);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -26,4 +26,10 @@ public interface IMenu {
      * Prompts the user for input and returns the item they selected from the list of available items.
      */
     public IMenuItem prompt();
+
+    /**
+     * Prints a temporary window on top of this window that contains the given message
+     * @param message Message to display on the screen
+     */
+    public void toast(String message);
 }

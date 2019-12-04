@@ -1,5 +1,7 @@
 package company;
 
+import java.io.IOException;
+
 // import java.sql.Connection;
 // import java.sql.DriverManager;
 // import java.sql.PreparedStatement;
@@ -8,6 +10,10 @@ package company;
 // import java.sql.Statement;
 // import java.util.ArrayList;
 // import java.util.List;
+
+import UI.AnsiUtil;
+import UI.UIUtil;
+import UI.controller.*;
 
 public class Main {
 
@@ -37,5 +43,16 @@ public class Main {
         // } catch (Exception e) {
         //     e.printStackTrace();
         // }
+
+        try {
+
+            TermController term = new TermController();
+
+            AnsiUtil.display_window(term, true, UIUtil.create_box_string("Hello world!\nThis is Aaron."));
+
+        }
+        catch(IOException e) {
+            System.out.println("Something dumb happened");
+        }
     }
 }

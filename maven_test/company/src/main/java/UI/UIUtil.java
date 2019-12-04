@@ -142,6 +142,31 @@ public class UIUtil {
     }
 
     /**
+     * Creates a boxed string message, similar to a menu string, but without the list of items.
+     * Splits the message by {@code '\n'} and uses that to determine the dimensions of the box
+     * @param message The string to wrap in a box of '#'
+     * @return Returns the {@code message} string surrounded with a '#' box.
+     */
+    public static String create_box_string(String message)
+    {
+        int width = 0;
+        for(String l : message.split("\n"))
+            if(l.length() > width) width = l.length();
+        width += 4; // Room for a space and the '#' symbol
+
+        String topBottom = create_bar_string(width, '#'), result = "";
+
+        result += topBottom + '\n';
+
+        for(String l : message.split("\n"))
+            result += "# " + pad_string(l, width - 4, AlignmentType.center) + " #\n";
+
+        result += topBottom;
+
+        return result;
+    }
+
+    /**
      * Creates a string that represents a menu created using the elements from {@code items} and
      * is formatted as follows:
      * 

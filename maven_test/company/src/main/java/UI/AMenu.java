@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import UI.controller.ITermController;
+import UI.AnsiUtil;
 
 public abstract class AMenu implements IMenu {
 
@@ -98,8 +99,7 @@ public abstract class AMenu implements IMenu {
         if(!is_availabled)
             populate_availabled();
 
-        UIUtil.clrscr();
-        System.out.print(get_display_string());
+        AnsiUtil.display_window(parent, true, get_display_string());
 
         is_valid = true;
     }
@@ -133,5 +133,20 @@ public abstract class AMenu implements IMenu {
         }
 
         return available.get(item - 1);
+    }
+
+    @Override
+    public void toast(String message)
+    {
+        int h_pad = get_x_coord();
+        String h_space = "";
+        for (int i = 0; i < h_pad; i++)
+            h_space += " ";
+
+        String temp_msg = UIUtil.create_box_string(message);
+        for(String l : temp_msg.split("\n"))
+        {
+
+        }
     }
 }
