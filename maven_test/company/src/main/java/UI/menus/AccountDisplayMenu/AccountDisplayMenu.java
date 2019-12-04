@@ -7,6 +7,6 @@ public class AccountDisplayMenu extends ADisplayMenu {
     public AccountDisplayMenu()
     {
         super(AccountController.getInstance().getAll());
-        title = "Current Employee Directory";
+        title = "Current Account Directory";
     }
 }

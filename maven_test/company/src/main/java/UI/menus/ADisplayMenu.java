@@ -50,6 +50,8 @@ public abstract class ADisplayMenu extends AMenu {
         {
             page_count = item_count / (TermController.get_instance().get_term_height() - 3);
 
+            if(page_count == 0) page_count = 1;
+
             page_item_count = item_count / page_count;
         }
     }
@@ -58,9 +60,9 @@ public abstract class ADisplayMenu extends AMenu {
     public String get_display_string()
     {
         // Create the header
-        String result = "Page: " + page + "/" + page_count + "\n" + 
+        String result = "Page: " + page + "/" + page_count + " Showing " + page_item_count + " items\n" + 
                         UIUtil.pad_string(title, TermController.get_instance().get_term_width(), 
-                            AlignmentType.center);
+                            AlignmentType.center) + "\n";
 
         // Create the list for this page
         int counter = (page - 1) * page_item_count + 1;
@@ -68,13 +70,16 @@ public abstract class ADisplayMenu extends AMenu {
         int current = 0;
         for(Object o : items)
         {
-            if(current++ < counter) continue;
+            if(current < (counter - 1)) continue;
             if(printed++ < page_item_count)
-                result += UIUtil.pad_string(counter++ + ": " + o.toString(), TermController.get_instance().get_term_width(),
+                result += UIUtil.pad_string(++current + ": " + o.toString(), 
+                                            TermController.get_instance().get_term_width(),
                                             AlignmentType.center) + "\n";
             else
                 break;
         }
+
+        // result += "Broke after " + printed + " items\n";
 
         prompt = "[P]rev [N]ext [E]xit : What would you like to do? ";
 

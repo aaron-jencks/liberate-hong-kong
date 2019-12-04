@@ -7,6 +7,6 @@ public class CustomerDisplayMenu extends ADisplayMenu {
     public CustomerDisplayMenu()
     {
         super(CustomerController.getInstance().getAll());
-        title = "Current Employee Directory";
+        title = "Current Customer Directory";
     }
 }

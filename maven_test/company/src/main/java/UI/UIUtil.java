@@ -189,15 +189,17 @@ public class UIUtil {
     {
         String result = new String();
         int total_width = (title.length() > prompt.length()) ? title.length() : prompt.length();
-        for(Object o : items)
-            if(o.toString().length() > total_width) total_width = o.toString().length();
+        ArrayList<String> stringified_list = create_string_list(items, true);
+        
+        for(String o : stringified_list)
+            if(o.length() > total_width) total_width = o.toString().length();
 
         if(use_borders)
             result += '\u250C' + create_bar_string(total_width + 2, '\u2500') + "\u2510\n";
 
         result += "\u2502 " + pad_string(title, total_width, AlignmentType.center) + " \u2502\n";
 
-        for(String element : create_string_list(items, true))
+        for(String element : stringified_list)
         {
             if(use_borders)
                 result += "\u2502 ";
