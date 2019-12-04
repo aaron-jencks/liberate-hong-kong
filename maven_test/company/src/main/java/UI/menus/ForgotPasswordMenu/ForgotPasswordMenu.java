@@ -7,7 +7,6 @@ import UI.AlignmentType;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.LoginMenu;
 import company.Controller.EmployeeController;
@@ -15,7 +14,6 @@ import company.Entity.Employee;
 import company.exceptions.EmployeeNotFoundException;
 
 public class ForgotPasswordMenu extends LoginMenu {
-    protected UUID user_id;
     protected String security_question = new String();
     protected String security_answer = new String();
     protected String confirm_password = new String();
@@ -29,11 +27,6 @@ public class ForgotPasswordMenu extends LoginMenu {
 
         if(!is_valid)
             display();
-
-        int h_pad = get_x_coord();
-        String padding = new String();
-        for(int i = 0; i < h_pad; i++)
-            padding += " ";
 
         try { 
             EmployeeController employeeController = EmployeeController.getInstance();
@@ -68,7 +61,7 @@ public class ForgotPasswordMenu extends LoginMenu {
 
             } while(!password.equals(confirm_password));
 
-            employeeController.getEmployee(user_id).setPassword(password);
+            employee.setPassword(password);
 
             toast("Account password changed successfully.");
         }
