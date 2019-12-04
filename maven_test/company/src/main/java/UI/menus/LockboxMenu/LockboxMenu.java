@@ -8,12 +8,12 @@ import UI.menus.LockboxMenu.items.DeleteLockboxMenuItem;
 import UI.menus.LockboxMenu.items.EditLockboxMenuItem;
 
 public class LockboxMenu extends AMenu{
-    public LockboxMenu(ITermController parent){
-        super(parent);
+    public LockboxMenu(){
+        super();
         title = "Lockboxes";
-        items.add(new CreateLockboxMenuItem(parent));
-        items.add(new EditLockboxMenuItem(parent));
-        items.add(new DeleteLockboxMenuItem(parent));
-        items.add(new ExitItem(this.parent));
+        items.add(new CreateLockboxMenuItem());
+        items.add(new EditLockboxMenuItem());
+        items.add(new DeleteLockboxMenuItem());
+        items.add(new ExitItem());
     }
 }

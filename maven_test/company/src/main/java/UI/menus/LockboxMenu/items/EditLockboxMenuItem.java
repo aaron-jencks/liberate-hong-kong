@@ -7,13 +7,9 @@ import UI.menus.EditLockboxMenu.EditLockboxMenu;
 
 public class EditLockboxMenuItem extends AMenuItem {
 
-    public EditLockboxMenuItem(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public AMenu activate() {
-        return new EditLockboxMenu(parent);
+        return new EditLockboxMenu();
     }
 
     @Override

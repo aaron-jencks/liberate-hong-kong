@@ -6,14 +6,10 @@ import UI.controller.ITermController;
 import UI.menus.DeleteLockboxMenu.DeleteLockboxMenu;
 
 public class DeleteLockboxMenuItem extends AMenuItem{
-    
-    public DeleteLockboxMenuItem(ITermController parent){
-        super(parent);
-    }
 
     @Override
     public AMenu activate() {
-        return new DeleteLockboxMenu(parent);
+        return new DeleteLockboxMenu();
     }
 
     @Override

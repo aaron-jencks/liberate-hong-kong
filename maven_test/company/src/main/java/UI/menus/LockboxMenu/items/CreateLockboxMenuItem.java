@@ -6,13 +6,10 @@ import UI.controller.ITermController;
 import UI.menus.CreateLockboxMenu.CreateLockboxMenu;
 
 public class CreateLockboxMenuItem extends AMenuItem{
-    public CreateLockboxMenuItem(ITermController parent){
-        super(parent);
-    }
 
     @Override
     public AMenu activate() {
-        return new CreateLockboxMenu(parent);
+        return new CreateLockboxMenu();
     }
 
     @Override

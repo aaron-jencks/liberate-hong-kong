@@ -3,6 +3,7 @@ package UI.menus.CreateAccountMenu;
 import java.util.Scanner;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
@@ -20,22 +21,9 @@ public class CreateAccountMenu extends AMenu {
     private String lastName = new String();
     private String accept = new String();
 
-    public CreateAccountMenu(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public String get_display_string() {
         String result = new String();
-
-        // Add vertical padding
-        int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for (int i = 0; i < v_pad; i++)
-            result += "\n";
-
-        String new_prompt = new String();
-        for (int i = 0; i < h_pad; i++)
-            new_prompt += " ";
 
         String s = "";
         if (firstName.isEmpty()) {
@@ -44,7 +32,7 @@ public class CreateAccountMenu extends AMenu {
             s = "Last Name: ";
         }
 
-        prompt = new_prompt + s;
+        prompt = s;
 
         return result;
     }
@@ -57,7 +45,8 @@ public class CreateAccountMenu extends AMenu {
             display();
 
         try {
-            firstName = UIUtil.get_input(sc, firstName, prompt, (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            firstName = UIUtil.get_input(sc, firstName, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -67,7 +56,8 @@ public class CreateAccountMenu extends AMenu {
         get_display_string();
 
         try {
-            lastName = UIUtil.get_input(sc, lastName, prompt, (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            lastName = UIUtil.get_input(sc, lastName, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -81,15 +71,8 @@ public class CreateAccountMenu extends AMenu {
         Account a = CustomerController.getInstance().addAccount(c, AccountType.SAVINGS);
         String accountNumber = a.getId().toString();
 
-        try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Account created. Account id = " + accountNumber
-                    + "\n Press any key to return to the account menu.", (String s) -> {
-                        return true;
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        toast("Account created. Account id = " + accountNumber);
 
-        return new ExitItem(this.parent);
+        return new ExitItem();
     }
 }

@@ -7,15 +7,10 @@ import UI.menus.ForgotPasswordMenu.ForgotPasswordMenu;
 
 public class ForgotPasswordItem extends AMenuItem {
 
-    public ForgotPasswordItem(ITermController parent)
-    {
-        super(parent);
-    }
-
     @Override
     public AMenu activate()
     {
-        return new ForgotPasswordMenu(parent);
+        return new ForgotPasswordMenu();
     }
 
     @Override

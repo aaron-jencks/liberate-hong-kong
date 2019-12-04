@@ -20,7 +20,7 @@ public class App
 {
     public static void main( String[] args ) throws IOException
     {
-        TermController term = new TermController();
+        TermController term = TermController.get_instance();
 
         PersonController.getInstance().createPerson("test", "test");
         
@@ -38,7 +38,7 @@ public class App
             e.createEmployee(Position.HR, "Hello?", "World!", "uhr", "p", "JohnHR", "Smith");
         }
 
-        GreeterMenu splash = new GreeterMenu(term);
+        GreeterMenu splash = new GreeterMenu();
         term.set_main_window(splash);
 
         while(true)
