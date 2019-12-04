@@ -268,6 +268,13 @@ public class UIUtil {
 
                 continue;
             }
+
+            if(!valid.test(out))
+            {
+                AnsiUtil.display_centered_string("\033[38;5;9mInvalid response, try again...\033[0m\n");
+                AnsiUtil.center_cursor_horiz();
+                if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
+            }
             
         }while(!valid.test(out));
         

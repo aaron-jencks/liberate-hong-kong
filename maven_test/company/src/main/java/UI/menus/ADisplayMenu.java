@@ -21,17 +21,17 @@ public abstract class ADisplayMenu extends AMenu {
     /**
      * Represents the number of items in the iterable that was passed in
      */
-    protected int item_count;
+    protected int item_count = 0;
 
     /**
      * Represents the number of pages that there are
      */
-    protected int page_count;
+    protected int page_count = 1;
 
     /**
      * Represents the number of items that are displayed per page
      */
-    protected int page_item_count;
+    protected int page_item_count = 0;
 
     /**
      * Contains a reference to the iterable that was passed in.
@@ -46,9 +46,12 @@ public abstract class ADisplayMenu extends AMenu {
         item_count = 0;
         for(Object o : list) item_count++;
 
-        page_count = item_count / (TermController.get_instance().get_term_height() - 3);
+        if(item_count > 0)
+        {
+            page_count = item_count / (TermController.get_instance().get_term_height() - 3);
 
-        page_item_count = item_count / page_count;
+            page_item_count = item_count / page_count;
+        }
     }
 
     @Override
