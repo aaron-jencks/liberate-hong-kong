@@ -154,14 +154,14 @@ public class UIUtil {
             if(l.length() > width) width = l.length();
         width += 4; // Room for a space and the '#' symbol
 
-        String topBottom = create_bar_string(width, '#'), result = "";
+        String topBottom = create_bar_string(width - 2, '\u2500'), result = "";
 
-        result += topBottom + '\n';
+        result += '\u250C' + topBottom + '\u2510' + '\n';
 
         for(String l : message.split("\n"))
-            result += "# " + pad_string(l, width - 4, AlignmentType.center) + " #\n";
+            result += "\u2502 " + pad_string(l, width - 4, AlignmentType.center) + " \u2502\n";
 
-        result += topBottom;
+        result += '\u2514' + topBottom + '\u2518';
 
         return result;
     }
@@ -194,9 +194,9 @@ public class UIUtil {
             if(o.toString().length() > total_width) total_width = o.toString().length();
 
         if(use_borders)
-            result += create_bar_string(total_width + 4, '#') + '\n';
+            result += '\u250C' + create_bar_string(total_width + 2, '\u2500') + "\u2510\n";
 
-        result += "# " + pad_string(title, total_width, AlignmentType.center) + " #\n";
+        result += "\u2502 " + pad_string(title, total_width, AlignmentType.center) + " \u2502\n";
 
         for(String element : create_string_list(items, true))
         {
@@ -210,7 +210,7 @@ public class UIUtil {
         }
 
         if(use_borders)
-            result += create_bar_string(total_width + 4, '#') + '\n';
+            result += '\u2514' + create_bar_string(total_width + 2, '\u2500') + "\u2518\n";
 
         result += prompt;
 
