@@ -3,6 +3,7 @@ package UI.menus.FireMenu;
 import java.util.Scanner;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
@@ -17,23 +18,10 @@ public class FireMenu extends AMenu {
     private static String done = new String();
     private Employee employee;
 
-    public FireMenu(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public String get_display_string()
     {
         String result = new String();
-
-        // Add vertical padding
-        int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for(int i = 0; i < v_pad; i++)
-            result += "\n";
-
-        String new_prompt = new String();
-        for(int i = 0; i < h_pad; i++)
-            new_prompt += " ";
 
         String s = "";
         if(employeeId.isBlank()){
@@ -42,7 +30,7 @@ public class FireMenu extends AMenu {
             s = "Are you sure you want to fire " + employee.getFirstName() + " ?";
         }
 
-        prompt = new_prompt + s;
+        prompt = s;
 
         return result;
     }
@@ -52,39 +40,30 @@ public class FireMenu extends AMenu {
 
         if(EmployeeController.getInstance().auth().getPosition() != Position.HR){
             //only HR can fire
-            return new ExitItem(this.parent);
+            return new ExitItem();
         }
         Scanner sc = new Scanner(System.in);
 
         if (!is_valid)
             display();
 
-        while (confirm.toUpperCase().indexOf('Y') < 0) {
-            try {
-                get_display_string();
-                employeeId = UIUtil.get_input(sc, employeeId, prompt, (String s) -> {
-                    return true;
-                });
-                employee = EmployeeController.getInstance().getEmployee(employeeId);
-                get_display_string();
-                confirm = UIUtil.get_input(sc, confirm, prompt, (String s) -> {
-                    return true;
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            get_display_string();
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            employeeId = UIUtil.get_input(sc, employeeId, "", (String s) -> {
+                return true;
+            });
+            employee = EmployeeController.getInstance().getEmployee(employeeId);
+            get_display_string();
+            if(!(prompt_yesNo(prompt))) return new ExitItem();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         EmployeeController.getInstance().deleteEmployee(employee);
         get_display_string();
 
-        try {
-            done = UIUtil.get_input(sc, done, prompt + " Employee Fired."
-                    + "\n Press any key to return to the account menu.", (String s) -> {
-                        return true;
-                    });
-        } catch (Exception er) {
-            er.printStackTrace();
-        }
-        return new ExitItem(this.parent);
+        toast("Employee Fired.");
+        return new ExitItem();
     }
 }

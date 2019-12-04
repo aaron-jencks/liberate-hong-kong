@@ -9,13 +9,13 @@ import UI.menus.PromoteMenu.items.PromoteMenuItem;
 
 public class EmployeeManagementMenu extends AMenu {
 
-    public EmployeeManagementMenu(ITermController parent) {
-        super(parent);
+    public EmployeeManagementMenu() {
+        super();
         title = "Employee Management";
-        items.add(new HireMenuItem(this.parent));
-        items.add(new FireMenuItem(this.parent));
-        items.add(new PromoteMenuItem(this.parent));
-        items.add(new ExitItem(this.parent));
+        items.add(new HireMenuItem());
+        items.add(new FireMenuItem());
+        items.add(new PromoteMenuItem());
+        items.add(new ExitItem());
     }
     
 }

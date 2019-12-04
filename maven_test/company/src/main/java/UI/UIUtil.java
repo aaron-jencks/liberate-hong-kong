@@ -261,9 +261,8 @@ public class UIUtil {
             {
                 // Invalid input by definition, continue and try again
                 // System.out.println("Moving cursor to column " + (prompt.length() + 1 + out.toString().length() + 1));
-                System.out.println("\033[" + 
-                                   (prompt.length() + 1 + out.toString().length() + 1) + 
-                                   "G\033[A\033[38;5;9mInvalid response, try again...\033[0m");
+                AnsiUtil.display_centered_string("\033[38;5;9mInvalid response, try again...\033[0m\n");
+                AnsiUtil.center_cursor_horiz();
 
                 // Read in the extra '\n'
                 if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();

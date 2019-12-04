@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
@@ -18,21 +19,9 @@ public class WithdrawlAccountMenu extends AMenu {
     private String accept = new String();
     private String totalAmount = new String();
 
-    public WithdrawlAccountMenu(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public String get_display_string() {
-        String result = new String();
-         // Add vertical padding
-         int v_pad = get_y_coord(), h_pad = get_x_coord();
-         for (int i = 0; i < v_pad; i++)
-             result += "\n";
- 
-         String new_prompt = new String();
-         for (int i = 0; i < h_pad; i++)
-             new_prompt += " ";
+         String result = new String();
  
          String s = "";
          if (accountNumber.isEmpty()) {
@@ -41,7 +30,7 @@ public class WithdrawlAccountMenu extends AMenu {
              s = "How much would you like to withdrawl today: ";
          }
  
-         prompt = new_prompt + s;
+         prompt = s;
  
          return result;
     }
@@ -54,7 +43,8 @@ public class WithdrawlAccountMenu extends AMenu {
             display();
 
         try {
-            accountNumber = UIUtil.get_input(sc, accountNumber, prompt, (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            accountNumber = UIUtil.get_input(sc, accountNumber, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -64,22 +54,16 @@ public class WithdrawlAccountMenu extends AMenu {
         Account a = AccountController.getInstance().getAccount(accountNumber);
 
         if(a == null){
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + " Account not found. " + totalAmount
-                        + "\n Press any key to return to the account menu.", (String s) -> {
-                            return true;
-                        });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Account not found. " + totalAmount);
+            return new ExitItem();
         }
 
         BigDecimal startAmount = a.getAmount();
         get_display_string();
 
         try {
-            withdrawlAmount = UIUtil.get_input(sc, withdrawlAmount, prompt + " Current account balance: " + startAmount.toString() + ". \n Enter withdraw amount: ", (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), " Current account balance: " + startAmount.toString() + ". \n Enter withdraw amount: ");
+            withdrawlAmount = UIUtil.get_input(sc, withdrawlAmount, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -91,30 +75,15 @@ public class WithdrawlAccountMenu extends AMenu {
         try {
             AccountController.getInstance().withdrawl(a, new BigDecimal(withdrawlAmount));
         } catch (InvalidParameterException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + " Insufficent funds "
-                        + "\n Press any key to return to the account menu.", (String s) -> {
-                            return true;
-                        });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-    
-            return new ExitItem(this.parent);
+            toast("Insufficent funds.");
+            return new ExitItem();
         }
 
         totalAmount = a.getAmount().toString();
 
-        try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Amount withdrawn. Total amount on account = " + totalAmount
-                    + "\n Press any key to return to the account menu.", (String s) -> {
-                        return true;
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        toast("Amount withdrawn. Total amount on account = " + totalAmount);
 
-        return new ExitItem(this.parent);
+        return new ExitItem();
     }
 
 }

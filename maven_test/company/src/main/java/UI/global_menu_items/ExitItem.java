@@ -1,12 +1,10 @@
 package UI.global_menu_items;
 
 import UI.AMenuItem;
-import UI.controller.ITermController;
+import UI.controller.TermController;
 import UI.AMenu;
 
 public class ExitItem extends AMenuItem {
-
-    public ExitItem(ITermController target) { super(target); }
 
     /**
      * Closes the active window
@@ -15,9 +13,7 @@ public class ExitItem extends AMenuItem {
     @Override
     public AMenu activate()
     {
-        if(parent != null)
-            parent.close_window();
-
+        TermController.get_instance().close_window();
         return null;
     }
 

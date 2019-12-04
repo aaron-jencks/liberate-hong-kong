@@ -3,14 +3,13 @@ package UI;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import UI.controller.ITermController;
+import UI.controller.TermController;
 import UI.AnsiUtil;
 
 public abstract class AMenu implements IMenu {
 
     protected static Scanner inputScanner = null;
 
-    protected ITermController parent;
     protected String title = new String();
     protected String prompt = "What would you like to do? ";
     protected ArrayList<IMenuItem> items = new ArrayList<IMenuItem>();
@@ -18,12 +17,6 @@ public abstract class AMenu implements IMenu {
     private boolean is_availabled = false;
     public boolean is_valid = false;
     public boolean is_centered = true;
-
-    public AMenu(ITermController parent)
-    {
-        super();
-        this.parent = parent;
-    }
 
     /**
      * Determines the column that the menu box for this menu starts in
@@ -37,7 +30,7 @@ public abstract class AMenu implements IMenu {
             if(s.length() > menu_width)
                 menu_width = s.length();
 
-        diff = parent.get_term_width() - menu_width;
+        diff = TermController.get_instance().get_term_width() - menu_width;
         if(diff < 0)
             return 0;
         else
@@ -49,7 +42,7 @@ public abstract class AMenu implements IMenu {
         if(!is_availabled)
             populate_availabled();
 
-        return (parent.get_term_height() - available.size() - 3) >> 1;
+        return (TermController.get_instance().get_term_height() - available.size() - 3) >> 1;
     }
 
     @Override
@@ -63,7 +56,7 @@ public abstract class AMenu implements IMenu {
             for(String str : temp)
                 if(!str.isEmpty())
                     result += UIUtil.pad_string(str, 
-                                                parent.get_term_width(), 
+                                                TermController.get_instance().get_term_width(), 
                                                 AlignmentType.center) + '\n';
 
             return result;
@@ -89,7 +82,7 @@ public abstract class AMenu implements IMenu {
         if(!is_availabled)
             populate_availabled();
 
-        AnsiUtil.display_window(parent, true, get_display_string());
+        AnsiUtil.display_window(true, get_display_string());
 
         is_valid = true;
     }
@@ -132,7 +125,7 @@ public abstract class AMenu implements IMenu {
         Scanner sc = new Scanner(System.in);
 
         // Display the message in a box
-        AnsiUtil.display_window(parent, false, 
+        AnsiUtil.display_window(false, 
                                 UIUtil.create_box_string(message + 
                                     "\nPress any key to continue."));
 
@@ -156,7 +149,7 @@ public abstract class AMenu implements IMenu {
         Scanner sc = new Scanner(System.in);
 
         // Display the message in a box
-        AnsiUtil.display_window(parent, false, 
+        AnsiUtil.display_window(false, 
                                 UIUtil.create_box_string(prompt + 
                                     " (y/n) "));
 

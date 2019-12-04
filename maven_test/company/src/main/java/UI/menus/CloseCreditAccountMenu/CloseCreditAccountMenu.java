@@ -5,6 +5,7 @@ import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
+import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Controller.CustomerController;
@@ -18,13 +19,9 @@ public class CloseCreditAccountMenu extends AMenu {
 
     private String acctNum;
 
-    public CloseCreditAccountMenu(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public int get_y_coord() {
-        return (parent.get_term_height() - 2) >> 1;
+        return (TermController.get_instance().get_term_height() - 2) >> 1;
     }
 
     @Override
@@ -66,14 +63,14 @@ public class CloseCreditAccountMenu extends AMenu {
                 {
                     toast("That account doesn't exist!");
                     if(!prompt_yesNo("Try again?"))
-                        return new ExitItem(parent);
+                        return new ExitItem();
                     continue;
                 }
                 else if(acct.getType() != AccountType.CREDIT)
                 {
                     toast("That is an invalid account type!");
                     if(!prompt_yesNo("Try again?")) 
-                        return new ExitItem(parent);
+                        return new ExitItem();
                     continue;
                 }
 
@@ -81,7 +78,7 @@ public class CloseCreditAccountMenu extends AMenu {
                 toast("Current account balance: $" + acct.getAmount());
 
                 if(!prompt_yesNo("Confirm closing this credit account?"))
-                    return new ExitItem(parent);
+                    return new ExitItem();
 
                 break;
             }
@@ -91,6 +88,6 @@ public class CloseCreditAccountMenu extends AMenu {
 
         toast("Account closed.");
 
-        return new ExitItem(this.parent);
+        return new ExitItem();
     }
 }

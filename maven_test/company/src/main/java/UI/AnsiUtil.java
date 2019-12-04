@@ -3,6 +3,7 @@ package UI;
 import UI.AlignmentType;
 import UI.UIUtil;
 import UI.controller.ITermController;
+import UI.controller.TermController;
 
 import java.lang.Iterable;
 import java.util.ArrayList;
@@ -14,12 +15,24 @@ import java.util.function.Predicate;
 public class AnsiUtil {
 
     /**
+     * Moves the cursor to the center of the current row and returns the column that it
+     * ended up on
+     * @return Returns the column that the cursor is on.
+     */
+    public static int center_cursor_horiz()
+    {
+        int x_coord = (TermController.get_instance().get_term_width() >> 1) + 1;
+        System.out.print("\033[" + x_coord + "G");
+        return x_coord;
+    }
+
+    /**
      * Displays the given String, centered in the terminal
      * @param term The terminal to use for sizing
      * @param clear Determines whether to clear the screen or not
      * @param window The string to display for the window.
      */
-    public static void display_window(ITermController term, boolean clear, String window)
+    public static void display_window(boolean clear, String window)
     {
         if(clear) UIUtil.clrscr();
 
@@ -32,6 +45,7 @@ public class AnsiUtil {
 
         // Determine the starting point of the drawing area
         // REMEMBER the cursor positions are 1-based
+        TermController term = TermController.get_instance();
         int x_coord = ((term.get_term_width() - width) >> 1) + 1,
             y_coord = ((term.get_term_height() - height) >> 1) + 1;
 
@@ -70,6 +84,36 @@ public class AnsiUtil {
 
         // Reset the column and print the message
         System.out.print("\033[" + column + "G" + message);
+    }
+
+    /**
+     * Displays a text, that is centered in the middle of the screen horizontally,
+     * but not necessarily vertically
+     * @param message
+     */
+    public static void display_centered_string(String message)
+    {
+        // Determine the dimensions of the window to be displayed
+        int width = 0;
+        for(String l : message.split("\n"))
+            if(l.length() > width) width = l.length();
+
+        // Determine the starting point of the drawing area
+        // REMEMBER the cursor positions are 1-based
+        int x_coord = ((TermController.get_instance().get_term_width() - width) >> 1) + 1;
+
+        // Convert \n characters into ansi codes that return the cursor to the x_coord
+        if(message.contains("\n"))
+        {
+            String temp_win = "";
+            for(String l : message.split("\n")) {
+                temp_win += l + "\033[1B\033[" + x_coord + "G";
+            }
+
+            message = temp_win;
+        }
+
+        System.out.print("\033[" + x_coord + "G" + message);
     }
 
     /**

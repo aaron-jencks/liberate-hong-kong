@@ -22,8 +22,9 @@ public class TermController implements ITermController {
     private Terminal term = null;
     private IMenu current = null;
     private ArrayDeque<IMenu> active_windows = new ArrayDeque<>();
+    private static TermController instance;
 
-    public TermController() throws IOException
+    private TermController() throws IOException
     { 
         term = TerminalBuilder.terminal();
         //term.startScreen();
@@ -32,6 +33,20 @@ public class TermController implements ITermController {
         // term_height = size.getRows();
         term_width = term.getWidth();
         term_height = term.getHeight();
+    }
+
+    public static TermController get_instance() {
+        if(instance == null)
+        {
+            try {
+                instance = new TermController();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return instance;
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
@@ -16,10 +17,6 @@ public class EditInterestRateMenu extends AMenu {
     private String accountNumber = new String();
     private Double depositAmount = 0.0;
     private String accept = new String();
-
-    public EditInterestRateMenu(ITermController parent) {
-        super(parent);
-    }
 
     @Override
     public String get_display_string() {
@@ -53,7 +50,8 @@ public class EditInterestRateMenu extends AMenu {
             display();
 
         try {
-            accountNumber = UIUtil.get_input(sc, accountNumber, prompt, (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            accountNumber = UIUtil.get_input(sc, accountNumber, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -65,21 +63,15 @@ public class EditInterestRateMenu extends AMenu {
             // accountNumber = new String();
             // invalidate();
             // return null;
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + " Invalid account number. "
-                        + "\n Press any key to return to the account menu.", (String s) -> {
-                            return true;
-                        });
-            } catch (Exception q) {
-                e.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Invalid account number.");
+            return new ExitItem();
         }
         Account account = AccountController.getInstance().getAccount(accountNumber);
         BigDecimal startAmount = account.getInterestRate();
         get_display_string();
 
         try {
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
             depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account rate: " + startAmount + ". \n Enter Interest Rate: ", (Double s) -> {
                 return true;
             });
@@ -91,16 +83,9 @@ public class EditInterestRateMenu extends AMenu {
 
         account.setInterestRate(new BigDecimal(depositAmount));
         
-        try {
-            accept = UIUtil.get_input(sc, accept, prompt + " Interest rate changed."
-                    + "\n Press any key to return to the account menu.", (String s) -> {
-                        return true;
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        toast("Interest rate changed.");
 
-        return new ExitItem(this.parent);
+        return new ExitItem();
     }
 
 }

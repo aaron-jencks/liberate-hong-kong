@@ -9,16 +9,16 @@ import company.Controller.EmployeeController;
 import company.Entity.Enum.Position;
 
 public class MainMenu extends AMenu {
-    public MainMenu(ITermController parent) {
-        super(parent);
+    public MainMenu() {
+        super();
         title = "Hong Kong Liberation Banking System";
-        items.add(new AccountMenuItem(this.parent));
+        items.add(new AccountMenuItem());
 
         if(EmployeeController.getInstance().auth().getPosition() == Position.HR){
-            items.add(new EmployeeManagementMenuItem(this.parent));
+            items.add(new EmployeeManagementMenuItem());
         }
         
-        items.add(new ExitItem(this.parent));
+        items.add(new ExitItem());
         // TODO Add Options here
     }
 }

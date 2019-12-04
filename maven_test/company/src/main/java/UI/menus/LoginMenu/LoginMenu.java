@@ -7,7 +7,7 @@ import UI.AlignmentType;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.AnsiUtil;
-import UI.controller.ITermController;
+import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.items.MainMenuItem;
 import company.Controller.EmployeeController;
@@ -19,26 +19,16 @@ public class LoginMenu extends AMenu {
     protected String username = new String();
     protected String password = new String();
 
-    public LoginMenu(ITermController parent)
-    {
-        super(parent);
-    }
-
     @Override
     public int get_y_coord()
     {
-        return (parent.get_term_height() - 2) >> 1;
+        return (TermController.get_instance().get_term_height() - 2) >> 1;
     }
 
     @Override
     public String get_display_string()
     {
         String result = new String();
-
-        // Add vertical padding
-        int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for(int i = 0; i < v_pad; i++)
-            result += "\n";
 
         prompt = ((username.isEmpty()) ? "Username: " : "Password: ");
 
@@ -72,7 +62,7 @@ public class LoginMenu extends AMenu {
             boolean validUP = employee.getPassword().equals(password);
             if(validUP){
                 EmployeeController.getInstance().setAuth(employee);
-                return new MainMenuItem(parent);
+                return new MainMenuItem();
             }
         }
         catch(EmployeeNotFoundException e) {
@@ -80,7 +70,7 @@ public class LoginMenu extends AMenu {
         }
         catch(Exception e) { e.printStackTrace(); }
 
-        return new ExitItem(parent);
+        return new ExitItem();
         
     }
 }

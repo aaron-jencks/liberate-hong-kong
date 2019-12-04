@@ -16,20 +16,20 @@ import UI.menus.AccountMenu.items.EditInterestRateMenuItem;
 
 public class AccountMenu extends AMenu {
 
-    public AccountMenu(ITermController parent) {
-        super(parent);
+    public AccountMenu() {
+        super();
         title = "Create an account";
-        items.add(new CreateAccountMenuItem(this.parent));
-        items.add(new DeleteAccountMenuItem(this.parent));
-        items.add(new DepositAccountMenuItem(this.parent));
-        items.add(new PayCreditAccountMenuItem(this.parent));
-        items.add(new WithdrawlAccountMenuItem(this.parent));
-        items.add(new CreateCreditAccountMenuItem(this.parent));
+        items.add(new CreateAccountMenuItem());
+        items.add(new DeleteAccountMenuItem());
+        items.add(new DepositAccountMenuItem());
+        items.add(new PayCreditAccountMenuItem());
+        items.add(new WithdrawlAccountMenuItem());
+        items.add(new CreateCreditAccountMenuItem());
         if(EmployeeController.getInstance().auth().getPosition() == Position.LOAN_OFFICER){
-            items.add(new AccrueInterestItem(this.parent));
-            items.add(new EditInterestRateMenuItem(this.parent));
+            items.add(new AccrueInterestItem());
+            items.add(new EditInterestRateMenuItem());
         }
-        items.add(new ExitItem(this.parent));
+        items.add(new ExitItem());
     }
     
 }

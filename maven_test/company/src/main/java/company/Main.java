@@ -1,7 +1,5 @@
 package company;
 
-import java.io.IOException;
-
 // import java.sql.Connection;
 // import java.sql.DriverManager;
 // import java.sql.PreparedStatement;
@@ -13,7 +11,6 @@ import java.io.IOException;
 
 import UI.AnsiUtil;
 import UI.UIUtil;
-import UI.controller.*;
 
 public class Main {
 
@@ -44,15 +41,6 @@ public class Main {
         //     e.printStackTrace();
         // }
 
-        try {
-
-            TermController term = new TermController();
-
-            AnsiUtil.display_window(term, true, UIUtil.create_box_string("Hello world!\nThis is Aaron."));
-
-        }
-        catch(IOException e) {
-            System.out.println("Something dumb happened");
-        }
+        AnsiUtil.display_window(true, UIUtil.create_box_string("Hello world!\nThis is Aaron."));
     }
 }
