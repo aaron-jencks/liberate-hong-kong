@@ -62,7 +62,7 @@ public class LockBankMenu extends AMenu {
         }
 
         BankLock.getInstance().lockBank();
-        display();
+        invalidate();
 
         return new ExitItem(this.parent);
     }

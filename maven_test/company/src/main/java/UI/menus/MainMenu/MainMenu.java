@@ -30,7 +30,6 @@ public class MainMenu extends AMenu {
             }
         }
 
-        invalidate();
         items.add(new ExitItem(this.parent));
         // TODO Add Options here
     }

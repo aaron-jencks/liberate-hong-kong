@@ -17,12 +17,10 @@ public class BankLock {
     }
 
     public void lockBank() {
-        System.out.println("bank locked");
         locked = true;
     }
 
     public void unlockBank() {
-        System.out.println("bank unlocked");
         locked = false;
     }
 
