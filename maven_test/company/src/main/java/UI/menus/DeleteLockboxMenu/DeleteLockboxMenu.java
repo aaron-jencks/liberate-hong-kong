@@ -12,6 +12,7 @@ import company.Entity.Lockbox;
 
 public class DeleteLockboxMenu extends AMenu {
     private String id = new String();
+    private Lockbox box = null;
 
     @Override
     public String get_display_string() {
@@ -39,6 +40,12 @@ public class DeleteLockboxMenu extends AMenu {
             AnsiUtil.append_display_string(get_x_coord(), prompt);
             id = UIUtil.get_input(sc, id, "", (String s) -> true);
 
+            box = LockboxController.getInstance().getLockbox(id);
+            if(box == null){
+                toast("No lockbox found with that ID");
+                return new ExitItem();
+            }
+
             get_display_string();
             if(!prompt_yesNo("Confirm delete lockbox?")) return new ExitItem();
         } catch (Exception e) {
@@ -46,7 +53,7 @@ public class DeleteLockboxMenu extends AMenu {
         }
 
         get_display_string();
-        Lockbox box = LockboxController.getInstance().getLockbox(id);
+        
         LockboxController.getInstance().deleteLockbox(box);
 
         toast("Lockbox closed.\nReturn the customer their items : " + box.getDescription());

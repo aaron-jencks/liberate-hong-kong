@@ -56,6 +56,11 @@ public class EditLockboxMenu extends AMenu {
 
             box = LockboxController.getInstance().getLockbox(id);
 
+            if(box == null){
+                toast("No lockbox found with that ID");
+                return new ExitItem();
+            }
+
             get_display_string();
             AnsiUtil.append_display_string(get_x_coord(), prompt);
             password = UIUtil.get_input(sc, password, "", (String s) -> true);
