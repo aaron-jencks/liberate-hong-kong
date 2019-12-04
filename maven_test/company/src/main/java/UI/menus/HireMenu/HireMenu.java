@@ -65,12 +65,12 @@ public class HireMenu extends AMenu {
                 get_display_string();
                 position = UIUtil.get_input(sc, position, prompt, (String s) -> {
                     // //TODO need to validate
-                    // try {
-                    //     Position.valueOf(position);
-                    // } catch (IllegalArgumentException e) {
-                    //     position = new String();
-                    //     return false;
-                    // }
+                    try {
+                        Position.valueOf(position.toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        position = new String();
+                        return false;
+                    }
                     return true;
                 });
                 get_display_string();

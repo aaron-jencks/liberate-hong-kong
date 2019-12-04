@@ -30,7 +30,9 @@ public class EditLockboxMenu extends AMenu {
         if(id.isEmpty()){
             s = "Lockbox id: ";
         }else if(password.isEmpty()){
-            s = "The box contains : " + box.getDescription() + " What is being put in the lock box? ";
+            s = "Lockbox password: ";
+        } else if(description.isEmpty()){
+            s = "The box contains : " + box.getDescription() + "What does the box contain after the customer changes the contents? ";
         }
 
         prompt = s;
@@ -52,11 +54,17 @@ public class EditLockboxMenu extends AMenu {
             AnsiUtil.append_display_string(get_x_coord(), prompt);
             id = UIUtil.get_input(sc, id, "", (String s) -> true);
 
-            get_display_string();
             box = LockboxController.getInstance().getLockbox(id);
+
+            get_display_string();
             AnsiUtil.append_display_string(get_x_coord(), prompt);
             password = UIUtil.get_input(sc, password, "", (String s) -> true);
+
             //check password
+            if(!box.getPassword().equals(password)){
+                toast("Lockbox password is incorrect. ");
+                return new ExitItem();
+            }
 
             get_display_string();
             AnsiUtil.append_display_string(get_x_coord(), prompt);
@@ -64,14 +72,14 @@ public class EditLockboxMenu extends AMenu {
             //update desc
 
             get_display_string();
-            if(!prompt_yesNo("Confirm create lockbox?")) return new ExitItem();
+            if(!prompt_yesNo("Confirm edit lockbox?")) return new ExitItem();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         get_display_string();
 
-        toast("Lockbox created.\nLockbox id = " + box.getId().toString());
+        toast("Lockbox contents changed.\n Lockbox contents : " + box.getDescription());
 
         return new ExitItem();
     }

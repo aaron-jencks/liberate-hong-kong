@@ -22,7 +22,7 @@ public class CreateLockboxMenu extends AMenu {
         if(description.isEmpty()){
             s = "What is being put in the lock box? ";
         }else if(password.isEmpty()){
-            s = "Lockbox passcode: ";
+            s = "Lockbox password: ";
         }
 
         prompt = s;
