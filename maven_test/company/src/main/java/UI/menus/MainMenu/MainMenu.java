@@ -1,10 +1,10 @@
 package UI.menus.MainMenu;
 
 import UI.AMenu;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.MainMenu.items.AccountMenuItem;
 import UI.menus.MainMenu.items.EmployeeManagementMenuItem;
+import UI.menus.MainMenu.items.LockboxMenuItem;
 import company.Controller.EmployeeController;
 import company.Entity.Enum.Position;
 
@@ -13,7 +13,7 @@ public class MainMenu extends AMenu {
         super();
         title = "Hong Kong Liberation Banking System";
         items.add(new AccountMenuItem());
-
+        items.add(new LockboxMenuItem());
         if(EmployeeController.getInstance().auth().getPosition() == Position.HR){
             items.add(new EmployeeManagementMenuItem());
         }
