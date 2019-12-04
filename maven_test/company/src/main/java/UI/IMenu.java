@@ -1,5 +1,7 @@
 package UI;
 
+import java.util.Scanner;
+
 import UI.IMenuItem;
 
 /**
@@ -32,4 +34,11 @@ public interface IMenu {
      * @param message Message to display on the screen
      */
     public void toast(String message);
+
+    /**
+     * Prompts the user with a yes/no question by printing a temporary window on top of this window
+     * @param prompt The question to ask the user
+     * @return Returns true if the user enters 'y' or 'Y', and false otherwise.
+     */
+    public boolean prompt_yesNo(String prompt);
 }

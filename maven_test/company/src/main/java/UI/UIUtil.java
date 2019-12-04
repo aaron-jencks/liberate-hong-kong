@@ -201,12 +201,12 @@ public class UIUtil {
         for(String element : create_string_list(items, true))
         {
             if(use_borders)
-                result += "# ";
+                result += "\u2502 ";
             
             result += pad_string(element, total_width, AlignmentType.left);
 
             if(use_borders)
-                result += " #\n";
+                result += " \u2502\n";
         }
 
         if(use_borders)
@@ -277,5 +277,31 @@ public class UIUtil {
         if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
 		
 		return out;
-	}
+    }
+    
+    /**
+     * Prompts the user with a yes/no question and returns a boolean corresponding to the response
+     * @param sc Scanner to use for reading input
+     * @param prompt The question to ask the user
+     * @return Returns true if the user enters 'y' or 'Y', and false otherwise
+     */
+    public static boolean get_yesNo_response(Scanner sc, String prompt)
+    {
+        String response = "";
+
+        try {
+            response = get_input(sc, response, prompt, (String s) -> {
+                return s.length() == 1 && (s.charAt(0) == 'y' ||
+                    s.charAt(0) == 'Y' || s.charAt(0) == 'n' ||
+                    s.charAt(0) == 'N');
+            });
+
+            return response.toUpperCase().charAt(0) == 'Y';
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

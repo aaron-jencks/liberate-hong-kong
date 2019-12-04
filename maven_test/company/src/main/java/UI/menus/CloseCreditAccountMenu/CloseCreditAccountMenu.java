@@ -1,10 +1,12 @@
 package UI.menus.CloseCreditAccountMenu;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
+import company.Controller.AccountController;
 import company.Controller.CustomerController;
 import company.Entity.Account;
 import company.Entity.Customer;
@@ -49,36 +51,45 @@ public class CloseCreditAccountMenu extends AMenu {
 
         if (!is_valid)
             display();
-        String confirm = "";
-
-        int h_pad = get_x_coord();
-        String h_space = new String();
-        for (int i = 0; i < h_pad; i++)
-            h_space += " ";
-
-        while (confirm.toUpperCase().indexOf('Y') < 0) {
-
-            try {
-                get_display_string();
-                acctNum = UIUtil.get_input(sc, acctNum, prompt, (String s) -> true);
-
-                // TODO Display the current balance
-
-                get_display_string();
-                confirm = UIUtil.get_input(sc, confirm, h_space + "Confirm closing this credit account? (y/N) ", (String s) -> true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // TODO verify that the account exists
-
+        
         try {
-            UIUtil.get_input(sc, confirm, "\n" + h_space + "Account closed.\n" + 
-                             h_space + "Press any key to return to the account menu.", (String s) -> true);
+            get_display_string();
+
+            while(true)
+            {
+                AnsiUtil.append_display_string(get_x_coord(), "Account Number: ");
+                acctNum = UIUtil.get_input(sc, acctNum, "", (String s) -> true);
+
+                // verify that the account exists
+                Account acct = AccountController.getInstance().getAccount(acctNum);
+                if(acct == null)
+                {
+                    toast("That account doesn't exist!");
+                    if(!prompt_yesNo("Try again?"))
+                        return new ExitItem(parent);
+                    continue;
+                }
+                else if(acct.getType() != AccountType.CREDIT)
+                {
+                    toast("That is an invalid account type!");
+                    if(!prompt_yesNo("Try again?")) 
+                        return new ExitItem(parent);
+                    continue;
+                }
+
+                // Display the current balance
+                toast("Current account balance: $" + acct.getAmount());
+
+                if(!prompt_yesNo("Confirm closing this credit account?"))
+                    return new ExitItem(parent);
+
+                break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        toast("Account closed.");
 
         return new ExitItem(this.parent);
     }

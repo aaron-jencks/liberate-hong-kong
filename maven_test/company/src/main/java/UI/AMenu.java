@@ -60,21 +60,11 @@ public abstract class AMenu implements IMenu {
             String result = new String();
             String[] temp = UIUtil.create_menu_string(title, true, available, "").split("\n");
 
-            // Add vertical padding
-            int v_pad = get_y_coord(), h_pad = get_x_coord();
-            for(int i = 0; i < v_pad; i++)
-                result += "\n";
-
             for(String str : temp)
                 if(!str.isEmpty())
                     result += UIUtil.pad_string(str, 
                                                 parent.get_term_width(), 
                                                 AlignmentType.center) + '\n';
-
-            String new_prompt = new String();
-            for(int i = 0; i < h_pad; i++)
-                new_prompt += " ";
-            prompt = new_prompt + prompt;
 
             return result;
         }
@@ -125,7 +115,8 @@ public abstract class AMenu implements IMenu {
             // Normally I just use a lambda expression here, but since I need the length of the list
             // I have to use an external class.
             // But, (T v) -> {expression;} is also okay.
-            item = UIUtil.get_input(AMenu.inputScanner, item, prompt, new MenuItemValidator(available.size()));
+            AnsiUtil.append_display_string(get_x_coord()+ 1, prompt);
+            item = UIUtil.get_input(AMenu.inputScanner, item, "", new MenuItemValidator(available.size()));
         }
         catch(Exception e)
         {
@@ -138,15 +129,43 @@ public abstract class AMenu implements IMenu {
     @Override
     public void toast(String message)
     {
-        int h_pad = get_x_coord();
-        String h_space = "";
-        for (int i = 0; i < h_pad; i++)
-            h_space += " ";
+        Scanner sc = new Scanner(System.in);
 
-        String temp_msg = UIUtil.create_box_string(message);
-        for(String l : temp_msg.split("\n"))
-        {
+        // Display the message in a box
+        AnsiUtil.display_window(parent, false, 
+                                UIUtil.create_box_string(message + 
+                                    "\nPress any key to continue."));
 
+        // Wait for the user to press a key
+        String prompt = "";
+
+        try {
+            UIUtil.get_input(sc, prompt, "", (String s) -> { return true; });
         }
+        catch(Exception e) {
+            System.err.println("How in the world?");
+        }
+
+        // Re-draw the current screen
+        display();
+    }
+
+    @Override
+    public boolean prompt_yesNo(String prompt)
+    {
+        Scanner sc = new Scanner(System.in);
+
+        // Display the message in a box
+        AnsiUtil.display_window(parent, false, 
+                                UIUtil.create_box_string(prompt + 
+                                    " (y/n) "));
+
+        // Collects the answer from the user
+        boolean answer = UIUtil.get_yesNo_response(sc, "");
+
+        // Re-draw the display
+        display();
+
+        return answer;
     }
 }

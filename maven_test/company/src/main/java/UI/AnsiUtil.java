@@ -36,12 +36,53 @@ public class AnsiUtil {
             y_coord = ((term.get_term_height() - height) >> 1) + 1;
 
         // Convert \n characters into ansi codes that return the cursor to the x_coord
-        String temp_win = "";
-        for(String l : window.split("\n")) {
-            temp_win += l + "\033[1B\033[" + x_coord + "G";
+        if(window.contains("\n"))
+        {
+            String temp_win = "";
+            for(String l : window.split("\n")) {
+                temp_win += l + "\033[1B\033[" + x_coord + "G";
+            }
+
+            window = temp_win;
         }
 
         // Positions the cursor to the start of the drawing region
-        System.out.print("\033[" + y_coord + ";" + x_coord + "H" + temp_win);
+        System.out.print("\033[" + y_coord + ";" + x_coord + "H" + window);
+    }
+
+    /**
+     * Displays a message by moving the cursor to the column desired and then printing the message
+     * @param column Column on the terminal to start the message at
+     * @param message Message to print
+     */
+    public static void display_string(int column, String message)
+    {
+        // Convert \n characters into ansi codes that return the cursor to the x_coord
+        if(message.contains("\n"))
+        {
+            String temp_win = "";
+            for(String l : message.split("\n")) {
+                temp_win += l + "\033[1B\033[" + column + "G";
+            }
+
+            message = temp_win;
+        }
+
+        // Reset the column and print the message
+        System.out.print("\033[" + column + "G" + message);
+    }
+
+    /**
+     * Does the same as {@code display_string()} except that it moves the cursor down one row
+     * before printing
+     * @param column Column on the terminal to start the message at
+     * @param message Message to print
+     */
+    public static void append_display_string(int column, String message)
+    {
+        // Move the cursor down one row
+        System.out.print("\033[1B");
+
+        display_string(column, message);
     }
 }

@@ -6,6 +6,7 @@ import UI.AMenu;
 import UI.AlignmentType;
 import UI.IMenuItem;
 import UI.UIUtil;
+import UI.AnsiUtil;
 import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.LoginMenu.items.MainMenuItem;
@@ -39,10 +40,7 @@ public class LoginMenu extends AMenu {
         for(int i = 0; i < v_pad; i++)
             result += "\n";
 
-        String new_prompt = new String();
-        for(int i = 0; i < h_pad; i++)
-            new_prompt += " ";
-        prompt = new_prompt + ((username.isEmpty()) ? "Username: " : "Password: ");
+        prompt = ((username.isEmpty()) ? "Username: " : "Password: ");
 
         return result;
     }
@@ -57,7 +55,8 @@ public class LoginMenu extends AMenu {
             display();
 
         try { 
-            username = UIUtil.get_input(LoginMenu.inputScanner, username, prompt, (String s) -> { return true; }); 
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            username = UIUtil.get_input(LoginMenu.inputScanner, username, "", (String s) -> { return true; }); 
             employee = EmployeeController.getInstance().findByUsername(username);
 
             if(employee == null){
@@ -66,7 +65,8 @@ public class LoginMenu extends AMenu {
 
             get_display_string();
 
-            try { password = UIUtil.get_input(LoginMenu.inputScanner, password, prompt, (String s) -> { return true; }); }
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            try { password = UIUtil.get_input(LoginMenu.inputScanner, password, "", (String s) -> { return true; }); }
             catch(Exception e) { e.printStackTrace(); }
 
             boolean validUP = employee.getPassword().equals(password);
@@ -76,12 +76,7 @@ public class LoginMenu extends AMenu {
             }
         }
         catch(EmployeeNotFoundException e) {
-            System.out.println(UIUtil.pad_string("That user does not exist, please contact your system administrator to create a new account.", 
-                                                 parent.get_term_width(), AlignmentType.center));
-            System.out.println(UIUtil.pad_string("Press RETURN to continue", 
-                                                 parent.get_term_width(), AlignmentType.center));
-            try { UIUtil.get_input(LoginMenu.inputScanner, new String(), "", (String s) -> { return true; }); }
-            catch(Exception e1) { e1.printStackTrace(); }
+            toast("That user does not exist, please contact your system administrator to create a new account.");
         }
         catch(Exception e) { e.printStackTrace(); }
 
