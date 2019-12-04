@@ -14,7 +14,7 @@ public class GreeterMenu extends AMenu {
         title = "Welcome to the Hong Kong Liberation Banking System";
         items.add(new LoginItem());
         items.add(new ForgotPasswordItem());
-        items.add(new ToasterItem());
+        //items.add(new ToasterItem());
         items.add(new ExitItem());
     }
 }
