@@ -15,6 +15,10 @@ public class HireMenu extends AMenu {
     private String firstName = new String();
     private String lastName = new String();
     private String position = new String();
+    private String username = new String();
+    private String password = new String();
+    private String question = new String();
+    private String answer = new String();
     private String confirm = new String();
     private String done = new String();
 
@@ -44,8 +48,16 @@ public class HireMenu extends AMenu {
             s = "Last Name: ";
         }else if(position.isBlank()){
             s = "Position: ";
+        }else if(username.isBlank()){
+                s = "Username: ";
+        }else if(password.isBlank()){
+            s = "Password: ";
+        }else if(question.isBlank()){
+            s = "Recovery Question: ";
+        }else if(answer.isBlank()){
+            s = "Recovery Answer: ";
         }else if(confirm.isBlank()){
-            s = "Confirm hiring?";
+            s = "Confirm hiring? ";
         }
 
         prompt = new_prompt + s;
@@ -77,15 +89,31 @@ public class HireMenu extends AMenu {
                 });
                 get_display_string();
                 position = UIUtil.get_input(sc, position, prompt, (String s) -> {
-                    //TODO need to validate
                     try {
-                        Position.valueOf(position);
+                        Position.valueOf(s.toUpperCase());
                     } catch (IllegalArgumentException e) {
                         position = new String();
                         return false;
                     }
                     return true;
                 });
+                get_display_string();
+                username = UIUtil.get_input(sc, username, prompt, (String s) -> {
+                    return true;
+                });
+                get_display_string();
+                password = UIUtil.get_input(sc, password, prompt, (String s) -> {
+                    return true;
+                });
+                get_display_string();
+                question = UIUtil.get_input(sc, question, prompt, (String s) -> {
+                    return true;
+                });
+                get_display_string();
+                answer = UIUtil.get_input(sc, answer, prompt, (String s) -> {
+                    return true;
+                });
+
                 get_display_string();
                 confirm = UIUtil.get_input(sc, confirm, prompt, (String s) -> {
                     return true;
@@ -97,11 +125,11 @@ public class HireMenu extends AMenu {
         get_display_string();
 
         Employee e = EmployeeController.getInstance()
-            .createEmployee(Position.valueOf(position.toUpperCase()), firstName, lastName);
+            .createEmployee(Position.valueOf(position.toUpperCase()), question, answer, username, password, firstName, lastName);
 
         try {
             done = UIUtil.get_input(sc, done, prompt + " Employee Hired. Employee id = " + e.getId().toString()
-                    + "\n Press any key to return to the account menu.", (String s) -> {
+                    + "\n Press enter to return to the employee management menu.", (String s) -> {
                         return true;
                     });
         } catch (Exception er) {

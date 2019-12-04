@@ -37,6 +37,10 @@ public class App
         if(hr == null){
             e.createEmployee(Position.HR, "Hello?", "World!", "uhr", "p", "JohnHR", "Smith");
         }
+        Employee m = e.findByUsername("um");
+        if(m == null){
+            e.createEmployee(Position.MANAGER, "Hello?", "World!", "um", "p", "JohnManager", "Smith");
+        }
 
         GreeterMenu splash = new GreeterMenu(term);
         term.set_main_window(splash);
