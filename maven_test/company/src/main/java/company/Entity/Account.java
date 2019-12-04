@@ -67,12 +67,15 @@ public class Account {
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", amount='" + getAmount() + "'" +
-            ", type='" + getType() + "'" +
-            ", interestRate='" + getInterestRate() + "'" +
-            "}";
+        // return "{" +
+        //     " id='" + getId() + "'" +
+        //     ", amount='" + getAmount() + "'" +
+        //     ", type='" + getType() + "'" +
+        //     ", interestRate='" + getInterestRate() + "'" +
+        //     "}";
+
+        return "Id: " + getId() + " Type: " + getType() + 
+            " Amount: " + getAmount() + " Interest Rate: " + getInterestRate();
     }
 
 }
