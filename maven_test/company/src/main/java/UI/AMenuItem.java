@@ -1,7 +1,6 @@
 package UI;
 
 import UI.IMenuItem;
-import UI.controller.ITermController;
 
 public abstract class AMenuItem implements IMenuItem {
     

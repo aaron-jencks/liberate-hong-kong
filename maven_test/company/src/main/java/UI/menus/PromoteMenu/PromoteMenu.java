@@ -4,7 +4,6 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
 import company.Entity.Employee;
@@ -19,7 +18,6 @@ public class PromoteMenu extends AMenu {
     {
 
         Scanner sc = new Scanner(System.in);
-        String confirm = "";
 
         if(!is_valid)
             display();

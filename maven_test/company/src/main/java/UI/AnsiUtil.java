@@ -1,16 +1,7 @@
 package UI;
 
-import UI.AlignmentType;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.controller.TermController;
-
-import java.lang.Iterable;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.function.Predicate;
 
 public class AnsiUtil {
 
@@ -114,6 +105,19 @@ public class AnsiUtil {
         }
 
         System.out.print("\033[" + x_coord + "G" + message);
+    }
+
+    /**
+     * Does the same as {@code display_centered_string()} except that it moves the cursor down one row
+     * before printing
+     * @param message Message to print
+     */
+    public static void append_centered_display_string(String message)
+    {
+        // Move the cursor down one row
+        System.out.print("\033[1B");
+
+        display_centered_string(message);
     }
 
     /**
