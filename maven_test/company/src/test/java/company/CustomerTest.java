@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.AfterClass;
@@ -34,6 +35,20 @@ public class CustomerTest
     public void setup(){
         cc = CustomerController.getInstance();
         p = PersonController.getInstance().createPerson("first", "something");
+    }
+
+    @Test
+    public void getAllTest(){
+        truncate();
+        for(int i = 0; i < 5; i++){
+            cc.createCustomer("f" + i, "l" + i);
+        }
+        ArrayList<Customer> allCustomers = cc.getAll();
+        for (Customer customer : allCustomers) {
+            System.out.println("Customer : " + customer.getFirstName());
+        }
+        boolean sameSize = allCustomers.size() == 5;
+        assertTrue(sameSize);
     }
 
     /**
