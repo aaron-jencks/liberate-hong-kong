@@ -55,12 +55,8 @@ public class WithdrawlAccountMenu extends AMenu {
             a = AccountController.getInstance().getAccount(accountNumber);
         }
         catch (BankLockedException e){
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot complete the withdrawl because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot complete the withdrawl because the bank is locked.");
+            return new ExitItem();
         }
 
         if(a == null){
@@ -89,12 +85,8 @@ public class WithdrawlAccountMenu extends AMenu {
             return new ExitItem();
         }
         catch (BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot withdrawl because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot withdrawl because the bank is locked.");
+            return new ExitItem();
         }
 
         totalAmount = a.getAmount().toString();

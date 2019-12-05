@@ -1,9 +1,7 @@
 package UI.menus.ForgotPasswordMenu;
 
 import java.util.Scanner;
-import java.util.UUID;
 
-import UI.AlignmentType;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;

@@ -3,7 +3,6 @@ package UI.menus.LoginMenu;
 import java.util.Scanner;
 
 import UI.AMenu;
-import UI.AlignmentType;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.AnsiUtil;

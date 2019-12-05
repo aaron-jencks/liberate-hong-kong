@@ -6,7 +6,6 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
 import company.Entity.Employee;
@@ -15,7 +14,6 @@ import company.Entity.Enum.Position;
 public class FireMenu extends AMenu {
     private static String employeeId = new String();
     private static String confirm = new String();
-    private static String done = new String();
     private Employee employee;
 
     @Override

@@ -16,8 +16,6 @@ public class AccrueInterestItem extends AMenuItem {
         Scanner sc = new Scanner(System.in);
         String confirm = "";
 
-        String padding = "";
-
         try {
             // Display the message in a box
             AnsiUtil.display_window(false, 

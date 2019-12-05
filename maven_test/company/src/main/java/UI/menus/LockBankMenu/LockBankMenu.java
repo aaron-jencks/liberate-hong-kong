@@ -1,7 +1,5 @@
 package UI.menus.LockBankMenu;
 
-import java.util.Scanner;
-
 import UI.AMenu;
 import UI.IMenuItem;
 import UI.global_menu_items.ExitItem;
@@ -31,8 +29,6 @@ public class LockBankMenu extends AMenu {
 
     @Override
     public IMenuItem prompt() {
-        Scanner sc = new Scanner(System.in);
-
         if (!is_valid)
             display();
 

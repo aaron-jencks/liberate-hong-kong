@@ -4,13 +4,10 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
-import company.Controller.CustomerController;
 import company.Entity.Account;
-import company.Entity.Customer;
 import company.Entity.Enum.AccountType;
 
 import java.util.Scanner;

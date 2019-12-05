@@ -43,16 +43,19 @@ public abstract class ADisplayMenu extends AMenu {
         super();
         items = list;
 
-        item_count = 0;
-        for(Object o : list) item_count++;
-
-        if(item_count > 0)
+        if(list != null)
         {
-            page_count = item_count / (TermController.get_instance().get_term_height() - 3);
+            item_count = 0;
+            for(Object o : list) item_count++;
 
-            if(page_count == 0) page_count = 1;
+            if(item_count > 0)
+            {
+                page_count = item_count / (TermController.get_instance().get_term_height() - 3);
 
-            page_item_count = item_count / page_count;
+                if(page_count == 0) page_count = 1;
+
+                page_item_count = item_count / page_count;
+            }
         }
     }
 
