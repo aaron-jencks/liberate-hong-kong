@@ -51,6 +51,16 @@ public class LockBankMenu extends AMenu {
         if (!is_valid)
             display();
 
+        // If bank is already locked - throw error (because I seemingly can't not show the option in the main menu)
+        if (BankLock.getInstance().isBankLocked() == true) {
+            try {
+                accept = UIUtil.get_input(sc, accept, "Cannot lock the bank because the bank is already locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
+
         try {
             accept = UIUtil.get_input(sc, accept, prompt, (String s) -> { return true; });
         } catch (Exception e) {

@@ -22,12 +22,8 @@ public class MainMenu extends AMenu {
         }
 
         if(EmployeeController.getInstance().auth().getPosition() == Position.MANAGER){
-            if(BankLock.getInstance().isBankLocked() == true) {
-                items.add(new UnlockBankMenuItem(this.parent));
-            }
-            else {
-                items.add(new LockBankMenuItem(this.parent));
-            }
+            items.add(new UnlockBankMenuItem(this.parent));
+            items.add(new LockBankMenuItem(this.parent));
         }
 
         items.add(new ExitItem(this.parent));
