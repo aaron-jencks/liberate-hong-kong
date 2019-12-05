@@ -5,14 +5,9 @@ import java.util.Scanner;
 import UI.AMenu;
 import UI.AMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import company.Controller.AccountController;
 
 public class AccrueInterestItem extends AMenuItem {
-
-    public AccrueInterestItem(ITermController parent) {
-        super(parent);
-    }
 
     @Override
     public AMenu activate() {
@@ -29,9 +24,8 @@ public class AccrueInterestItem extends AMenuItem {
             if(confirm.length() > 0)
             {
                 char temp_confirm = confirm.toUpperCase().charAt(0);
-                //TODO fix
-                // if(temp_confirm == 'Y')
-                //     AccountController.getInstance().accrueInterest();
+                if(temp_confirm == 'Y')
+                    AccountController.getInstance().accrueInterest();
             }
         }
         catch(Exception e)

@@ -7,13 +7,9 @@ import UI.menus.PromoteMenu.PromoteMenu;
 
 public class PromoteMenuItem extends AMenuItem {
 
-    public PromoteMenuItem(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public AMenu activate() {
-        return new PromoteMenu(this.parent);
+        return new PromoteMenu();
     }
 
     @Override

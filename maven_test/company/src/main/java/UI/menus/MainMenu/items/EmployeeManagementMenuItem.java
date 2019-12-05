@@ -7,13 +7,9 @@ import UI.menus.EmployeeManagementMenu.EmployeeManagementMenu;
 
 public class EmployeeManagementMenuItem extends AMenuItem {
 
-    public EmployeeManagementMenuItem(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public AMenu activate() {
-        return new EmployeeManagementMenu(this.parent);
+        return new EmployeeManagementMenu();
     }
 
     @Override

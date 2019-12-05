@@ -3,13 +3,13 @@ package UI;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import UI.controller.ITermController;
+import UI.controller.TermController;
+import UI.AnsiUtil;
 
 public abstract class AMenu implements IMenu {
 
     protected static Scanner inputScanner = null;
 
-    protected ITermController parent;
     protected String title = new String();
     protected String prompt = "What would you like to do? ";
     protected ArrayList<IMenuItem> items = new ArrayList<IMenuItem>();
@@ -17,12 +17,6 @@ public abstract class AMenu implements IMenu {
     private boolean is_availabled = false;
     public boolean is_valid = false;
     public boolean is_centered = true;
-
-    public AMenu(ITermController parent)
-    {
-        super();
-        this.parent = parent;
-    }
 
     /**
      * Determines the column that the menu box for this menu starts in
@@ -36,7 +30,7 @@ public abstract class AMenu implements IMenu {
             if(s.length() > menu_width)
                 menu_width = s.length();
 
-        diff = parent.get_term_width() - menu_width;
+        diff = TermController.get_instance().get_term_width() - menu_width;
         if(diff < 0)
             return 0;
         else
@@ -48,7 +42,7 @@ public abstract class AMenu implements IMenu {
         if(!is_availabled)
             populate_availabled();
 
-        return (parent.get_term_height() - available.size() - 3) >> 1;
+        return (TermController.get_instance().get_term_height() - available.size() - 3) >> 1;
     }
 
     @Override
@@ -59,21 +53,11 @@ public abstract class AMenu implements IMenu {
             String result = new String();
             String[] temp = UIUtil.create_menu_string(title, true, available, "").split("\n");
 
-            // Add vertical padding
-            int v_pad = get_y_coord(), h_pad = get_x_coord();
-            for(int i = 0; i < v_pad; i++)
-                result += "\n";
-
             for(String str : temp)
                 if(!str.isEmpty())
                     result += UIUtil.pad_string(str, 
-                                                parent.get_term_width(), 
+                                                TermController.get_instance().get_term_width(), 
                                                 AlignmentType.center) + '\n';
-
-            String new_prompt = new String();
-            for(int i = 0; i < h_pad; i++)
-                new_prompt += " ";
-            prompt = new_prompt + prompt;
 
             return result;
         }
@@ -98,8 +82,7 @@ public abstract class AMenu implements IMenu {
         if(!is_availabled)
             populate_availabled();
 
-        UIUtil.clrscr();
-        System.out.print(get_display_string());
+        AnsiUtil.display_window(true, get_display_string());
 
         is_valid = true;
     }
@@ -125,7 +108,8 @@ public abstract class AMenu implements IMenu {
             // Normally I just use a lambda expression here, but since I need the length of the list
             // I have to use an external class.
             // But, (T v) -> {expression;} is also okay.
-            item = UIUtil.get_input(AMenu.inputScanner, item, prompt, new MenuItemValidator(available.size()));
+            AnsiUtil.append_display_string(get_x_coord()+ 1, prompt);
+            item = UIUtil.get_input(AMenu.inputScanner, item, "", new MenuItemValidator(available.size()));
         }
         catch(Exception e)
         {
@@ -133,5 +117,48 @@ public abstract class AMenu implements IMenu {
         }
 
         return available.get(item - 1);
+    }
+
+    @Override
+    public void toast(String message)
+    {
+        Scanner sc = new Scanner(System.in);
+
+        // Display the message in a box
+        AnsiUtil.display_window(false, 
+                                UIUtil.create_box_string(message + 
+                                    "\nPress any key to continue."));
+
+        // Wait for the user to press a key
+        String prompt = "";
+
+        try {
+            UIUtil.get_input(sc, prompt, "", (String s) -> { return true; });
+        }
+        catch(Exception e) {
+            System.err.println("How in the world?");
+        }
+
+        // Re-draw the current screen
+        display();
+    }
+
+    @Override
+    public boolean prompt_yesNo(String prompt)
+    {
+        Scanner sc = new Scanner(System.in);
+
+        // Display the message in a box
+        AnsiUtil.display_window(false, 
+                                UIUtil.create_box_string(prompt + 
+                                    " (y/n) "));
+
+        // Collects the answer from the user
+        boolean answer = UIUtil.get_yesNo_response(sc, "");
+
+        // Re-draw the display
+        display();
+
+        return answer;
     }
 }

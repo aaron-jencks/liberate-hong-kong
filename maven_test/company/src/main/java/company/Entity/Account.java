@@ -30,7 +30,8 @@ public class Account {
     }
 
     public void accrueInterest(){
-        //TODO
+        this.amount = this.amount.multiply(this.interestRate);
+        AccountController.getInstance().updateAccount(this);
     }
 
     public UUID getId() {
@@ -76,12 +77,15 @@ public class Account {
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", amount='" + getAmount() + "'" +
-            ", type='" + getType() + "'" +
-            ", interestRate='" + getInterestRate() + "'" +
-            "}";
+        // return "{" +
+        //     " id='" + getId() + "'" +
+        //     ", amount='" + getAmount() + "'" +
+        //     ", type='" + getType() + "'" +
+        //     ", interestRate='" + getInterestRate() + "'" +
+        //     "}";
+
+        return "Id: " + getId() + " Type: " + getType() + 
+            " Amount: " + getAmount() + " Interest Rate: " + getInterestRate();
     }
 
 }

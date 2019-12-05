@@ -77,13 +77,17 @@ public class Employee extends Person {
 
     @Override
     public String toString() {
-        return "{" +
-            " username='" + username + "'" +
-            ", password='" + password + "'" +
-            ", question='" + question + "'" +
-            ", answer='" + answer + "'" +
-            ", position='" + position + "'" +
-            "}";
+        // return "{" +
+        //     " username='" + username + "'" +
+        //     ", password='" + password + "'" +
+        //     ", question='" + question + "'" +
+        //     ", answer='" + answer + "'" +
+        //     ", position='" + position + "'" +
+        //     "}";
+
+        return super.toString() + " Position: " + position +
+            " Username: " + username + " Password: " + password + 
+            " Security Question: " + question + " Answer: " + answer;
     }
 
 }

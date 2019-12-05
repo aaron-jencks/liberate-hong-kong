@@ -5,7 +5,6 @@ import UI.AlignmentType;
 import java.lang.Iterable;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -142,6 +141,31 @@ public class UIUtil {
     }
 
     /**
+     * Creates a boxed string message, similar to a menu string, but without the list of items.
+     * Splits the message by {@code '\n'} and uses that to determine the dimensions of the box
+     * @param message The string to wrap in a box of '#'
+     * @return Returns the {@code message} string surrounded with a '#' box.
+     */
+    public static String create_box_string(String message)
+    {
+        int width = 0;
+        for(String l : message.split("\n"))
+            if(l.length() > width) width = l.length();
+        width += 4; // Room for a space and the '#' symbol
+
+        String topBottom = create_bar_string(width - 2, '\u2500'), result = "";
+
+        result += '\u250C' + topBottom + '\u2510' + '\n';
+
+        for(String l : message.split("\n"))
+            result += "\u2502 " + pad_string(l, width - 4, AlignmentType.center) + " \u2502\n";
+
+        result += '\u2514' + topBottom + '\u2518';
+
+        return result;
+    }
+
+    /**
      * Creates a string that represents a menu created using the elements from {@code items} and
      * is formatted as follows:
      * 
@@ -165,27 +189,29 @@ public class UIUtil {
     {
         String result = new String();
         int total_width = (title.length() > prompt.length()) ? title.length() : prompt.length();
-        for(Object o : items)
-            if(o.toString().length() > total_width) total_width = o.toString().length();
+        ArrayList<String> stringified_list = create_string_list(items, true);
+        
+        for(String o : stringified_list)
+            if(o.length() > total_width) total_width = o.toString().length();
 
         if(use_borders)
-            result += create_bar_string(total_width + 4, '#') + '\n';
+            result += '\u250C' + create_bar_string(total_width + 2, '\u2500') + "\u2510\n";
 
-        result += "# " + pad_string(title, total_width, AlignmentType.center) + " #\n";
+        result += "\u2502 " + pad_string(title, total_width, AlignmentType.center) + " \u2502\n";
 
-        for(String element : create_string_list(items, true))
+        for(String element : stringified_list)
         {
             if(use_borders)
-                result += "# ";
+                result += "\u2502 ";
             
             result += pad_string(element, total_width, AlignmentType.left);
 
             if(use_borders)
-                result += " #\n";
+                result += " \u2502\n";
         }
 
         if(use_borders)
-            result += create_bar_string(total_width + 4, '#') + '\n';
+            result += '\u2514' + create_bar_string(total_width + 2, '\u2500') + "\u2518\n";
 
         result += prompt;
 
@@ -236,14 +262,20 @@ public class UIUtil {
             {
                 // Invalid input by definition, continue and try again
                 // System.out.println("Moving cursor to column " + (prompt.length() + 1 + out.toString().length() + 1));
-                System.out.println("\033[" + 
-                                   (prompt.length() + 1 + out.toString().length() + 1) + 
-                                   "G\033[A\033[38;5;9mInvalid response, try again...\033[0m");
+                AnsiUtil.display_centered_string("\033[38;5;9mInvalid response, try again...\033[0m\n");
+                AnsiUtil.center_cursor_horiz();
 
                 // Read in the extra '\n'
                 if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
 
                 continue;
+            }
+
+            if(!valid.test(out))
+            {
+                AnsiUtil.display_centered_string("\033[38;5;9mInvalid response, try again...\033[0m\n");
+                AnsiUtil.center_cursor_horiz();
+                if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
             }
             
         }while(!valid.test(out));
@@ -252,5 +284,31 @@ public class UIUtil {
         if(out.getClass() != String.class && sc.hasNextLine()) sc.nextLine();
 		
 		return out;
-	}
+    }
+    
+    /**
+     * Prompts the user with a yes/no question and returns a boolean corresponding to the response
+     * @param sc Scanner to use for reading input
+     * @param prompt The question to ask the user
+     * @return Returns true if the user enters 'y' or 'Y', and false otherwise
+     */
+    public static boolean get_yesNo_response(Scanner sc, String prompt)
+    {
+        String response = "";
+
+        try {
+            response = get_input(sc, response, prompt, (String s) -> {
+                return s.length() == 1 && (s.charAt(0) == 'y' ||
+                    s.charAt(0) == 'Y' || s.charAt(0) == 'n' ||
+                    s.charAt(0) == 'N');
+            });
+
+            return response.toUpperCase().charAt(0) == 'Y';
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

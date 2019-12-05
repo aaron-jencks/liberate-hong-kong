@@ -9,6 +9,9 @@ package company;
 // import java.util.ArrayList;
 // import java.util.List;
 
+import UI.AnsiUtil;
+import UI.UIUtil;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -37,5 +40,7 @@ public class Main {
         // } catch (Exception e) {
         //     e.printStackTrace();
         // }
+
+        AnsiUtil.display_window(true, UIUtil.create_box_string("Hello world!\nThis is Aaron."));
     }
 }

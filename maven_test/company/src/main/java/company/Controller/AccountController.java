@@ -17,13 +17,4 @@ public class AccountController extends AAccountController{
         }
         return controllerInstance;
     }
-
-    
-    //TODO fix
-    // public void accrueInterest()
-    // {
-    //     for(IAccount acct : Vault.getInstance().getAccounts().values())
-    //         if(ICreditAccount.class.isAssignableFrom(acct.getClass()))
-    //             ((ICreditAccount)acct).accrueInterest();
-    // }
 }

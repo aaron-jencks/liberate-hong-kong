@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import company.Entity.Employee;
@@ -43,6 +44,20 @@ public class EmployeeTest
     public void testCreateEmployee(){
         Employee e = ec.createEmployee(Position.TELLER, "who are you?", "me", "tom", "thompson", p);
         assertTrue(e.getQuestion().equals("who are you?"));
+    }
+
+    @Test
+    public void getAllTest(){
+        truncate();
+        for(int i = 0; i < 5; i++){
+            ec.createEmployee(Position.TELLER, "f" + i, "l" + i);
+        }
+        ArrayList<Employee> allEmps = ec.getAll();
+        for (Employee employee : allEmps) {
+            System.out.println("Emp : " + employee.getFirstName());
+        }
+        boolean sameSize = allEmps.size() == 5;
+        assertTrue(sameSize);
     }
 
     /**

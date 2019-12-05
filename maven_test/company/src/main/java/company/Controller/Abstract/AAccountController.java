@@ -164,7 +164,7 @@ public abstract class AAccountController extends ASQLController implements IAcco
      */
     public ArrayList<Account> getAll() throws BankLockedException {
         ArrayList<Account> allAccount = new ArrayList<>();
-        String sqlQuery = "SELECT * " + TABLE_NAME;
+        String sqlQuery = "SELECT * FROM " + TABLE_NAME;
         if(ASQLController.debug){
             System.out.println("executeQuery : " + sqlQuery + "\n");
         }

@@ -7,15 +7,10 @@ import UI.menus.LoginMenu.LoginMenu;
 
 public class LoginItem extends AMenuItem {
 
-    public LoginItem(ITermController parent)
-    {
-        super(parent);
-    }
-
     @Override
     public AMenu activate()
     {
-        return new LoginMenu(parent);
+        return new LoginMenu();
     }
 
     @Override

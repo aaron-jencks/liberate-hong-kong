@@ -1,9 +1,9 @@
 package UI.menus.PromoteMenu;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
 import company.Entity.Employee;
@@ -13,34 +13,11 @@ import java.util.Scanner;
 
 public class PromoteMenu extends AMenu {
 
-    public PromoteMenu(ITermController parent)
-    {
-        super(parent);
-    }
-
-    @Override
-    public String get_display_string()
-    {
-        String result = "";
-
-        // Add vertical padding
-        int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for(int i = 0; i < v_pad; i++)
-            result += "\n";
-
-        String new_prompt = "";
-        for(int i = 0; i < h_pad; i++)
-            new_prompt += " ";
-
-        return new_prompt;
-    }
-
     @Override
     public IMenuItem prompt()
     {
 
         Scanner sc = new Scanner(System.in);
-        String confirm = "";
 
         if(!is_valid)
             display();
@@ -48,44 +25,36 @@ public class PromoteMenu extends AMenu {
         String employee_id_str = "";
         String position = "";
         while(true) {
-            String padding = get_display_string();
 
-            while (confirm.toUpperCase().indexOf('Y') < 0) {
-                try {
-                    employee_id_str = UIUtil.get_input(sc, employee_id_str, padding + "Employee ID: ", (String s) -> true);
-                    position = UIUtil.get_input(sc, position, padding + "Position: ", (String s) -> { return true;});
+            try {
+                AnsiUtil.append_display_string(get_x_coord(), "Employee ID: ");
+                employee_id_str = UIUtil.get_input(sc, employee_id_str, "", (String s) -> true);
+                AnsiUtil.append_display_string(get_x_coord(), "Position: ");
+                position = UIUtil.get_input(sc, position, "", (String s) -> { return true;});
 
-                    confirm = UIUtil.get_input(sc, confirm, padding + "Confirm changing this employee's position? ", (String s) -> { return true;});
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                if(!prompt_yesNo("Confirm changing this employee's position?"))
+                    return new ExitItem();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             //try to get the employee
             Employee employee = EmployeeController.getInstance().getEmployee(employee_id_str);
             if(employee == null){
-                try {
-                    UIUtil.get_input(sc, confirm, padding + "Employee id " + employee_id_str + " is not a valid employee id. Press enter to continue.", (String s) -> true);
-                }
-                catch (Exception e1) { e1.printStackTrace(); }
-
+                toast("Employee id " + employee_id_str + " is not a valid employee id.");
                 invalidate();
-                return new ExitItem(parent);
+                return new ExitItem();
             }
             //check if it's a valid position
             if(Position.valueOf(position.toUpperCase()) == null){
-                try {
-                    UIUtil.get_input(sc, confirm, padding + "No position found of type " + position + " Press enter to continue.", (String s) -> true);
-                }
-                catch (Exception e1) { e1.printStackTrace(); }
-
+                toast("No position found of type " + position);
                 invalidate();
-                return new ExitItem(parent);
+                return new ExitItem();
             }
             //update their position
             employee.setPosition(Position.valueOf(position.toUpperCase()));
 
-            return new ExitItem(parent);
+            return new ExitItem();
         }
 
     }

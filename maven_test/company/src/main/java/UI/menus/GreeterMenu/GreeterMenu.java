@@ -5,14 +5,16 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.items.ForgotPasswordItem;
 import UI.menus.GreeterMenu.items.LoginItem;
+import UI.menus.GreeterMenu.items.ToasterItem;
 
 public class GreeterMenu extends AMenu {
-    public GreeterMenu(ITermController parent)
+    public GreeterMenu()
     {
-        super(parent);
+        super();
         title = "Welcome to the Hong Kong Liberation Banking System";
-        items.add(new LoginItem(this.parent));
-        items.add(new ForgotPasswordItem(this.parent));
-        items.add(new ExitItem(this.parent));
+        items.add(new LoginItem());
+        items.add(new ForgotPasswordItem());
+        //items.add(new ToasterItem());
+        items.add(new ExitItem());
     }
 }

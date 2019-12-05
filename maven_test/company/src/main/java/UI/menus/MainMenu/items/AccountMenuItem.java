@@ -7,14 +7,9 @@ import UI.menus.AccountMenu.AccountMenu;
 
 public class AccountMenuItem extends AMenuItem {
 
-    public AccountMenuItem(ITermController parent) {
-        super(parent);
-        // TODO Auto-generated constructor stub
-    }
-
     @Override
     public AMenu activate() {
-        return new AccountMenu(this.parent);
+        return new AccountMenu();
     }
 
     @Override

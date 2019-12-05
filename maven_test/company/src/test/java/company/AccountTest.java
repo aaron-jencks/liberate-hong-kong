@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.AfterClass;
@@ -33,6 +34,20 @@ public class AccountTest
     @Before
     public void setup(){
         ac = AccountController.getInstance();
+    }
+
+    @Test
+    public void getAllTest(){
+        truncate();
+        for(int i = 0; i < 5; i++){
+            ac.createAccount(new BigDecimal(i), AccountType.SAVINGS);
+        }
+        ArrayList<Account> allAccounts = ac.getAll();
+        for (Account account : allAccounts) {
+            System.out.println("Account : " + account.getAmount());
+        }
+        boolean sameSize = allAccounts.size() == 5;
+        assertTrue(sameSize);
     }
 
     /**

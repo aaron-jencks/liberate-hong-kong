@@ -3,6 +3,7 @@ package UI.menus.HireMenu;
 import java.util.Scanner;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
@@ -22,24 +23,10 @@ public class HireMenu extends AMenu {
     private String confirm = new String();
     private String done = new String();
 
-    public HireMenu(ITermController parent)
-    {
-        super(parent);
-    }
-
     @Override
     public String get_display_string()
     {
         String result = new String();
-
-        // Add vertical padding
-        int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for(int i = 0; i < v_pad; i++)
-            result += "\n";
-
-        String new_prompt = new String();
-        for(int i = 0; i < h_pad; i++)
-            new_prompt += " ";
 
         String s = "";
         if(firstName.isBlank()){
@@ -60,7 +47,7 @@ public class HireMenu extends AMenu {
             s = "Confirm hiring? ";
         }
 
-        prompt = new_prompt + s;
+        prompt = s;
 
         return result;
     }
@@ -70,7 +57,7 @@ public class HireMenu extends AMenu {
 
         if(EmployeeController.getInstance().auth().getPosition() != Position.HR){
             //only HR can hire
-            return new ExitItem(this.parent);
+            return new ExitItem();
         }
         Scanner sc = new Scanner(System.in);
 
@@ -90,7 +77,7 @@ public class HireMenu extends AMenu {
                 get_display_string();
                 position = UIUtil.get_input(sc, position, prompt, (String s) -> {
                     try {
-                        Position.valueOf(s.toUpperCase());
+                        Position.valueOf(position.toUpperCase());
                     } catch (IllegalArgumentException e) {
                         position = new String();
                         return false;
@@ -127,14 +114,7 @@ public class HireMenu extends AMenu {
         Employee e = EmployeeController.getInstance()
             .createEmployee(Position.valueOf(position.toUpperCase()), question, answer, username, password, firstName, lastName);
 
-        try {
-            done = UIUtil.get_input(sc, done, prompt + " Employee Hired. Employee id = " + e.getId().toString()
-                    + "\n Press enter to return to the employee management menu.", (String s) -> {
-                        return true;
-                    });
-        } catch (Exception er) {
-            er.printStackTrace();
-        }
-        return new ExitItem(this.parent);
+        toast("Employee Hired. Employee id = " + e.getId().toString());
+        return new ExitItem();
     }
 }

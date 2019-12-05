@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 import UI.AMenu;
+import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
 import UI.controller.ITermController;
@@ -19,32 +20,20 @@ public class DepositAccountMenu extends AMenu {
     private String accept = new String();
     private String totalAmount = new String();
 
-    public DepositAccountMenu(ITermController parent) {
-        super(parent);
-    }
-
     @Override
     public String get_display_string() {
         String result = new String();
-         // Add vertical padding
-         int v_pad = get_y_coord(), h_pad = get_x_coord();
-         for (int i = 0; i < v_pad; i++)
-             result += "\n";
  
-         String new_prompt = new String();
-         for (int i = 0; i < h_pad; i++)
-             new_prompt += " ";
- 
-         String s = "";
-         if (accountNumber.isEmpty()) {
-             s = "Please enter the account number you would like to deposit into: ";
-         } else if (depositAmount.isEmpty()) {
-             s = "How much would you like to deposit today: ";
-         }
- 
-         prompt = new_prompt + s;
- 
-         return result;
+        String s = "";
+        if (accountNumber.isEmpty()) {
+            s = "Please enter the account number you would like to deposit into: ";
+        } else if (depositAmount.isEmpty()) {
+            s = "How much would you like to deposit today: ";
+        }
+
+        prompt = s;
+
+        return result;
     }
 
     @Override
@@ -55,7 +44,8 @@ public class DepositAccountMenu extends AMenu {
             display();
 
         try {
-            accountNumber = UIUtil.get_input(sc, accountNumber, prompt, (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), prompt);
+            accountNumber = UIUtil.get_input(sc, accountNumber, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -78,22 +68,16 @@ public class DepositAccountMenu extends AMenu {
 
         //make sure it exists
         if(a == null){
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + " Invalid account number. "
-                        + "\n Press any key to return to the account menu.", (String s) -> {
-                            return true;
-                        });
-            } catch (Exception q) {
-                q.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Invalid account number.");
+            return new ExitItem();
         }
 
         BigDecimal startAmount = a.getAmount();
         get_display_string();
 
         try {
-            depositAmount = UIUtil.get_input(sc, depositAmount, prompt + " Current account balance: " + startAmount.toString() + ". \n Enter deposit amount: ", (String s) -> {
+            AnsiUtil.append_display_string(get_x_coord(), prompt + " Current account balance: " + startAmount.toString() + ". \n Enter deposit amount: ");
+            depositAmount = UIUtil.get_input(sc, depositAmount, "", (String s) -> {
                 return true;
             });
         } catch (Exception e) {
@@ -107,36 +91,15 @@ public class DepositAccountMenu extends AMenu {
             AccountController.getInstance().deposit(a, new BigDecimal(depositAmount));
             totalAmount = a.getAmount().toString();
 
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + 
-                    " Amount deposited. Total amount on account = " + totalAmount + 
-                    "\n Press any key to return to the account menu.", 
-                    (String s) -> {
-                            return true;
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            toast("Amount deposited. Total amount on account = " + totalAmount);
 
-            return new ExitItem(this.parent);
+            return new ExitItem();
         } catch (InvalidParameterException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + 
-                    "Failed to deposit amount. ", 
-                    (String s) -> {
-                            return true;
-                        });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Failed to deposit amount.");
+            return new ExitItem();
         } catch (BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot deposit money because bank is locked", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot deposit money because bank is locked");
+            return new ExitItem();
         }
 
     }
