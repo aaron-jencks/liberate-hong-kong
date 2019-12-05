@@ -11,6 +11,7 @@ import UI.UIUtil;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
+import company.exceptions.BankLockedException;
 
 public class WithdrawlAccountMenu extends AMenu {
     private String accountNumber = new String();
@@ -49,7 +50,18 @@ public class WithdrawlAccountMenu extends AMenu {
             e.printStackTrace();
         }
         //try to get the account
-        Account a = AccountController.getInstance().getAccount(accountNumber);
+        Account a;
+        try {
+            a = AccountController.getInstance().getAccount(accountNumber);
+        }
+        catch (BankLockedException e){
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot complete the withdrawl because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
 
         if(a == null){
             toast("Account not found. " + totalAmount);
@@ -75,6 +87,14 @@ public class WithdrawlAccountMenu extends AMenu {
         } catch (InvalidParameterException e) {
             toast("Insufficent funds.");
             return new ExitItem();
+        }
+        catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot withdrawl because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
         }
 
         totalAmount = a.getAmount().toString();

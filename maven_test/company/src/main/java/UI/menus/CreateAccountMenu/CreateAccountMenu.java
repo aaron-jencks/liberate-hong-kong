@@ -14,6 +14,7 @@ import company.Entity.Account;
 import company.Entity.Customer;
 import company.Entity.Person;
 import company.Entity.Enum.AccountType;
+import company.exceptions.BankLockedException;
 
 public class CreateAccountMenu extends AMenu {
 
@@ -66,9 +67,24 @@ public class CreateAccountMenu extends AMenu {
 
         get_display_string();
         //TODO, add functionality to search for customer before creating a new one
-        Person p = PersonController.getInstance().createPerson(firstName, lastName);
-        Customer c = CustomerController.getInstance().createCustomer(p);
-        Account a = CustomerController.getInstance().addAccount(c, AccountType.SAVINGS);
+        Person p;
+        Customer c;
+        Account a;
+
+        try {
+            p = PersonController.getInstance().createPerson(firstName, lastName);
+            c = CustomerController.getInstance().createCustomer(p);
+            a = CustomerController.getInstance().addAccount(c, AccountType.SAVINGS);
+        }
+        catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot create the account because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
+
         String accountNumber = a.getId().toString();
 
         toast("Account created. Account id = " + accountNumber);

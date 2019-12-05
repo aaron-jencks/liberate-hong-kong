@@ -11,11 +11,11 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
+import company.exceptions.BankLockedException;
 
 public class DeleteAccountMenu extends AMenu {
 
     private String accountId = new String();
-    private String accept = new String();
 
     @Override
     public String get_display_string() {
@@ -48,19 +48,29 @@ public class DeleteAccountMenu extends AMenu {
         }
 
         get_display_string();
-        
-        Account a = AccountController.getInstance().getAccount(accountId);
+
+        Account a;
+        //try to get the account
+        try {
+            a = AccountController.getInstance().getAccount(accountId);
+        }
+        catch (BankLockedException e) {
+            toast("Cannot get the bank account because the bank is locked.");
+            return new ExitItem();
+        }
+
         if (a == null) {
             toast("No account was found with the given account id.");
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + " No account was found with the given account id", (String s) -> {
-                            return true;
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } else {
-            BigDecimal amt = AccountController.getInstance().deleteAccount(a);
+            BigDecimal amt;
+            try {
+                amt = AccountController.getInstance().deleteAccount(a);
+            }
+            catch (BankLockedException e) {
+                toast("Cannot delete the bank account because the bank is locked.");
+                return new ExitItem();
+            }
+
             toast("The account with the given account id has been closed. The balance remaining on the account was " + amt.toString());
         }
 

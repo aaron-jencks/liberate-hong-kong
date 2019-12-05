@@ -127,7 +127,7 @@ public abstract class AMenu implements IMenu {
         // Display the message in a box
         AnsiUtil.display_window(false, 
                                 UIUtil.create_box_string(message + 
-                                    "\nPress any key to continue."));
+                                    "\nPress ENTER to continue."));
 
         // Wait for the user to press a key
         String prompt = "";

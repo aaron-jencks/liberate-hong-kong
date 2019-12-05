@@ -11,6 +11,7 @@ import company.Controller.CustomerController;
 import company.Entity.Account;
 import company.Entity.Customer;
 import company.Entity.Enum.AccountType;
+import company.exceptions.BankLockedException;
 
 import java.util.Scanner;
 
@@ -68,8 +69,21 @@ public class CreateCreditAccountMenu extends AMenu {
 
         get_display_string();
         //TODO, fix to first search for customer before creating a new one
-        Customer c = CustomerController.getInstance().createCustomer(firstName, lastName);
-        Account a = CustomerController.getInstance().addAccount(c, AccountType.CREDIT);
+        Customer c;
+        Account a;
+
+        try {
+            c = CustomerController.getInstance().createCustomer(firstName, lastName);
+            a = CustomerController.getInstance().addAccount(c, AccountType.CREDIT);
+        }
+        catch (BankLockedException e) {
+            try {
+                confirm = UIUtil.get_input(sc, confirm, prompt + "Cannot create the account because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
 
         toast("Account created.\nAccount id = " + a.getId().toString());
 

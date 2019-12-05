@@ -12,6 +12,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
+import company.exceptions.BankLockedException;
 
 public class EditInterestRateMenu extends AMenu {
     private String accountNumber = new String();
@@ -66,7 +67,17 @@ public class EditInterestRateMenu extends AMenu {
             toast("Invalid account number.");
             return new ExitItem();
         }
-        Account account = AccountController.getInstance().getAccount(accountNumber);
+
+        Account account;
+
+        try {
+            account = AccountController.getInstance().getAccount(accountNumber);
+        }
+        catch (BankLockedException e) {
+            toast("Cannot edit the interest rate because the bank is locked.");
+            return new ExitItem();
+        }
+
         BigDecimal startAmount = account.getInterestRate();
         get_display_string();
 
@@ -81,8 +92,14 @@ public class EditInterestRateMenu extends AMenu {
 
         get_display_string();
 
-        account.setInterestRate(new BigDecimal(depositAmount));
-        
+        try {
+            account.setInterestRate(new BigDecimal(depositAmount));
+        }
+        catch (BankLockedException e) {
+            toast("Cannot edit the interest rate because the bank is locked.");
+            return new ExitItem();
+        }
+
         toast("Interest rate changed.");
 
         return new ExitItem();

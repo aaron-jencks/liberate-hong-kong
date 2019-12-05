@@ -18,6 +18,8 @@ import company.Entity.Account;
 import company.Entity.Customer;
 import company.Entity.Person;
 import company.Entity.Enum.AccountType;
+import company.Entity.BankLock;
+import company.exceptions.BankLockedException;
 
 public abstract class ACustomerController extends ASQLController implements ICustomerController{
     
@@ -67,7 +69,10 @@ public abstract class ACustomerController extends ASQLController implements ICus
      * @param type
      * @return
      */
-    public Account addAccount(Customer customer, AccountType type){
+    public Account addAccount(Customer customer, AccountType type) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         Account a = AccountController.getInstance().createAccount(BigDecimal.ZERO, type);
         customer.addAccount(a);
         return a;

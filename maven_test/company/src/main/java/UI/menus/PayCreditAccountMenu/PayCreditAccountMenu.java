@@ -12,6 +12,7 @@ import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
+import company.exceptions.BankLockedException;
 
 public class PayCreditAccountMenu extends AMenu {
     private String accountNumber = new String();
@@ -59,7 +60,21 @@ public class PayCreditAccountMenu extends AMenu {
             toast("Invalid account number.");
             return new ExitItem();
         }
-        Account account = AccountController.getInstance().getAccount(accountNumber);
+
+        Account account;
+
+        try {
+            account = AccountController.getInstance().getAccount(accountNumber);
+        }
+        catch (BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot pay on the credit account because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
+
         BigDecimal startAmount = account.getAmount();
         get_display_string();
 
@@ -73,8 +88,17 @@ public class PayCreditAccountMenu extends AMenu {
 
         get_display_string();
 
-        AccountController.getInstance().deposit(account, new BigDecimal(depositAmount));
-
+        try {
+            AccountController.getInstance().deposit(account, new BigDecimal(depositAmount));
+        }
+        catch(BankLockedException e) {
+            try {
+                accept = UIUtil.get_input(sc, accept, prompt + "Cannot pay on the credit account because the bank is locked.", (String s) -> { return true; });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            return new ExitItem(this.parent);
+        }
         totalAmount = account.getAmount().toString();
 
         toast("Amount paid. Total amount on account = " + totalAmount);

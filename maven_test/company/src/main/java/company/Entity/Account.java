@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import company.Controller.AccountController;
 import company.Entity.Enum.AccountType;
+import company.exceptions.BankLockedException;
 
 public class Account {
     private UUID id;
@@ -28,7 +29,7 @@ public class Account {
         this.type = type;
     }
 
-    public void accrueInterest(){
+    public void accrueInterest() throws BankLockedException {
         this.amount = this.amount.multiply(this.interestRate);
         AccountController.getInstance().updateAccount(this);
     }
@@ -41,7 +42,10 @@ public class Account {
         return this.amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         BigDecimal rounded = amount.setScale(2, RoundingMode.HALF_EVEN);
         this.amount = rounded;
         AccountController.getInstance().updateAccount(this);
@@ -51,7 +55,10 @@ public class Account {
         return this.type;
     }
 
-    public void setType(AccountType type) {
+    public void setType(AccountType type) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         this.type = type;
         AccountController.getInstance().updateAccount(this);
     }
@@ -60,7 +67,10 @@ public class Account {
         return this.interestRate;
     }
 
-    public void setInterestRate(BigDecimal interestRate) {
+    public void setInterestRate(BigDecimal interestRate) throws BankLockedException {
+        if (BankLock.getInstance().isBankLocked() == true)
+            throw new BankLockedException();
+
         this.interestRate = interestRate;
         AccountController.getInstance().updateAccount(this);
     }

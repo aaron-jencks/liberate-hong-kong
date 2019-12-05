@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import company.Entity.Account;
 import company.Entity.Enum.AccountType;
+import company.exceptions.BankLockedException;
 
 public interface IAccountController{
 
@@ -24,41 +25,41 @@ public interface IAccountController{
      * @param type
      * @return
      */
-    public Account createAccount(BigDecimal amount, AccountType type);
+    public Account createAccount(BigDecimal amount, AccountType type) throws BankLockedException;
     
     /**
      * Get account
      * @param id
      * @return
      */
-    public Account getAccount(String id);
+    public Account getAccount(String id) throws BankLockedException;
 
     /**
      * Get account
      * @param id
      * @return
      */
-    public Account getAccount(UUID id);
+    public Account getAccount(UUID id) throws BankLockedException;
 
     /**
      * Get all accounts
      * @return
      */
-    public ArrayList<Account> getAll();
+    public ArrayList<Account> getAll() throws BankLockedException;
 
     /**
      * Delete account
      * @param account
      * @return the amount left on the account
      */
-    public BigDecimal deleteAccount(Account account);
+    public BigDecimal deleteAccount(Account account) throws BankLockedException;
 
     /**
      * Delete account
      * @param id
      * @return the amount left on the account
      */
-    public BigDecimal deleteAccount(UUID id);
+    public BigDecimal deleteAccount(UUID id) throws BankLockedException;
 
     /**
      * Deposit amount into account
@@ -68,7 +69,7 @@ public interface IAccountController{
      * @return
      * @throws InvalidParameterException
      */
-    public Account deposit(Account account, BigDecimal amount) throws InvalidParameterException;
+    public Account deposit(Account account, BigDecimal amount) throws InvalidParameterException, BankLockedException;
 
     /**
      * Withdraw amount from account
@@ -78,10 +79,10 @@ public interface IAccountController{
      * @return
      * @throws InvalidParameterException
      */
-    public Account withdrawl(Account account, BigDecimal amount) throws InvalidParameterException;
+    public Account withdrawl(Account account, BigDecimal amount) throws InvalidParameterException, BankLockedException;
 
     /**
      * Accrue interest on all accounts
      */
-    public void accrueInterest();
+    public void accrueInterest() throws BankLockedException;
 }
