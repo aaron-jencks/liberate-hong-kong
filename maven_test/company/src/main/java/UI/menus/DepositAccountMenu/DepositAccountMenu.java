@@ -8,7 +8,6 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
@@ -58,12 +57,8 @@ public class DepositAccountMenu extends AMenu {
             a = AccountController.getInstance().getAccount(accountNumber);
         }
         catch (BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot get the bank account because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot get the bank account because the bank is locked.");
+            return new ExitItem();
         }
 
         //make sure it exists

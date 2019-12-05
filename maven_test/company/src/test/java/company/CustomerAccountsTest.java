@@ -9,8 +9,10 @@ import org.junit.Test;
 
 import company.Controller.AccountController;
 import company.Controller.CustomerController;
+import company.Entity.BankLock;
 import company.Entity.Customer;
 import company.Entity.Enum.AccountType;
+import company.exceptions.BankLockedException;
 
 
 /**
@@ -32,6 +34,7 @@ public class CustomerAccountsTest
 
     @Before
     public void setup(){
+        BankLock.getInstance().unlockBank();
         ac = AccountController.getInstance();
         cc = CustomerController.getInstance();
         customer = cc.createCustomer("first", "last");
@@ -42,7 +45,13 @@ public class CustomerAccountsTest
      */
     @Test
     public void testCreateAccount(){
+        try{
         cc.addAccount(customer, AccountType.CHECKING);
+        }
+        catch(BankLockedException e)
+        {
+            // unreachable
+        }
     }
 
 }

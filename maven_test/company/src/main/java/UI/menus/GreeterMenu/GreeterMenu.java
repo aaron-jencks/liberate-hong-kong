@@ -1,7 +1,6 @@
 package UI.menus.GreeterMenu;
 
 import UI.AMenu;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import UI.menus.GreeterMenu.items.ForgotPasswordItem;
 import UI.menus.GreeterMenu.items.LoginItem;

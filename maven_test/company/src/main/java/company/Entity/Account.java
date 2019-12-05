@@ -29,7 +29,7 @@ public class Account {
         this.type = type;
     }
 
-    public void accrueInterest(){
+    public void accrueInterest() throws BankLockedException {
         this.amount = this.amount.multiply(this.interestRate);
         AccountController.getInstance().updateAccount(this);
     }

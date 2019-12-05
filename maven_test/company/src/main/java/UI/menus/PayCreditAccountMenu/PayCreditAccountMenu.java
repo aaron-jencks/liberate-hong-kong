@@ -8,7 +8,6 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
@@ -17,7 +16,6 @@ import company.exceptions.BankLockedException;
 public class PayCreditAccountMenu extends AMenu {
     private String accountNumber = new String();
     private String depositAmount = new String();
-    private String accept = new String();
     private String totalAmount = new String();
 
     @Override
@@ -52,7 +50,7 @@ public class PayCreditAccountMenu extends AMenu {
             e.printStackTrace();
         }
         try {
-            UUID id = UUID.fromString(accountNumber);
+            UUID.fromString(accountNumber);
         } catch (IllegalArgumentException e) {
             // accountNumber = new String();
             // invalidate();
@@ -67,12 +65,8 @@ public class PayCreditAccountMenu extends AMenu {
             account = AccountController.getInstance().getAccount(accountNumber);
         }
         catch (BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot pay on the credit account because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot pay on the credit account because the bank is locked.");
+            return new ExitItem();
         }
 
         BigDecimal startAmount = account.getAmount();
@@ -92,12 +86,8 @@ public class PayCreditAccountMenu extends AMenu {
             AccountController.getInstance().deposit(account, new BigDecimal(depositAmount));
         }
         catch(BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot pay on the credit account because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot pay on the credit account because the bank is locked.");
+            return new ExitItem();
         }
         totalAmount = account.getAmount().toString();
 

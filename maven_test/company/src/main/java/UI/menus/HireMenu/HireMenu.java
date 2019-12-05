@@ -3,10 +3,8 @@ package UI.menus.HireMenu;
 import java.util.Scanner;
 
 import UI.AMenu;
-import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.EmployeeController;
 import company.Entity.Employee;
@@ -21,7 +19,6 @@ public class HireMenu extends AMenu {
     private String question = new String();
     private String answer = new String();
     private String confirm = new String();
-    private String done = new String();
 
     @Override
     public String get_display_string()
@@ -77,7 +74,7 @@ public class HireMenu extends AMenu {
                 get_display_string();
                 position = UIUtil.get_input(sc, position, prompt, (String s) -> {
                     try {
-                        Position.valueOf(position.toUpperCase());
+                        Position.valueOf(s.toUpperCase());
                     } catch (IllegalArgumentException e) {
                         position = new String();
                         return false;

@@ -4,7 +4,6 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.controller.TermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.CustomerController;
@@ -47,7 +46,6 @@ public class CreateCreditAccountMenu extends AMenu {
 
         if (!is_valid)
             display();
-        String confirm = "";
 
         firstName = "";
         lastName = "";
@@ -77,12 +75,8 @@ public class CreateCreditAccountMenu extends AMenu {
             a = CustomerController.getInstance().addAccount(c, AccountType.CREDIT);
         }
         catch (BankLockedException e) {
-            try {
-                confirm = UIUtil.get_input(sc, confirm, prompt + "Cannot create the account because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot create the account because the bank is locked.");
+            return new ExitItem();
         }
 
         toast("Account created.\nAccount id = " + a.getId().toString());

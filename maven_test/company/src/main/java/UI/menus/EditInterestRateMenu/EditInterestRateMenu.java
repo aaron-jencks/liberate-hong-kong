@@ -8,7 +8,6 @@ import UI.AMenu;
 import UI.AnsiUtil;
 import UI.IMenuItem;
 import UI.UIUtil;
-import UI.controller.ITermController;
 import UI.global_menu_items.ExitItem;
 import company.Controller.AccountController;
 import company.Entity.Account;
@@ -17,7 +16,6 @@ import company.exceptions.BankLockedException;
 public class EditInterestRateMenu extends AMenu {
     private String accountNumber = new String();
     private Double depositAmount = 0.0;
-    private String accept = new String();
 
     @Override
     public String get_display_string() {
@@ -59,7 +57,7 @@ public class EditInterestRateMenu extends AMenu {
             e.printStackTrace();
         }
         try {
-            UUID id = UUID.fromString(accountNumber);
+            UUID.fromString(accountNumber);
         } catch (IllegalArgumentException e) {
             // accountNumber = new String();
             // invalidate();
@@ -74,12 +72,8 @@ public class EditInterestRateMenu extends AMenu {
             account = AccountController.getInstance().getAccount(accountNumber);
         }
         catch (BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot edit the interest rate because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot edit the interest rate because the bank is locked.");
+            return new ExitItem();
         }
 
         BigDecimal startAmount = account.getInterestRate();
@@ -100,12 +94,8 @@ public class EditInterestRateMenu extends AMenu {
             account.setInterestRate(new BigDecimal(depositAmount));
         }
         catch (BankLockedException e) {
-            try {
-                accept = UIUtil.get_input(sc, accept, prompt + "Cannot edit the interest rate because the bank is locked.", (String s) -> { return true; });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-            return new ExitItem(this.parent);
+            toast("Cannot edit the interest rate because the bank is locked.");
+            return new ExitItem();
         }
 
         toast("Interest rate changed.");
