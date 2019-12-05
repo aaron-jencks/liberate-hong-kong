@@ -11,18 +11,9 @@ public class UnlockBankMenu extends AMenu {
     public String get_display_string() {
         String result = new String();
 
-        // Add vertical padding
-        int v_pad = get_y_coord(), h_pad = get_x_coord();
-        for (int i = 0; i < v_pad; i++)
-            result += "\n";
-
-        String new_prompt = new String();
-        for (int i = 0; i < h_pad; i++)
-            new_prompt += " ";
-
         String s = "Do you want to unlock the bank (allowing account based operations)?";
 
-        prompt = new_prompt + s;
+        prompt = s;
 
         return result;
     }

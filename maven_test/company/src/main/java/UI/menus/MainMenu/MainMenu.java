@@ -9,7 +9,6 @@ import UI.menus.MainMenu.items.LockBankMenuItem;
 import UI.menus.MainMenu.items.UnlockBankMenuItem;
 import company.Controller.EmployeeController;
 import company.Entity.Enum.Position;
-import company.Entity.BankLock;
 
 public class MainMenu extends AMenu {
     public MainMenu() {
@@ -22,12 +21,8 @@ public class MainMenu extends AMenu {
         }
 
         if(EmployeeController.getInstance().auth().getPosition() == Position.MANAGER){
-            if(BankLock.getInstance().isBankLocked() == true) {
-                items.add(new UnlockBankMenuItem());
-            }
-            else {
-                items.add(new LockBankMenuItem());
-            }
+            items.add(new UnlockBankMenuItem(this));
+            items.add(new LockBankMenuItem(this));
         }
 
         items.add(new ExitItem());
